@@ -9,6 +9,9 @@ export const KEYED_LIMITS = { requests: 100, rows: 1000 };
 /** Rows requested per lookup; also what the collapsed header counts as "recent". */
 export const ROWS_PER_LOOKUP = 5;
 
+/** Share of the daily lookups that background alert checks may never dip into. */
+const ALERT_SHARE = 0.5;
+
 // Bargo's reset time is not documented and is not UTC midnight. When the local
 // counters say "exhausted", one request per interval is let through to find out
 // whether the server has reset; a 429 costs nothing.
@@ -97,6 +100,15 @@ export async function resetBudget(): Promise<void> {
   await storage.removeItem(KEY);
 }
 
+/** Chart lookups the remaining request and row budgets can still pay for. */
+export function lookupsLeft(budget: BudgetState): number {
+  return Math.min(budget.requestsRemaining, Math.floor(budget.rowsRemaining / ROWS_PER_LOOKUP));
+}
+
+export function lookupsPerDay(budget: BudgetState): number {
+  return Math.min(budget.requestsLimit, Math.floor(budget.rowsLimit / ROWS_PER_LOOKUP));
+}
+
 /**
  * Decides whether a Bargo request may be made right now.
  *
@@ -105,6 +117,8 @@ export async function resetBudget(): Promise<void> {
  */
 export function allowRequest(budget: BudgetState, purpose: RequestPurpose): boolean {
   if (isExhausted(budget)) return false;
-  // TODO(human): alert checks should not be able to starve chart lookups.
-  return true;
+  if (purpose === 'chart') return true;
+  // Alerts may spend the first half of the day's lookups; the rest is kept for
+  // charts the user actually opens. A refused check is retried on the next tick.
+  return lookupsLeft(budget) > Math.floor(lookupsPerDay(budget) * ALERT_SHARE);
 }

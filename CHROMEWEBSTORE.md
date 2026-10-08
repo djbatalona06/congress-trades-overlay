@@ -49,7 +49,7 @@ Remote code: none. All code is in the package.
 | Asset | State |
 |---|---|
 | Icons 16/32/48/128 | Done (`public/icon`, from `scripts/build-icons.mjs`) |
-| Screenshots 1280×800, disclaimer visible | To do |
+| Screenshots 1280×800, disclaimer visible | Done: 3 in `store-assets/`. They show TradingView's interface; swap them if the store objects |
 | Small promo tile 440×280 | Optional, to do |
 
 ## Before submitting

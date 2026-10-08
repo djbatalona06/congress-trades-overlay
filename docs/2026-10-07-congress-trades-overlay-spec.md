@@ -71,12 +71,12 @@ ExtensionPay also stores its own user key, including in `storage.sync`.
 |---|---|
 | 1 Scaffold | Done |
 | 2 Ticker detection | Done; URL shapes captured from the live sites |
-| 3 Data layer | Done, except the alert/chart split in `allowRequest` (`lib/budget.ts`) |
+| 3 Data layer | Done. Alert checks may use the first half of each day's lookups; the rest is kept for charts |
 | 4 Panel | Done; checked in Chromium on all four sites and a bond page |
 | 5 Popup, watchlist, party map | Done |
-| 6 Alerts | Done in unit tests; not yet observed firing in a real browser |
+| 6 Alerts | Done; seen firing once for a new filing in Chromium, silent on first check and when nothing is new |
 | 7 ExtensionPay | Wired; needs the registered extension id and a test-mode payment |
-| 8 Store prep | Privacy page and `CHROMEWEBSTORE.md` drafted; screenshots and upload pending |
+| 8 Store prep | Privacy page, `CHROMEWEBSTORE.md`, three 1280×800 screenshots in `store-assets/`, zips via `npm run zip`; upload pending |
 
 Not yet run in a real Firefox (none installed on the build machine); the Firefox package builds and its manifest is correct.
 

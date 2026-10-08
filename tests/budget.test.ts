@@ -106,6 +106,20 @@ describe('allowRequest', () => {
     expect(allowRequest(budget(), 'chart')).toBe(true);
   });
 
+  it('lets alerts spend only the first half of the day', () => {
+    // Keyless: 20 lookups a day, so alerts stop once 10 are left.
+    expect(allowRequest(budget(), 'alert')).toBe(true);
+    expect(allowRequest(budget({ requestsRemaining: 11, rowsRemaining: 55 }), 'alert')).toBe(true);
+    expect(allowRequest(budget({ requestsRemaining: 10, rowsRemaining: 50 }), 'alert')).toBe(false);
+    expect(allowRequest(budget({ requestsRemaining: 10, rowsRemaining: 50 }), 'chart')).toBe(true);
+  });
+
+  it('scales the alert share with a keyed budget', () => {
+    const keyed = { requestsLimit: 100, rowsLimit: 1000 };
+    expect(allowRequest(budget({ ...keyed, requestsRemaining: 51, rowsRemaining: 600 }), 'alert')).toBe(true);
+    expect(allowRequest(budget({ ...keyed, requestsRemaining: 50, rowsRemaining: 600 }), 'alert')).toBe(false);
+  });
+
   it('allows a chart lookup down to the last request', () => {
     expect(allowRequest(budget({ requestsRemaining: 1, rowsRemaining: 5 }), 'chart')).toBe(true);
   });

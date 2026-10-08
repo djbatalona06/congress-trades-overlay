@@ -1,5 +1,4 @@
-import { ROWS_PER_LOOKUP } from './budget';
-import type { BudgetState, Party } from './types';
+import type { Party } from './types';
 
 const DATE = new Intl.DateTimeFormat('en-US', {
   month: 'short',
@@ -21,11 +20,4 @@ export const PARTY_NAME: Record<Party, string> = {
   I: 'Independent',
 };
 
-/** Chart lookups the remaining request and row budgets can still pay for. */
-export function lookupsLeft(budget: BudgetState): number {
-  return Math.min(budget.requestsRemaining, Math.floor(budget.rowsRemaining / ROWS_PER_LOOKUP));
-}
-
-export function lookupsPerDay(budget: BudgetState): number {
-  return Math.min(budget.requestsLimit, Math.floor(budget.rowsLimit / ROWS_PER_LOOKUP));
-}
+export { lookupsLeft, lookupsPerDay } from './budget';

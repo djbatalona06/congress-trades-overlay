@@ -4,5 +4,10 @@
     "jsx": "react-jsx",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    ".output",
+    "worker"
+  ]
 }

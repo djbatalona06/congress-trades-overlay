@@ -1,0 +1,26 @@
+name = "congress-trades-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+# Run `npx wrangler d1 create congress-trades` and paste the id it prints.
+[[d1_databases]]
+binding = "DB"
+database_name = "congress-trades"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+[triggers]
+# Keep in step with BILLS_CRON and ORDERS_CRON in src/index.ts.
+crons = ["7 * * * *", "17 */6 * * *"]
+
+[vars]
+# "bargo" or "none". See README before charging for the data.
+TRADE_SOURCE = "bargo"
+
+# Request logs can carry client details; this Worker needs none of them.
+[observability]
+enabled = false
+
+# Secrets (never in this file):
+#   npx wrangler secret put CONGRESS_API_KEY
+#   npx wrangler secret put BARGO_API_KEY      (optional)

@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import type { CongressTrade } from './types';
+import type { CongressTrade, TickerContext } from './types';
 
 const PREFIX = 'cache:';
 // Disclosures are filed days to weeks after a trade, and the daily request
@@ -10,6 +10,8 @@ const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 interface CacheEntry {
   fetchedAt: number;
   trades: CongressTrade[];
+  /** Only saved for answers that came from the Worker. */
+  context?: TickerContext;
 }
 
 export interface CacheRead extends CacheEntry {
@@ -27,8 +29,9 @@ export async function writeCache(
   ticker: string,
   trades: CongressTrade[],
   now = Date.now(),
+  context?: TickerContext,
 ): Promise<void> {
-  await browser.storage.local.set({ [PREFIX + ticker]: { fetchedAt: now, trades } });
+  await browser.storage.local.set({ [PREFIX + ticker]: { fetchedAt: now, trades, context } });
 }
 
 export async function pruneCache(now = Date.now()): Promise<void> {

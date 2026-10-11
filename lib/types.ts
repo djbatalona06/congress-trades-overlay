@@ -20,6 +20,45 @@ export interface BargoTrade {
   filing_portal?: string | null;
 }
 
+/** How far a bill got. Bills that were only introduced are never returned. */
+export type BillStatus = 'passed_chamber' | 'to_president' | 'became_law' | 'vetoed';
+
+/** A bill in Congress.gov's own words, matched to a stock's sector by policy area. */
+export interface RelatedBill {
+  /** "119-hr-1234" */
+  id: string;
+  title: string;
+  status: BillStatus;
+  /** Day (YYYY-MM-DD) of the latest action, which is what `status` describes. */
+  date: string;
+  policy_area: string;
+  /** "119-5" once the bill became a public or private law. */
+  public_law: string | null;
+  url: string;
+}
+
+/** A presidential executive order from the Federal Register. */
+export interface ExecOrder {
+  document_number: string;
+  /** The "Executive Order 14xxx" number; null when the register has not assigned one. */
+  number: number | null;
+  title: string;
+  signing_date: string | null;
+  publication_date: string;
+  url: string;
+}
+
+/** The legislation half of a Worker answer. */
+export interface TickerContext {
+  related_bills: RelatedBill[];
+  exec_orders: ExecOrder[];
+}
+
+/** What `GET /v1/ticker/{T}` returns. Trades keep Bargo's row shape. */
+export interface TickerPayload extends TickerContext {
+  trades: BargoTrade[];
+}
+
 export interface CongressTrade {
   id: string;
   member: string;
@@ -67,9 +106,11 @@ export interface TradesResponse {
   trades: CongressTrade[];
   fetchedAt: number | null;
   stale: boolean;
-  /** Whether this response cost a Bargo request. */
+  /** True when the data was just fetched (from the Worker or Bargo), false when it is saved results. */
   fromNetwork: boolean;
   budget: BudgetState;
+  /** Present when the lookup came from the Worker (or from a saved Worker answer). */
+  context?: TickerContext;
 }
 
 export interface ProStatus {

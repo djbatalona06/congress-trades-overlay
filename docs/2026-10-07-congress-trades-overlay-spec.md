@@ -31,7 +31,7 @@ Supersedes the technical parts of the "Complete Build Package (Revised)" of 2026
 | Tests | Vitest + WXT fake-browser, jsdom for DOM tests |
 | Data | Bargo Congress Trades API, called from each user's browser |
 | Payments | ExtensionPay (`extpay`), id `congress-trades-overlay` |
-| Backend | None |
+| Backend | None by default. Optional Cloudflare Worker in `worker/`, off unless the build sets `WXT_USE_WORKER=true` (section 8) |
 
 **Bargo facts (verified live):** `GET https://www.bargo.ai/free-apis/congress/v1/trades/{ticker}?limit=`. Keyless: 30 requests and 100 rows per day per IP. Free key: 100 requests, 1,000 rows. Last 3 months only. No party field, no per-filing link, no id. The request-remaining header counts the current call; the rows-remaining header does not; both can lag.
 
@@ -87,3 +87,15 @@ Not yet run in a real Firefox (none installed on the build machine); the Firefox
 - Keyless budget allows roughly 20 chart lookups a day per user.
 - Alerts read each ticker's 5 newest rows; a burst of more than 5 new filings between checks could hide some.
 - Broker URL or DOM changes break detection; fixtures in `tests/platforms.test.ts` make the fix quick.
+
+## 8. Worker backend (optional, behind a build flag)
+
+Adds the legislation layer from the 2026-10-10 research spec (decisions D3 to D5) without changing the default build.
+
+- **Where:** `worker/` (Cloudflare Worker + D1). Setup and checklist in `worker/README.md`.
+- **API:** `GET /v1/ticker/{T}` returns `{ trades, related_bills, exec_orders }`.
+- **Cron:** hourly Congress.gov bills (key in a Worker secret, never in the extension); executive orders from the Federal Register every 6 hours.
+- **Matching:** bill policy area -> sector -> ticker, shown as "related legislation" (`worker/src/sectors.ts`).
+- **Extension:** `lib/service.ts` tries the Worker first when the flag is on and falls back to Bargo on any failure. `lib/timeline.ts` merges trades, bills and orders by date. The panel does not render the legislation yet.
+- **Unchanged:** the disclaimer string, the Bargo credit, and the rule that panel copy never uses "signal", "indicator" or a recommendation to buy or sell.
+

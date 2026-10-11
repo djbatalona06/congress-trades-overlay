@@ -6,3 +6,4 @@ node_modules/
 .env.*
 web-ext.config.ts
 stats.html
+!.env.example

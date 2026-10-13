@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { TradesBody } from '@/components/TradesBody';
 import { WatchButton } from '@/components/WatchButton';
+import { useUpdateGate } from '@/components/useUpdateGate';
 import { BARGO_HOME } from '@/lib/bargo';
 import { requestPopOut } from '@/lib/messaging';
 import type { Detection } from '@/lib/platforms';
 import { getOverlayExpanded, setOverlayExpanded } from '@/lib/settings';
 import type { TradesResponse } from '@/lib/types';
+
+const UPDATE_NOTE = 'Update notes: open the Capitol Tape popup';
 
 export function Overlay({
   detection,
@@ -22,6 +25,7 @@ export function Overlay({
   const tabRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const moved = useRef(false);
+  const update = useUpdateGate(false).show;
 
   useEffect(() => {
     getOverlayExpanded().then(setStored);
@@ -59,10 +63,12 @@ export function Overlay({
         type="button"
         className="edge-tab"
         aria-expanded={false}
-        aria-label={`${label}. Congress trades. Open panel`}
+        aria-label={`${label}. Congress trades. Open panel${update ? `. ${UPDATE_NOTE}` : ''}`}
+        title={update ? UPDATE_NOTE : undefined}
         onClick={() => setDrawer(true)}
       >
         {label}
+        {update && <span className="dot" aria-hidden="true" />}
       </button>
     );
   }
@@ -92,6 +98,7 @@ export function Overlay({
               {expanded ? '▾' : '▸'}
             </span>
             <span className="title">Congress Trades: {detection.ticker}</span>
+            {update && <span className="dot" role="img" aria-label={UPDATE_NOTE} title={UPDATE_NOTE} />}
             <span className="count">{limited ? '(daily limit reached)' : `(${trades.length} recent)`}</span>
           </button>
           <button

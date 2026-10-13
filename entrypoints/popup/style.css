@@ -80,6 +80,19 @@ section {
   margin-top: 12px;
 }
 
+/* Update notes: a card above the tab content, until the user taps Continue. */
+.gate {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+}
+
+.gate h2 {
+  justify-content: flex-start;
+}
+
 [role='tabpanel'] {
   min-height: 120px;
 }

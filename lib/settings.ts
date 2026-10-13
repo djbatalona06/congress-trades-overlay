@@ -1,5 +1,6 @@
 import { storage } from 'wxt/utils/storage';
 import { resetBudget } from './budget';
+import type { LastSeen } from './update';
 import type { Platform } from './types';
 
 const API_KEY = 'local:bargoApiKey';
@@ -66,4 +67,18 @@ export async function getPopoutWindowId(): Promise<number | null> {
 
 export async function setPopoutWindowId(id: number): Promise<void> {
   await storage.setItem(POPOUT_WINDOW, id);
+}
+
+const LAST_SEEN = 'local:lastSeen';
+
+export async function getLastSeen(): Promise<LastSeen | null> {
+  return storage.getItem<LastSeen>(LAST_SEEN);
+}
+
+export async function setLastSeen(value: LastSeen): Promise<void> {
+  await storage.setItem(LAST_SEEN, value);
+}
+
+export function watchLastSeen(callback: (value: LastSeen | null) => void): () => void {
+  return storage.watch<LastSeen>(LAST_SEEN, (value) => callback(value ?? null));
 }

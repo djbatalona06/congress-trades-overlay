@@ -15,6 +15,7 @@ import {
   removeFromWatchlist,
 } from '@/lib/watchlist';
 import { PANEL_ID, type TabDef, Tabs, tabId } from './Tabs';
+import { UpdateGate } from './UpdateGate';
 
 const TABS = [
   { id: 'watchlist', label: 'Watchlist' },
@@ -269,6 +270,7 @@ export function Popup() {
         <span className={pro ? 'badge pro' : 'badge'}>{pro ? 'Pro' : 'Free'}</span>
         <Tabs tabs={TABS} selected={tab} onSelect={setTab} />
       </header>
+      <UpdateGate />
       <div role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(tab)} tabIndex={0}>
         {tab === 'watchlist' && <Watchlist pro={pro} />}
         {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}

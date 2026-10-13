@@ -8,7 +8,7 @@ import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { Overlay } from '@/entrypoints/overlay.content/Overlay';
 import { Panel } from '@/entrypoints/panel/Panel';
 import { Popup } from '@/entrypoints/popup/Popup';
-import { setCurrentTicker } from '@/lib/settings';
+import { setCurrentTicker, setLastSeen } from '@/lib/settings';
 import type { TradesResponse } from '@/lib/types';
 import { budget, congressTrade } from './helpers';
 
@@ -184,6 +184,15 @@ describe('axe on the page panel and the pop-out window', () => {
       await setCurrentTicker({ ticker: 'NVDA', bond: null, platform: 'tradingview', at: Date.now() });
     });
     expect(host.textContent).toContain('Nancy Pelosi');
+    expect(await violations()).toEqual([]);
+  });
+});
+
+describe('axe on the update card', () => {
+  it('has no violations while the card is showing', async () => {
+    await setLastSeen({ version: '0.9.0', at: Date.now() });
+    await act(async () => root.render(<Popup />));
+    expect(host.querySelector('.gate')).toBeTruthy();
     expect(await violations()).toEqual([]);
   });
 });

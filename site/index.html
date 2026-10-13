@@ -188,6 +188,16 @@
     .logos .serif { font-family: Georgia, 'Times New Roman', serif; font-weight: 600; letter-spacing: 0; }
     .logos .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; letter-spacing: -0.04em; }
 
+    /* Broker links */
+    .brokers { padding: 56px 0; border-bottom: 1px solid var(--line); text-align: center; }
+    .brokers h2 { margin: 0; font-size: clamp(20px, 1.6vw + 12px, 28px); }
+    .brokers p { max-width: 640px; margin: 12px auto 0; font-size: 15px; color: var(--muted); }
+    .broker-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; max-width: 1000px; margin: 28px auto 0; padding: 0; list-style: none; }
+    .broker-list a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 72px; height: 100%; padding: 12px 16px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink); font-weight: 600; text-decoration: none; }
+    .broker-list a:hover { border-color: var(--green); }
+    .broker-list a:focus-visible, .foot-col a:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+    .broker-list small { max-width: 24ch; font-size: 13px; font-weight: 400; color: var(--muted); }
+
     /* Cards */
     .card {
       grid-column: span 4; padding: 32px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
@@ -397,6 +407,21 @@
       </div>
     </section>
 
+    <!-- 3b. Broker links -->
+    <section class="brokers" aria-labelledby="brokers-title">
+      <div class="wrap">
+        <h2 id="brokers-title">Already have a broker?</h2>
+        <p>Open the account you already use, or start a new one. These are plain links to each company's own website. We add no affiliate codes and no tracking.</p>
+        <ul class="broker-list">
+          <li><a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://robinhood.com/" target="_blank" rel="noopener noreferrer">Robinhood<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.webull.com/" target="_blank" rel="noopener noreferrer">Webull<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer">Charles Schwab<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer">Interactive Brokers (IBKR)<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+      </div>
+    </section>
+
     <!-- 4. Capabilities grid -->
     <section id="features" aria-labelledby="features-title">
       <div class="wrap">
@@ -473,7 +498,7 @@
           <h2 id="how-title" class="h2">From install to first disclosure in under a minute.</h2>
         </div>
         <ol class="steps grid">
-          <li class="step reveal" style="--i:0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up, no API key.</p><span class="time">10 seconds</span></li>
+          <li class="step reveal" style="--i:0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups.</p><span class="time">10 seconds</span></li>
           <li class="step reveal" style="--i:1"><h3>Open a ticker</h3><p>Pull up any US stock or corporate bond on a supported platform. The symbol is detected automatically.</p><span class="time">Instant</span></li>
           <li class="step reveal" style="--i:2"><h3>Read the tape</h3><p>Expand the panel to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
           <li class="step reveal" style="--i:3"><h3>Watch &amp; get notified</h3><p>Star a ticker. When a member files a new disclosure on it, you get a browser notification.</p><span class="time">Runs in the background</span></li>
@@ -541,8 +566,8 @@
             <ul>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Panel on all four platforms</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Bond-to-issuer mapping</li>
-              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>3-ticker watchlist</li>
-              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>About 20 chart lookups a day, more with a free Bargo key</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Watchlist of 3 tickers</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>About 20 chart lookups a day, more with a <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free Bargo key<span class="sr-only"> (opens in a new tab)</span></a></li>
             </ul>
             <a class="btn btn-ghost" href="#get" data-install="chrome">Add to Chrome</a>
           </article>
@@ -550,7 +575,7 @@
             <span class="tag">Recommended</span>
             <h3>Pro</h3>
             <p class="for">For active traders with a real watchlist.</p>
-            <div class="price"><b>$8</b><span>/ month</span></div>
+            <div class="price"><b>$8</b><span>/month</span></div>
             <ul>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Everything in Free</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Unlimited watchlist</li>
@@ -588,7 +613,7 @@
           <details><summary>How current are the disclosures?</summary><p class="a">Members have up to 45 days after a trade to file, so every disclosure is delayed by law. Capitol Tape shows both the trade date and the filing date, and refreshes each ticker at most every 6 hours.</p></details>
           <details><summary>Can it see my brokerage account?</summary><p class="a">No. It reads only the ticker symbol from the page address or title. It cannot read balances, positions or orders, and it cannot place trades.</p></details>
           <details><summary>Which sites does it work on?</summary><p class="a">Stock pages on TradingView, Robinhood, Webull and Schwab, in Chrome and Firefox. On a TradingView corporate-bond chart, it shows disclosures for the issuing company's stock.</p></details>
-          <details><summary>Why is there a daily lookup limit?</summary><p class="a">The free data API allows a set number of requests per day per network. Capitol Tape caches results and reserves half the budget for charts. Paste your own free Bargo key in the popup to raise the limit.</p></details>
+          <details><summary>Why is there a daily lookup limit?</summary><p class="a">The free data API allows a set number of requests per day per network. Capitol Tape caches results and reserves half the budget for charts. Get a <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free Bargo key<span class="sr-only"> (opens in a new tab)</span></a> and paste it in the popup (Lookups tab) to raise the limit.</p></details>
           <details><summary>How do I upgrade or cancel Pro?</summary><p class="a">Open the extension popup and choose Upgrade to Pro. Payment runs through ExtensionPay and Stripe; the extension never sees your card. Cancel any time under Manage subscription in the same popup.</p></details>
         </div>
       </div>
@@ -627,7 +652,7 @@
         </div>
         <div class="foot-col">
           <h3>Platforms</h3>
-          <ul><li><a href="#features">TradingView</a></li><li><a href="#features">Robinhood</a></li><li><a href="#features">Webull</a></li><li><a href="#features">Schwab</a></li></ul>
+          <ul><li><a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView<span class="sr-only"> (opens in a new tab)</span></a></li><li><a href="https://robinhood.com/" target="_blank" rel="noopener noreferrer">Robinhood<span class="sr-only"> (opens in a new tab)</span></a></li><li><a href="https://www.webull.com/" target="_blank" rel="noopener noreferrer">Webull<span class="sr-only"> (opens in a new tab)</span></a></li><li><a href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer">Schwab<span class="sr-only"> (opens in a new tab)</span></a></li><li><a href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer">Interactive Brokers<span class="sr-only"> (opens in a new tab)</span></a> <small>(not supported yet)</small></li></ul>
         </div>
         <div class="foot-col">
           <h3>Resources</h3>
@@ -640,7 +665,7 @@
       </div>
       <div class="legal">
         <p>Capitol Tape displays publicly available U.S. congressional stock trade disclosures (STOCK Act data) for information only. It is not financial, investment or trading advice, and nothing on this site or in the extension is a recommendation to buy or sell any security. Disclosures may be delayed up to 45 days after a trade and may be incomplete; verify with official sources.</p>
-        <p>Capitol Tape is not affiliated with or endorsed by TradingView, Robinhood, Webull, Charles Schwab, Bargo, Google, Mozilla, the U.S. Congress or any government entity. All trademarks belong to their owners.</p>
+        <p>Capitol Tape is not affiliated with or endorsed by TradingView, Robinhood, Webull, Charles Schwab, Interactive Brokers, Bargo, Google, Mozilla, the U.S. Congress or any government entity. All trademarks belong to their owners.</p>
         <p>© <span id="year">2026</span> Capitol Tape. All rights reserved.</p>
       </div>
     </div>

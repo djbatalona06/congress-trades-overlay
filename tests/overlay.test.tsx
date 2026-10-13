@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import { act } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
+import { BARGO_KEY_URL } from '@/lib/bargo';
 import { Overlay } from '@/entrypoints/overlay.content/Overlay';
 import type { Detection } from '@/lib/platforms';
 import { getOverlayExpanded } from '@/lib/settings';
@@ -61,7 +62,11 @@ afterEach(async () => {
   host.remove();
 });
 
-describe('Overlay', () => {
+describe('Overlay (saved choice: the bar users already know)', () => {
+  beforeEach(async () => {
+    await fakeBrowser.storage.local.set({ overlayExpanded: false });
+  });
+
   it('starts collapsed with the ticker, count and Bargo credit visible', async () => {
     await render(NVDA, response());
     expect(text()).toContain('Congress Trades: NVDA');
@@ -73,6 +78,7 @@ describe('Overlay', () => {
     });
     expect(host.querySelectorAll('.trade')).toHaveLength(0);
     expect(toggle()?.getAttribute('aria-expanded')).toBe('false');
+    expect(host.querySelector('.edge-tab')).toBeNull();
   });
 
   it('expands to the trade list, disclaimer and filing links, and remembers it', async () => {
@@ -118,9 +124,11 @@ describe('Overlay', () => {
 
   it('says so when the daily limit is reached and nothing is saved', async () => {
     await render(NVDA, response({ status: 'limited', trades: [], fromNetwork: false }));
-    expect(text()).toContain('(limit reached)');
+    expect(text()).toContain('(daily limit reached)');
     await click(toggle());
-    expect(text()).toContain("Today's free lookups are used up");
+    expect(text()).toContain('Daily free limit reached.');
+    expect(text()).toContain('Lookups tab');
+    expect(host.querySelector<HTMLAnchorElement>('.notice a')?.href).toBe(BARGO_KEY_URL);
   });
 
   it('labels saved results', async () => {
@@ -159,5 +167,67 @@ describe('Overlay', () => {
     expect(text()).toContain('The free plan watches 3 tickers.');
     expect(host.querySelector('.watch .link')?.textContent).toBe('Upgrade to Pro');
     expect(await getWatchlist()).toHaveLength(3);
+  });
+});
+
+describe('Overlay (never chosen: edge tab)', () => {
+  const tab = () => host.querySelector<HTMLButtonElement>('.edge-tab');
+  const press = async (key: string) =>
+    act(async () => {
+      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
+    });
+
+  it('shows only a small tab with the ticker and count, and no panel', async () => {
+    await render(NVDA, response());
+    expect(tab()?.textContent).toBe('NVDA 2');
+    expect(tab()?.getAttribute('aria-expanded')).toBe('false');
+    expect(tab()?.getAttribute('aria-label')).toContain('NVDA 2');
+    expect(host.querySelector('.panel')).toBeNull();
+    expect(host.querySelectorAll('.trade')).toHaveLength(0);
+  });
+
+  it('shows the limit on the tab', async () => {
+    await render(NVDA, response({ status: 'limited', trades: [], fromNetwork: false }));
+    expect(tab()?.textContent).toBe('NVDA limit');
+  });
+
+  it('opens the panel as a drawer with the Bargo credit and moves focus into it', async () => {
+    await render(NVDA, response());
+    await click(tab());
+    expect(host.querySelector('.panel.drawer.expanded')).toBeTruthy();
+    expect(host.querySelectorAll('.trade')).toHaveLength(2);
+    expect(host.querySelector('.bar a.credit')).toBeTruthy();
+    expect(tab()).toBeNull();
+    expect(document.activeElement).toBe(host.querySelector('.close'));
+  });
+
+  it('closes on Escape, returns focus to the tab, and saves nothing', async () => {
+    await render(NVDA, response());
+    await click(tab());
+    await press('Escape');
+    expect(host.querySelector('.panel')).toBeNull();
+    expect(document.activeElement).toBe(tab());
+    expect(await getOverlayExpanded()).toBeNull();
+  });
+
+  it('the close button and the chevron both close the drawer instead of hiding the panel', async () => {
+    await render(NVDA, response());
+    await click(tab());
+    expect(host.querySelector('.close')?.getAttribute('aria-label')).toBe('Close panel');
+    await click(host.querySelector('.close'));
+    expect(tab()).toBeTruthy();
+    await click(tab());
+    await click(toggle());
+    expect(tab()).toBeTruthy();
+    expect(await getOverlayExpanded()).toBeNull();
+  });
+
+  it('Pop out asks the background for a separate window', async () => {
+    const send = vi.spyOn(fakeBrowser.runtime, 'sendMessage').mockResolvedValue(undefined as never);
+    await render(NVDA, response());
+    await click(tab());
+    expect(host.querySelector('.popout')?.getAttribute('aria-label')).toBe('Pop out to a separate window');
+    await click(host.querySelector('.popout'));
+    expect(send).toHaveBeenCalledWith({ type: 'cto/pop-out' });
   });
 });

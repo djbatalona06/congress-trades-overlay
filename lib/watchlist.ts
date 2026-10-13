@@ -4,7 +4,9 @@ import { resolveTicker } from './ticker';
 import type { Platform, WatchlistItem } from './types';
 
 const KEY = 'local:watchlist';
+// Plan facts live here and nowhere else in code; tests/parity.test.ts checks the written copy.
 export const FREE_WATCHLIST_LIMIT = 3;
+export const PRO_PRICE_MONTHLY = 8;
 
 export type AddResult =
   | { ok: true; watchlist: WatchlistItem[] }

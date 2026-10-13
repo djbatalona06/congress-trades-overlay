@@ -1,10 +1,11 @@
 import './style.css';
+import '@/components/trades.css';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import type { ContentScriptContext } from '#imports';
-import { requestTrades } from '@/lib/messaging';
+import { useTrades } from '@/components/useTrades';
+import { setCurrentTicker } from '@/lib/settings';
 import { CONTENT_SCRIPT_MATCHES, type Detection, detect } from '@/lib/platforms';
-import type { TradesResponse } from '@/lib/types';
 import { Overlay } from './Overlay';
 
 const RECHECK_DELAY_MS = 400;
@@ -47,28 +48,31 @@ function useDetection(ctx: ContentScriptContext): Detection | null {
   return detection;
 }
 
-function useTrades(ticker: string | null): TradesResponse | null {
-  const [response, setResponse] = useState<TradesResponse | null>(null);
-
+/**
+ * Publishes the symbol on screen so the pop-out window can follow it. Only the
+ * tab the user is looking at writes, and a tab that becomes visible writes again.
+ */
+function usePublishTicker(detection: Detection | null) {
   useEffect(() => {
-    setResponse(null);
-    if (!ticker) return;
-    let cancelled = false;
-    // Rejects when the extension was reloaded under an open tab; the panel just stays hidden.
-    requestTrades(ticker).then(
-      (result) => !cancelled && setResponse(result),
-      () => undefined,
-    );
-    return () => {
-      cancelled = true;
+    if (!detection) return;
+    const publish = () => {
+      if (document.visibilityState !== 'visible') return;
+      void setCurrentTicker({
+        ticker: detection.ticker,
+        bond: detection.bond,
+        platform: detection.platform,
+        at: Date.now(),
+      });
     };
-  }, [ticker]);
-
-  return response?.ticker === ticker ? response : null;
+    publish();
+    document.addEventListener('visibilitychange', publish);
+    return () => document.removeEventListener('visibilitychange', publish);
+  }, [detection]);
 }
 
 function App({ ctx }: { ctx: ContentScriptContext }) {
   const detection = useDetection(ctx);
+  usePublishTicker(detection);
   const response = useTrades(detection?.ticker ?? null);
   if (!detection || !response) return null;
   return <Overlay key={detection.ticker} detection={detection} response={response} />;

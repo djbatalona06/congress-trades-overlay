@@ -16,7 +16,7 @@ Shows what members of Congress have disclosed trading in the stock you are looki
 - Works on stock pages at TradingView, Robinhood, Webull and Schwab
 - Shows each disclosure's member, party, chamber, buy or sell, amount range, trade date and filing date
 - On a corporate bond chart, shows disclosures for the issuing company's stock
-- Free: the panel plus a 3-ticker watchlist
+- Free: the panel plus a watchlist of 3 tickers
 - Pro ($8/month): unlimited watchlist and a notification when a watched ticker gets a new disclosure
 
 What it does not do: place trades, access your brokerage account, read balances or positions, or give investment advice.

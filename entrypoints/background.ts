@@ -2,8 +2,11 @@ import { ALERT_ALARM, ALERT_PERIOD_MINUTES, pollAlerts } from '@/lib/alerts';
 import { pruneCache } from '@/lib/cache';
 import { createExtPay, refreshPro } from '@/lib/extpay';
 import { type AppMessage, isAppMessage } from '@/lib/messaging';
+import { openPopout } from '@/lib/popoutWindow';
 import { PRO_RECHECK_MS, readProStatus } from '@/lib/pro';
+import { getLastSeen, setLastSeen } from '@/lib/settings';
 import { getTrades } from '@/lib/service';
+import { seedLastSeen } from '@/lib/update';
 import { resolveTicker } from '@/lib/ticker';
 
 async function ensureAlarm(): Promise<void> {
@@ -28,13 +31,28 @@ async function handle(message: AppMessage): Promise<unknown> {
     case 'cto/open-payment':
       await createExtPay().openPaymentPage();
       return null;
+    case 'cto/pop-out':
+      await openPopout();
+      return null;
   }
 }
 
 export default defineBackground(() => {
   createExtPay().startBackground();
 
-  browser.runtime.onInstalled.addListener(() => void ensureAlarm());
+  browser.runtime.onInstalled.addListener((details) => {
+    void ensureAlarm();
+    void (async () => {
+      const seed = seedLastSeen(
+        await getLastSeen(),
+        details.reason,
+        details.previousVersion,
+        browser.runtime.getManifest().version,
+        Date.now(),
+      );
+      if (seed) await setLastSeen(seed);
+    })();
+  });
   browser.runtime.onStartup.addListener(() => void ensureAlarm());
 
   browser.alarms.onAlarm.addListener((alarm) => {

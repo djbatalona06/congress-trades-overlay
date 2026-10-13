@@ -44,8 +44,8 @@ Supersedes the technical parts of the "Complete Build Package (Revised)" of 2026
 1. Content script loads on the four hosts and detects the symbol (`lib/platforms`). It re-checks on URL change and on `<head>` changes, because these sites switch symbol without a page load.
 2. `lib/ticker.ts` keeps US equities only and maps FINRA corporate bonds to the issuer (`FINRA:AAPL4242667` → `AAPL`).
 3. The content script asks the background for trades. Background: fresh cache → return; else budget check → Bargo → cache → return.
-4. Panel states: hidden (no trades, error, unsupported page), collapsed, expanded, limit reached, saved results.
-5. Popup: watchlist, plan and upgrade, lookups left today, optional Bargo key.
+4. Panel states: hidden (no trades, error, unsupported page), edge tab (default for new users), drawer, collapsed bar and expanded (kept for users who already chose one), limit reached, saved results. A Pop out button opens `panel.html` in its own window (see `docs/2026-10-13-prd-delta.md`, section 3.7).
+5. Popup: three tabs (Watchlist, Plan, Lookups), update notes card, optional Bargo key (link: `https://www.bargo.ai/connect`).
 6. Hourly alarm (Pro): check one watchlist ticker in rotation; notify on ids not seen before. A ticker's first check only sets its baseline.
 
 ## 4. UI/UX
@@ -99,3 +99,7 @@ Adds the legislation layer from the 2026-10-10 research spec (decisions D3 to D5
 - **Extension:** `lib/service.ts` tries the Worker first when the flag is on and falls back to Bargo on any failure. `lib/timeline.ts` merges trades, bills and orders by date. The panel does not render the legislation yet.
 - **Unchanged:** the disclaimer string, the Bargo credit, and the rule that panel copy never uses "signal", "indicator" or a recommendation to buy or sell.
 
+
+## 9. Later changes
+
+Version 1.1.0 changes (popup tabs, plan states, accessibility, edge tab and pop-out window, update notes, broker links) are in `docs/2026-10-13-prd-delta.md`. How Bargo limits and licence affect the project is in `docs/bargo-and-this-project.md`.

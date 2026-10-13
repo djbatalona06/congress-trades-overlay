@@ -32,8 +32,9 @@ It works in the Chrome and Firefox web browsers.
 
 1. Add Capitol Tape to your browser.
 2. Open a stock on one of the four websites.
-3. Look in the bottom corner. Click the box to open it.
+3. Look at the right edge of the chart. A small tab shows the stock and how many trades there are. Click it to open it. Press Esc to close it.
 4. Click the star to watch a stock. You can get a message when someone in Congress trades it.
+5. Have two screens? Click **Pop out** (the little box with an arrow). The trades open in their own window. Drag it to your second screen and it follows the chart.
 
 ## Is it safe?
 
@@ -41,8 +42,14 @@ Yes. Capitol Tape only reads the stock's name from the web page. It cannot see y
 
 ## Does it cost money?
 
-- **Free:** you get the box on all four websites. You can watch 3 stocks.
-- **Pro ($8 a month):** you can watch as many stocks as you want. You also get a message when there is a new form.
+- **Free:** you get the box on all four websites. You can watch 3 tickers (a ticker is a stock's short name, like NVDA).
+- **Pro ($8/month):** you can watch as many stocks as you want. You also get a message when there is a new form.
+
+## Do I need a key?
+
+No. Capitol Tape works the first time you open it. A "key" is like a library card for the data. It is free and you do not have to get one.
+
+Without a key you get about 20 stock look-ups a day. With a free key from [Bargo](https://www.bargo.ai/connect) you get more. If you see "daily limit reached", you used up the free look-ups for now. Get a key, then paste it in the Capitol Tape popup (the **Lookups** tab).
 
 ## Important
 

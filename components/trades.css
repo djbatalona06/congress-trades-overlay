@@ -1,0 +1,134 @@
+/* Trade list styles shared by the on-page panel (inside a shadow root) and the
+   pop-out window. The host defines --bg, --bg-raised, --border, --control-border,
+   --text, --muted, --link, --buy and --sell. */
+.trades {
+  max-height: 300px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
+.trade {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.who,
+.what {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.what {
+  margin-top: 4px;
+}
+
+.member {
+  font-weight: 600;
+}
+
+/* White text at 7:1 or better on each badge (tests/a11y.test.tsx checks it). */
+.party {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.party-D {
+  background: #1e40af;
+}
+
+.party-R {
+  background: #991b1b;
+}
+
+.party-I {
+  background: #475569;
+}
+
+.seat,
+.when {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.when {
+  margin-top: 4px;
+}
+
+.type {
+  font-weight: 700;
+}
+
+.type-purchase {
+  color: var(--buy);
+}
+
+.type-sale {
+  color: var(--sell);
+}
+
+.notice {
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--bg-raised);
+  color: var(--text);
+  font-size: 12px;
+}
+
+.trade a,
+.notice a,
+.link {
+  color: var(--link);
+  text-decoration: none;
+}
+
+.trade a:hover,
+.notice a:hover,
+.link:hover {
+  text-decoration: underline;
+}
+
+.watch {
+  border-bottom: 1px solid var(--border);
+}
+
+.watch-button,
+.link {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.watch-button {
+  display: block;
+  width: calc(100% - 24px);
+  min-height: 44px;
+  margin: 10px 12px;
+  padding: 10px;
+  border: 1px solid var(--control-border);
+  border-radius: 6px;
+  background: var(--bg-raised);
+}
+
+.watch-button[aria-pressed='true'] {
+  border-color: var(--buy);
+  color: var(--buy);
+}
+
+.link {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link);
+}

@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [WxtVitest()],
   test: {
     include: ['tests/**/*.test.{ts,tsx}'],
+    setupFiles: ['tests/setup.ts'],
     restoreMocks: true,
     unstubGlobals: true,
   },

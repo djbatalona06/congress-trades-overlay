@@ -2,6 +2,8 @@ import type { BargoTrade } from './types';
 
 const BASE_URL = 'https://www.bargo.ai/free-apis/congress/v1';
 export const BARGO_HOME = 'https://www.bargo.ai';
+// Where to get a free key. The only key link the product uses.
+export const BARGO_KEY_URL = 'https://www.bargo.ai/connect';
 
 export type BargoErrorKind = 'rate_limited' | 'invalid_key' | 'network' | 'bad_response';
 

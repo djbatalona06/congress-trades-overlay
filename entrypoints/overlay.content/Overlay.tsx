@@ -1,95 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { TradesBody } from '@/components/TradesBody';
+import { WatchButton } from '@/components/WatchButton';
+import { useUpdateGate } from '@/components/useUpdateGate';
 import { BARGO_HOME } from '@/lib/bargo';
-import { PARTY_NAME, formatDate } from '@/lib/format';
-import { requestPaymentPage } from '@/lib/messaging';
+import { requestPopOut } from '@/lib/messaging';
 import type { Detection } from '@/lib/platforms';
 import { getOverlayExpanded, setOverlayExpanded } from '@/lib/settings';
-import { TYPE_LABEL } from '@/lib/trades';
-import type { CongressTrade, TradesResponse, WatchlistItem } from '@/lib/types';
-import {
-  FREE_WATCHLIST_LIMIT,
-  addToWatchlist,
-  getWatchlist,
-  removeFromWatchlist,
-  watchWatchlist,
-} from '@/lib/watchlist';
+import type { TradesResponse } from '@/lib/types';
 
-function TradeRow({ trade }: { trade: CongressTrade }) {
-  const seat = [trade.chamber === 'senate' ? 'Senate' : trade.chamber && 'House', trade.state]
-    .filter(Boolean)
-    .join(' · ');
-  return (
-    <li className="trade">
-      <div className="who">
-        <span className="member">{trade.member}</span>
-        {trade.party && (
-          <span className={`party party-${trade.party}`} title={PARTY_NAME[trade.party]}>
-            {trade.party}
-          </span>
-        )}
-        {seat && <span className="seat">{seat}</span>}
-      </div>
-      <div className="what">
-        <span className={`type type-${trade.type ?? 'unknown'}`}>
-          {trade.type ? TYPE_LABEL[trade.type] : 'Trade'}
-        </span>
-        <span className="amount">{trade.amount}</span>
-      </div>
-      <div className="when">
-        Filed {formatDate(trade.filedDate)} · Traded {formatDate(trade.transactionDate)}
-        {trade.sourceUrl && (
-          <>
-            {' · '}
-            <a href={trade.sourceUrl} target="_blank" rel="noopener noreferrer">
-              Filing portal
-            </a>
-          </>
-        )}
-      </div>
-    </li>
-  );
-}
-
-function WatchButton({ detection }: { detection: Detection }) {
-  const [watchlist, setWatchlist] = useState<WatchlistItem[] | null>(null);
-  const [atLimit, setAtLimit] = useState(false);
-
-  useEffect(() => {
-    getWatchlist().then(setWatchlist);
-    return watchWatchlist(setWatchlist);
-  }, []);
-
-  if (!watchlist) return null;
-  const watching = watchlist.some((item) => item.ticker === detection.ticker);
-
-  const toggle = async () => {
-    if (watching) {
-      setWatchlist(await removeFromWatchlist(detection.ticker));
-      setAtLimit(false);
-      return;
-    }
-    const result = await addToWatchlist(detection.ticker, detection.platform);
-    setWatchlist(result.watchlist);
-    setAtLimit(!result.ok && result.reason === 'limit');
-  };
-
-  return (
-    <div className="watch">
-      <button type="button" className="watch-button" aria-pressed={watching} onClick={toggle}>
-        {watching ? `Watching ${detection.ticker}` : `Watch ${detection.ticker}`}
-      </button>
-      {atLimit && (
-        <p className="notice">
-          The free plan watches {FREE_WATCHLIST_LIMIT} tickers.{' '}
-          <button type="button" className="link" onClick={() => void requestPaymentPage()}>
-            Upgrade to Pro
-          </button>{' '}
-          for an unlimited watchlist and alerts.
-        </p>
-      )}
-    </div>
-  );
-}
+const UPDATE_NOTE = 'Update notes: open the Capitol Tape popup';
 
 export function Overlay({
   detection,
@@ -98,25 +17,80 @@ export function Overlay({
   detection: Detection;
   response: TradesResponse;
 }) {
-  const [expanded, setExpanded] = useState(false);
+  // undefined: still reading. null: the user has never chosen, so they get the
+  // edge tab. true/false: a saved choice, kept as the bar they already know.
+  const [stored, setStored] = useState<boolean | null | undefined>(undefined);
   const [dismissed, setDismissed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const tabRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const moved = useRef(false);
+  const update = useUpdateGate(false).show;
 
   useEffect(() => {
-    getOverlayExpanded().then(setExpanded);
+    getOverlayExpanded().then(setStored);
   }, []);
+
+  // Keyboard users: focus goes into the drawer when it opens and back to the tab when it closes.
+  useEffect(() => {
+    if (!moved.current) return;
+    (drawerOpen ? closeRef : tabRef).current?.focus();
+  }, [drawerOpen]);
 
   const { trades } = response;
   const limited = response.status === 'limited';
   // Nothing to show and nothing to explain: stay out of the way of the chart.
-  if (dismissed || response.status === 'error' || (!limited && trades.length === 0)) return null;
+  if (
+    stored === undefined ||
+    dismissed ||
+    response.status === 'error' ||
+    (!limited && trades.length === 0)
+  ) {
+    return null;
+  }
 
+  const tabMode = stored === null;
+  const setDrawer = (open: boolean) => {
+    moved.current = true;
+    setDrawerOpen(open);
+  };
+
+  if (tabMode && !drawerOpen) {
+    const label = `${detection.ticker} ${limited ? 'limit' : trades.length}`;
+    return (
+      <button
+        ref={tabRef}
+        type="button"
+        className="edge-tab"
+        aria-expanded={false}
+        aria-label={`${label}. Congress trades. Open panel${update ? `. ${UPDATE_NOTE}` : ''}`}
+        title={update ? UPDATE_NOTE : undefined}
+        onClick={() => setDrawer(true)}
+      >
+        {label}
+        {update && <span className="dot" aria-hidden="true" />}
+      </button>
+    );
+  }
+
+  const expanded = tabMode ? true : stored;
   const toggle = () => {
-    setExpanded(!expanded);
+    if (tabMode) {
+      setDrawer(false);
+      return;
+    }
+    setStored(!expanded);
     void setOverlayExpanded(!expanded);
   };
 
   return (
-    <section className={expanded ? 'panel expanded' : 'panel'} aria-label="Congress trades">
+    <section
+      className={`${expanded ? 'panel expanded' : 'panel'}${tabMode ? ' drawer' : ''}`}
+      aria-label="Congress trades"
+      onKeyDown={(event) => {
+        if (tabMode && event.key === 'Escape') setDrawer(false);
+      }}
+    >
       <header className="bar">
         <div className="bar-main">
           <button type="button" className="toggle" aria-expanded={expanded} onClick={toggle}>
@@ -124,13 +98,24 @@ export function Overlay({
               {expanded ? '▾' : '▸'}
             </span>
             <span className="title">Congress Trades: {detection.ticker}</span>
-            <span className="count">{limited ? '(limit reached)' : `(${trades.length} recent)`}</span>
+            {update && <span className="dot" role="img" aria-label={UPDATE_NOTE} title={UPDATE_NOTE} />}
+            <span className="count">{limited ? '(daily limit reached)' : `(${trades.length} recent)`}</span>
           </button>
           <button
             type="button"
+            className="popout"
+            aria-label="Pop out to a separate window"
+            title="Pop out to a separate window"
+            onClick={() => void requestPopOut()}
+          >
+            ⧉
+          </button>
+          <button
+            ref={closeRef}
+            type="button"
             className="close"
-            aria-label="Hide Congress trades"
-            onClick={() => setDismissed(true)}
+            aria-label={tabMode ? 'Close panel' : 'Hide Congress trades'}
+            onClick={() => (tabMode ? setDrawer(false) : setDismissed(true))}
           >
             ×
           </button>
@@ -148,23 +133,8 @@ export function Overlay({
 
       {expanded && (
         <div className="body">
-          {limited && (
-            <p className="notice">
-              Today's free lookups are used up. Add your own free Bargo key in the extension popup
-              for more.
-            </p>
-          )}
-          {response.stale && response.fetchedAt !== null && (
-            <p className="notice">
-              Saved results from {formatDate(new Date(response.fetchedAt).toISOString())}.
-            </p>
-          )}
-          <ul className="trades">
-            {trades.map((trade) => (
-              <TradeRow key={trade.id} trade={trade} />
-            ))}
-          </ul>
-          <WatchButton detection={detection} />
+          <TradesBody response={response} />
+          <WatchButton ticker={detection.ticker} platform={detection.platform} />
           <footer className="footer">
             Data:{' '}
             <a href={BARGO_HOME} target="_blank" rel="noopener noreferrer">

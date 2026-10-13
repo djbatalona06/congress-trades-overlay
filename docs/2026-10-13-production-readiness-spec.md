@@ -42,6 +42,16 @@ Where the request was ambiguous, this is the reading used. Change any of these a
 - **Broker links on the site:** a row of links to each broker's company website (TradingView, Robinhood, Webull, Charles Schwab, and Interactive Brokers / IBKR), so visitors can open their existing broker or start a new account. Only the first four are supported by the extension (see 3.6).
 - **Out of scope:** new analytics (it would change the store's data-use disclosure), a logout button (confirm ExtensionPay supports it before adding one), Safari, i18n, rendering Worker bill data in the panel, and any change to the disclaimer text.
 
+### 1a. Findings from user testing (2026-10-13)
+
+| # | Finding | What the code does | What needs to change |
+|---|---|---|---|
+| F1 | **Key conflict.** The site says "no API key" and "no sign-up", but a Bargo key is needed right after install | The key is optional (`lib/settings.ts`). Keyless requests share a daily budget per IP (`lib/bargo.ts`, HTTP 429 → "Daily Bargo limit reached"). The panel shows "(limit reached)" with no reason or next step. The popup's Lookups tab asks every user for a key | Make the limit explained and fixable in place; fix the site copy to match the real behaviour (3.9) |
+| F2 | **Panel blocks the chart.** It is a dropdown box that sits over the charting terminal | `entrypoints/overlay.content/style.css`: `position: fixed; right: 16px; bottom: 16px; width: 320px` (380px expanded). It covers the lower-right of the chart | Add a dual-display layout that keeps the chart clear (3.7) |
+| F3 | **No update awareness.** Nothing tells a returning user that the extension has changed | No version check or "last opened" record exists. `background.ts` only creates the alarm on install | Add an update gate that notifies the user before first use after a long gap or after an update (3.8) |
+
+Reproduction is still needed for F1. The steps to confirm: a fresh install with no key, count the lookups until the panel shows "(limit reached)", and check whether the same happens from a second network. If the budget is shared per IP, a shared home or office network can run out quickly, which would match the report.
+
 ## 2. Current gaps (checked in code)
 
 | # | Gap | Where | Why it matters |
@@ -55,6 +65,10 @@ Where the request was ambiguous, this is the reading used. Change any of these a
 | G7 | Buttons are below 44×44 CSS px (e.g. the ghost "Remove" buttons) | popup CSS | Fails WCAG 2.5.5 (AAA) |
 | G8 | No `prefers-reduced-motion` rule | both stylesheets | Motion users get the panel's transitions |
 | G9 | No automated accessibility or parity check; no CI on PRs | `tests/`, `.github/workflows/` | Regressions go unnoticed |
+| G10 | Site says "no API key" and "no sign-up"; the first lookup can hit the keyless limit | `site/index.html` lines 493, 619; `lib/bargo.ts` | Users are misled at first use (F1) |
+| G11 | Limit message has no reason and no next step | `Overlay.tsx` "(limit reached)" | Users cannot tell a bug from a limit (F1) |
+| G12 | Panel is fixed over the chart; no docked or detached mode | `overlay.content/style.css` | Blocks the chart on a single screen (F2) |
+| G13 | No version tracking or update notice | `entrypoints/background.ts`, `lib/` | Returning users get no sign that anything changed (F3) |
 
 Launch blockers that are not code (from the store checklist; unchanged): ExtensionPay id registered, Bargo permission for commercial use, legal advice on 5 U.S.C. 13107(c)(1) before promoting Pro, privacy-page contact email, `site/` published, store screenshots that show TradingView's UI (get permission or swap them), and a real Firefox run.
 
@@ -113,6 +127,44 @@ Contrast ratios in the table are checked by the test in section 4.3, not by eye.
 - **Honest labelling:** the four brokers the extension supports say so. IBKR is labelled "listed for convenience only; not supported by the extension yet". Adding IBKR support means a new platform module in `lib/platforms/` and new host permissions, which is a separate task.
 - **Before launch:** check each link once in a browser, since company sites change their URLs. Confirm that affiliate programmes (if you join any) are disclosed on the site; none are included now.
 
+### 3.7 Dual-display layout that leaves the chart clear (fixes G12, F2)
+
+Two parts, shipped together. Both are needed because a box on the page will always cover some of the chart.
+
+- **A. Edge tab by default.** The panel collapses to a 28px tab on the right edge, vertically centred, showing the ticker and count (for example `NVDA 5`). It covers almost nothing. Expanding it opens the existing 380px panel as a drawer; it closes on Escape or the close button.
+  - Existing users keep their saved `overlayExpanded` choice. Only users who have never set it get the edge tab.
+- **B. Pop-out window for a second monitor.** A "Pop out" button opens `entrypoints/panel/` as a separate window (`browser.windows.create`, type `popup`, 380×720). It is a normal window, so it can sit on the second screen.
+  - The pop-out reads the current ticker from `local:currentTicker`, which the content script writes on each symbol change. It uses the same `storage.watch` pattern as the watchlist, so no new messaging is needed.
+  - Its size and position are saved on `pagehide` (`window.screenX/Y`, `outerWidth/Height`) and restored on the next open. If the saved position is off-screen, it opens at the default position.
+  - It reuses `TradeRow` and the lookup logic from the panel. Move these into a shared module rather than copying them.
+- **Why both:** A covers single-screen users. B covers dual-screen users, who are the ones who asked for it.
+- **Not doing:** resizing or pushing the host page's layout. That is fragile across four broker sites and risks breaking their own UIs.
+- **Choice for you to confirm:** this design ships A and B together. If you want only one, say which.
+
+### 3.8 Update gate (fixes G13, F3)
+
+Chrome and Firefox update the package themselves on their own schedule. The extension cannot force an update. The gate's job is to tell the user what changed, before they rely on the data.
+
+- **Record:** `local:lastSeen` = `{ version, at }`. Written on first install, and again whenever the user taps **Continue** on the gate.
+- **Show the gate when either is true:**
+  1. The installed version (`browser.runtime.getManifest().version`) is different from `lastSeen.version`. This covers any update.
+  2. `now - lastSeen.at` is more than 14 days (`GATE_IDLE_DAYS`). This covers "first time in a while".
+- **Where:** a card at the top of the popup, shown before the first lookup of the session. It lists the version, a short "What changed" note, and the data status.
+- **In the panel:** the edge tab gets a small dot until the gate is acknowledged. The panel never shows the gate card itself, so it cannot cover the chart. The dot's tooltip says "Update notes: open the Capitol Tape popup".
+- **Buttons:**
+  - **Continue:** writes `lastSeen`, hides the card.
+  - **Check for updates:** Chrome only, calls `browser.runtime.requestUpdateCheck()`. Shows "You have the latest version" or "An update is ready. Restart Chrome to finish." Hidden on Firefox, which has no equivalent. Confirm the result values in Chromium before shipping.
+- **Release notes:** a constant `RELEASE_NOTES` keyed by version, in the new `lib/update.ts`. Written by hand per release. A missing entry shows "See the store page for what changed".
+- **Pure function, tested:** `shouldShowGate(now, lastSeen, currentVersion)` in `lib/update.ts`. No browser API inside it, so it is unit-tested directly (see 4.6).
+- **Not in scope:** a server-side version check or push notifications. Both would need a new host permission and a new service. Trigger: the store listing is no longer enough to tell users about a change.
+
+### 3.9 Site copy matches real behaviour (fixes G10, F1)
+
+- `site/index.html` line 493 says "No sign-up, no API key." Change to: "No sign-up. A free Bargo key is optional and raises your daily lookups."
+- `site/index.html` line 619 says "no account required." That is true, so keep it.
+- Panel limit message (G11): replace "(limit reached)" with "Daily free limit reached. Resets at midnight UTC. Add a free Bargo key in the popup for more." Link to the popup's Lookups tab.
+- Confirm the reset time in `lib/budget.ts` before writing "midnight UTC". Do not state a time that the code does not use.
+
 ### 3.5 Shipping checks (fixes G9)
 
 - One GitHub Actions workflow, `.github/workflows/ci.yml`, on pull requests: `npm ci`, `npm run compile`, `npm test`, `npm run build`, `npm run build:firefox`. Run `npm run zip` only on tags.
@@ -129,6 +181,9 @@ Each item is one runnable check. No new frameworks.
    - Render the popup and run `axe-core` with `wcag2aaa` tags. Fail on violations. Known exceptions go in one array with a reason next to each.
 4. **Pro state** (extend `tests/` for `refreshPro`): with the ExtPay call mocked to throw, `refreshPro()` returns `ok: false` with the cached value and time; with no cache it returns `cachedPaid: false`.
 5. **Manual, once before submission:** load the unpacked build in Chromium, click through all four sites, the popup tabs with the keyboard only, and the Plan states above with ExtensionPay in test mode.
+6. **Update gate** (`tests/update.test.ts`): `shouldShowGate` returns true for a changed version, true after 14 idle days, and false for the same version within 14 days. With no record at all (a first install), it returns false and the caller writes a record. Assert each case.
+7. **Site copy** (add to `tests/parity.test.ts`): `site/index.html` does not contain "no API key", and does contain the optional-key wording from 3.9.
+8. **Dual display, manual:** on a two-screen setup, pop out the panel to the second screen, change symbol on the chart, and confirm the pop-out follows. Close and reopen the browser, and confirm the pop-out returns to its saved position.
 
 ## 5. Phases
 
@@ -140,8 +195,11 @@ Each item is one runnable check. No new frameworks.
 | D | Accessibility tokens, targets, focus, motion (3.4); axe and contrast test (4.3) | axe clean at WCAG 2.2 AAA, with exceptions listed |
 | E | CI workflow (3.5) | PRs run compile, test and both builds |
 | F | Manual pass (4.5); store checklist (section 2 blockers) | Store submission ready |
+| G | Reproduce F1 (1a); site copy and limit message (3.9) | Steps recorded; no "no API key" in site; limit message gives a reason |
+| H | Edge tab and pop-out window (3.7) | Chart clear with the edge tab; pop-out follows the chart on a second screen |
+| I | Update gate (3.8); pure-function test (4.6) | Gate shows after an update or 14 idle days; "Continue" records it |
 
-Phases A to E are code and can be merged one at a time. Phase F needs the human blockers in section 2 first.
+Phases A to E are code and can be merged one at a time. Phases G to I are independent of A to E. Phase F needs the human blockers in section 2 first.
 
 ## 6. Deferred, with the trigger that brings each back
 

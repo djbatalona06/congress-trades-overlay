@@ -3,11 +3,12 @@
   --bg: #0f172a;
   --bg-raised: #1e293b;
   --border: #334155;
+  --control-border: #64748b;
   --text: #e2e8f0;
-  --muted: #94a3b8;
+  --muted: #b4c0d3;
   --link: #7dd3fc;
-  --buy: #22c55e;
-  --sell: #ef4444;
+  --buy: #4ade80;
+  --sell: #fca5a5;
 
   position: fixed;
   right: 16px;
@@ -55,7 +56,7 @@
 
 .panel :focus-visible {
   outline: 2px solid var(--link);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
 .bar {
@@ -75,6 +76,7 @@
   align-items: baseline;
   gap: 6px;
   min-width: 0;
+  min-height: 44px;
   padding: 10px 0 2px 12px;
   border: 0;
   background: none;
@@ -108,8 +110,8 @@
 }
 
 .close {
-  width: 24px;
-  height: 24px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   border-radius: 6px;
@@ -175,15 +177,15 @@
 }
 
 .party-D {
-  background: #2563eb;
+  background: #1e40af;
 }
 
 .party-R {
-  background: #dc2626;
+  background: #991b1b;
 }
 
 .party-I {
-  background: #64748b;
+  background: #475569;
 }
 
 .seat,
@@ -223,9 +225,10 @@
 .watch-button {
   display: block;
   width: calc(100% - 24px);
+  min-height: 44px;
   margin: 10px 12px;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
+  padding: 10px;
+  border: 1px solid var(--control-border);
   border-radius: 6px;
   background: var(--bg-raised);
 }
@@ -236,6 +239,7 @@
 }
 
 .link {
+  min-height: 44px;
   padding: 0;
   border: 0;
   background: none;
@@ -245,4 +249,15 @@
   padding: 8px 12px;
   color: var(--muted);
   font-size: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .panel *,
+  .panel *::before,
+  .panel *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
 }

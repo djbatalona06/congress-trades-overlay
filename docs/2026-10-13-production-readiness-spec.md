@@ -11,6 +11,16 @@ related: ["docs/2026-10-07-congress-trades-overlay-spec.md"]
 
 Builds on `docs/2026-10-07-congress-trades-overlay-spec.md`. That spec stays the source for architecture, data schema and Bargo facts. This one covers only the gap to production.
 
+## About me
+
+> **To fill in:** replace the bracketed text with your own words. Keep it to a few sentences. Don't include anything you don't want public, since this spec is in a repository and may later be shared.
+
+- **Who I am:** [your name or handle, and what you do]
+- **Why I built this:** [the moment or frustration that started Capitol Tape]
+- **How it was built:** [who wrote the code and how: e.g. "I designed it and used AI coding tools to write most of the code"]
+- **What I want from it:** [e.g. "a useful free tool for everyday traders; a small paid tier that pays for the data"]
+- **How to reach me:** [support or contact email, or "see the site's Contact link"]
+
 ## 0. Interpretations
 
 Where the request was ambiguous, this is the reading used. Change any of these and the matching section changes.
@@ -29,6 +39,7 @@ Where the request was ambiguous, this is the reading used. Change any of these a
 - **Account:** the Plan tab shows real status, when it was last confirmed, and one action for each state. A failed check says so, instead of failing silently.
 - **Paywall parity:** price, free limit and Pro features come from one set of constants. A test fails if the store listing drifts from them.
 - **Accessibility:** WCAG 2.2 AA for the whole extension, AAA for contrast and target size. Keyboard-only use works in the popup and the panel.
+- **Broker links on the site:** a row of links to each broker's company website (TradingView, Robinhood, Webull, Charles Schwab, and Interactive Brokers / IBKR), so visitors can open their existing broker or start a new account. Only the first four are supported by the extension (see 3.6).
 - **Out of scope:** new analytics (it would change the store's data-use disclosure), a logout button (confirm ExtensionPay supports it before adding one), Safari, i18n, rendering Worker bill data in the panel, and any change to the disclaimer text.
 
 ## 2. Current gaps (checked in code)
@@ -93,6 +104,14 @@ Stack stays as it is: WXT 0.21, React 19, plain CSS, Vitest. New runtime cost: $
 | Panel controls | Keep the existing `aria-expanded` and `aria-pressed`. Add an accessible name to the close button. | AA 4.1.2 |
 
 Contrast ratios in the table are checked by the test in section 4.3, not by eye.
+
+### 3.6 Broker links on the site
+
+- **Where:** `site/index.html`. A new "Already have a broker?" row after the supported-platforms strip, and the footer's Platforms list.
+- **Links:** company home pages, one per broker. TradingView `tradingview.com`, Robinhood `robinhood.com`, Webull `webull.com`, Charles Schwab `schwab.com`, Interactive Brokers `interactivebrokers.com`.
+- **Behaviour:** each link opens in a new tab with `rel="noopener noreferrer"` and a screen-reader note "(opens in a new tab)". No affiliate codes, tracking parameters or redirects are added.
+- **Honest labelling:** the four brokers the extension supports say so. IBKR is labelled "listed for convenience only; not supported by the extension yet". Adding IBKR support means a new platform module in `lib/platforms/` and new host permissions, which is a separate task.
+- **Before launch:** check each link once in a browser, since company sites change their URLs. Confirm that affiliate programmes (if you join any) are disclosed on the site; none are included now.
 
 ### 3.5 Shipping checks (fixes G9)
 

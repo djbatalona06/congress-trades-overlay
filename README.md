@@ -35,6 +35,16 @@ It works in the Chrome and Firefox web browsers.
 3. Look in the bottom corner. Click the box to open it.
 4. Click the star to watch a stock. You can get a message when someone in Congress trades it.
 
+## Do I need a key?
+
+No. Capitol Tape works without one. Each day, the free data service allows only a set number of lookups from one internet connection. Most people will never hit that limit.
+
+If you do hit the limit, you can get a free key from Bargo, the company that provides the data:
+
+1. Go to [bargo.ai/connect](https://www.bargo.ai/connect) and get a free key.
+2. Click the Capitol Tape icon, then open the **Lookups** tab.
+3. Paste the key and press **Save**. The key stays on your computer.
+
 ## Is it safe?
 
 Yes. Capitol Tape only reads the stock's name from the web page. It cannot see your money. It cannot buy or sell anything for you. It does not know who you are.

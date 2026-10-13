@@ -14,8 +14,10 @@ function readText(path: string): string {
 
 describe('plan facts match the constants', () => {
   for (const file of FILES) {
-    it(`${file} states the price`, () => {
-      expect(readText(file), `${file} price`).toContain(`$${PRO_PRICE_MONTHLY}/month`);
+    it(`${file} states the price, and every price it states matches`, () => {
+      const prices = [...readText(file).matchAll(/\$(\d+)\/month/g)].map((m) => Number(m[1]));
+      expect(prices.length, `${file} states no $N/month price`).toBeGreaterThan(0);
+      expect(prices, `${file} price`).toEqual(prices.map(() => PRO_PRICE_MONTHLY));
     });
     it(`${file} states the free limit`, () => {
       expect(readText(file), `${file} free limit`).toContain(`${FREE_WATCHLIST_LIMIT} tickers`);

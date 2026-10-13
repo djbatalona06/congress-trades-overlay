@@ -28,8 +28,32 @@ main {
 
 header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+}
+
+header nav {
+  flex-basis: 100%;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  border-color: transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: 6px 6px 0 0;
+  background: none;
+}
+
+.tab[aria-selected='true'] {
+  border-bottom-color: var(--accent);
+  font-weight: 600;
 }
 
 h1 {
@@ -49,8 +73,10 @@ h2 {
 
 section {
   margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
+}
+
+[role='tabpanel'] {
+  min-height: 120px;
 }
 
 p {

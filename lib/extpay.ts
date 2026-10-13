@@ -1,5 +1,5 @@
 import ExtPay from 'extpay';
-import { isPro, writeProStatus } from './pro';
+import { isPro, readProStatus, writeProStatus } from './pro';
 
 // The extension id registered at extensionpay.com.
 export const EXTPAY_ID = 'congress-trades-overlay';
@@ -10,14 +10,23 @@ export function createExtPay() {
   return ExtPay(EXTPAY_ID);
 }
 
-/** Asks ExtensionPay for the paid status; on failure the cached status stands. */
-export async function refreshPro(): Promise<boolean> {
+export type RefreshResult =
+  | { ok: true; paid: boolean; checkedAt: number }
+  // The check failed; cachedPaid / checkedAt describe what is on this device.
+  | { ok: false; cachedPaid: boolean; checkedAt: number | null };
+
+/**
+ * Asks ExtensionPay for the paid status. On failure the cached status stands,
+ * but the caller is told the check failed so it can say so.
+ */
+export async function refreshPro(now = Date.now()): Promise<RefreshResult> {
   try {
     const user = await createExtPay().getUser();
-    await writeProStatus(user.paid);
-    return user.paid;
+    await writeProStatus(user.paid, now);
+    return { ok: true, paid: user.paid, checkedAt: now };
   } catch (error) {
     console.warn('[congress-trades] could not refresh Pro status', error);
-    return isPro();
+    const cached = await readProStatus();
+    return { ok: false, cachedPaid: await isPro(now), checkedAt: cached?.checkedAt ?? null };
   }
 }

@@ -1,7 +1,7 @@
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { BARGO_HOME } from '@/lib/bargo';
 import { readBudget } from '@/lib/budget';
-import { createExtPay, refreshPro } from '@/lib/extpay';
+import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
 import { isPro } from '@/lib/pro';
 import { getApiKey, setApiKey } from '@/lib/settings';
@@ -14,6 +14,14 @@ import {
   getWatchlist,
   removeFromWatchlist,
 } from '@/lib/watchlist';
+import { PANEL_ID, type TabDef, Tabs, tabId } from './Tabs';
+
+const TABS = [
+  { id: 'watchlist', label: 'Watchlist' },
+  { id: 'plan', label: 'Plan' },
+  { id: 'lookups', label: 'Lookups' },
+] as const satisfies readonly TabDef<string>[];
+type TabKey = (typeof TABS)[number]['id'];
 
 const ADD_ERRORS: Record<Extract<AddResult, { ok: false }>['reason'], string> = {
   invalid: 'Enter a US stock ticker, like NVDA.',
@@ -58,11 +66,7 @@ function Watchlist({ pro }: { pro: boolean }) {
           Add
         </button>
       </form>
-      {error && (
-        <p className="error" role="alert">
-          {error}
-        </p>
-      )}
+      <div role="status">{error && <p className="error">{error}</p>}</div>
       {watchlist.length === 0 ? (
         <p className="muted">No tickers yet. Add one here or from the panel on a chart.</p>
       ) : (
@@ -86,19 +90,63 @@ function Watchlist({ pro }: { pro: boolean }) {
   );
 }
 
-function Plan({ pro }: { pro: boolean }) {
+export type PlanStatus =
+  | { kind: 'checking' }
+  | { kind: 'pro'; checkedAt: number }
+  | { kind: 'free'; checkedAt: number }
+  | { kind: 'offline-pro'; checkedAt: number }
+  | { kind: 'offline' };
+
+export function planStatus(result: RefreshResult): PlanStatus {
+  if (result.ok) {
+    return { kind: result.paid ? 'pro' : 'free', checkedAt: result.checkedAt };
+  }
+  return result.cachedPaid && result.checkedAt !== null
+    ? { kind: 'offline-pro', checkedAt: result.checkedAt }
+    : { kind: 'offline' };
+}
+
+const formatChecked = (at: number) =>
+  new Date(at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+
+function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) {
   const extpay = createExtPay();
+  const retry = (
+    <button type="button" onClick={onRetry}>
+      Try again
+    </button>
+  );
   return (
     <section>
       <h2>Plan</h2>
-      {pro ? (
+      <div role="status">
+        {status.kind === 'checking' && <p className="muted">Checking your plan…</p>}
+        {status.kind === 'pro' && (
+          <p>Pro is active. Last checked {formatChecked(status.checkedAt)}.</p>
+        )}
+        {status.kind === 'free' && (
+          <p className="muted">Free plan. Last checked {formatChecked(status.checkedAt)}.</p>
+        )}
+        {status.kind === 'offline-pro' && (
+          <p className="error">
+            Couldn&apos;t reach the payment server. Showing Pro from {formatChecked(status.checkedAt)}.
+          </p>
+        )}
+        {status.kind === 'offline' && (
+          <p className="error">
+            Couldn&apos;t check your plan. Check your connection and try again.
+          </p>
+        )}
+      </div>
+      {status.kind === 'pro' && (
         <>
-          <p>Pro is active: unlimited watchlist and new-disclosure alerts.</p>
+          <p>Unlimited watchlist and new-disclosure alerts.</p>
           <button type="button" onClick={() => void extpay.openPaymentPage()}>
             Manage subscription
           </button>
         </>
-      ) : (
+      )}
+      {status.kind === 'free' && (
         <>
           <p>
             Pro, ${PRO_PRICE_MONTHLY}/month: unlimited watchlist and alerts when a watched ticker gets
@@ -114,6 +162,7 @@ function Plan({ pro }: { pro: boolean }) {
           </div>
         </>
       )}
+      {(status.kind === 'offline-pro' || status.kind === 'offline') && retry}
     </section>
   );
 }
@@ -190,12 +239,27 @@ function Lookups() {
 
 export function Popup() {
   const [pro, setPro] = useState(false);
+  const [plan, setPlan] = useState<PlanStatus>({ kind: 'checking' });
+  // Not saved between opens: a remembered tab is a convenience, not a need.
+  const [tab, setTab] = useState<TabKey>('watchlist');
+
+  const confirmed = useRef(false);
+
+  const check = useCallback(async () => {
+    setPlan({ kind: 'checking' });
+    const result = await refreshPro();
+    confirmed.current = true;
+    setPro(result.ok ? result.paid : result.cachedPaid);
+    setPlan(planStatus(result));
+  }, []);
 
   useEffect(() => {
-    // Show the cached status immediately, then confirm it with the payment server.
-    isPro().then(setPro);
-    refreshPro().then(setPro);
-  }, []);
+    // Show the cached badge immediately, unless the server has already answered.
+    isPro().then((cached) => {
+      if (!confirmed.current) setPro(cached);
+    });
+    void check();
+  }, [check]);
 
   return (
     <main>
@@ -203,10 +267,13 @@ export function Popup() {
         <img src="/icon/32.png" width="24" height="24" alt="" />
         <h1>Capitol Tape</h1>
         <span className={pro ? 'badge pro' : 'badge'}>{pro ? 'Pro' : 'Free'}</span>
+        <Tabs tabs={TABS} selected={tab} onSelect={setTab} />
       </header>
-      <Watchlist pro={pro} />
-      <Plan pro={pro} />
-      <Lookups />
+      <div role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(tab)} tabIndex={0}>
+        {tab === 'watchlist' && <Watchlist pro={pro} />}
+        {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}
+        {tab === 'lookups' && <Lookups />}
+      </div>
       <footer>
         Data via{' '}
         <a href={BARGO_HOME} target="_blank" rel="noopener noreferrer">

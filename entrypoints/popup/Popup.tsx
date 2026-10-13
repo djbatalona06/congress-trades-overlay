@@ -197,7 +197,7 @@ export function Popup() {
     <main>
       <header>
         <img src="/icon/32.png" width="24" height="24" alt="" />
-        <h1>Congress Trades Overlay</h1>
+        <h1>Capitol Tape</h1>
         <span className={pro ? 'badge pro' : 'badge'}>{pro ? 'Pro' : 'Free'}</span>
       </header>
       <Watchlist pro={pro} />

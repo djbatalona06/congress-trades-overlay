@@ -13,13 +13,13 @@ export default defineConfig({
   // WXT defaults Firefox to MV2; both stores get MV3 from this codebase.
   manifestVersion: 3,
   manifest: ({ browser }) => ({
-    name: 'Congress Trades Overlay',
+    name: 'Capitol Tape — Congress Trades on Your Charts',
     description:
       'See recent STOCK Act congressional trade disclosures overlaid on stock charts. Read-only. Not financial advice.',
     permissions: ['storage', 'alarms', 'notifications'],
     // ExtPay's README requires its origin as a host permission on Firefox only.
     host_permissions: [BARGO, ...(browser === 'firefox' ? [EXTPAY] : []), ...(WORKER ? [WORKER] : [])],
-    action: { default_title: 'Congress Trades Overlay' },
+    action: { default_title: 'Capitol Tape' },
     ...(browser === 'firefox' && {
       browser_specific_settings: {
         gecko: {

@@ -1,10 +1,10 @@
-# Chrome Web Store / Firefox Add-ons Listing — Congress Trades Overlay
+# Chrome Web Store / Firefox Add-ons Listing — Capitol Tape
 
 Last updated: 2026-10-07 · Version 1.0.0 · Not yet submitted
 
 ## Listing
 
-- **Name:** Congress Trades Overlay
+- **Name:** Capitol Tape — Congress Trades on Your Charts (was: Congress Trades Overlay)
 - **Category:** Productivity
 - **Short description (132 max):** See recent STOCK Act congressional trade disclosures overlaid on stock charts. Read-only. Not financial advice.
 - **Single purpose:** Displays publicly available U.S. congressional stock trade disclosures (STOCK Act data) for the stock shown on supported chart and quote pages. It is a read-only information display.
@@ -42,7 +42,7 @@ Remote code: none. All code is in the package.
 - **Not collected:** personal information, authentication data, financial account data, location, browsing history.
 - Certify: not sold; not used for purposes unrelated to the single purpose; not used for creditworthiness or lending.
 - ExtensionPay uses `storage.sync`, which the browser may sync through the user's account.
-- **Privacy policy URL:** _publish `docs/privacy.html` and paste the URL here_
+- **Privacy policy URL:** _publish `site/` and paste the URL of `privacy.html` here_
 
 ## Assets
 
@@ -56,7 +56,7 @@ Remote code: none. All code is in the package.
 
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
 - [ ] ExtensionPay extension registered as `congress-trades-overlay` with the $8/month plan; test-mode payment passes
-- [ ] Contact email filled into `docs/privacy.html`; page published
+- [ ] Contact email filled into `site/privacy.html`; `site/` published (landing page + privacy)
 - [ ] Reply from Bargo on commercial use; legal advice on 5 U.S.C. 13107(c)(1)
 - [ ] `npm test`, `npm run zip`, `npm run zip:firefox`
 - [ ] Load unpacked and click through all four sites; run once in Firefox

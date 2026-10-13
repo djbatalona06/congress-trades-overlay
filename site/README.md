@@ -23,4 +23,15 @@ npx serve site
 
 ## Publish
 
-Any static host works. With Cloudflare Pages: `npx wrangler pages deploy site`.
+Address: **https://capitol-tape.pages.dev** (works after the first deploy below).
+
+GitHub publishes this folder to Cloudflare Pages by itself (`.github/workflows/deploy-site.yml`) every time `site/` changes on `master`. You can also run it by hand from the Actions tab ("Deploy site" → "Run workflow").
+
+One-time setup, in the GitHub repo under **Settings → Secrets and variables → Actions**:
+
+| Secret | Where to get it |
+|---|---|
+| `CLOUDFLARE_API_TOKEN` | Cloudflare dashboard → My Profile → API Tokens → Create Token → "Edit Cloudflare Pages" template (or a custom token with *Account → Cloudflare Pages → Edit*) |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard → Workers & Pages → the Account ID in the right sidebar |
+
+From your own computer instead: `npx wrangler login`, then `npx wrangler pages deploy site --project-name=capitol-tape`.

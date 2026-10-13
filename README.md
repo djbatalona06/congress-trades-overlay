@@ -32,8 +32,9 @@ It works in the Chrome and Firefox web browsers.
 
 1. Add Capitol Tape to your browser.
 2. Open a stock on one of the four websites.
-3. Look in the bottom corner. Click the box to open it.
+3. Look at the right edge of the chart. A small tab shows the stock and how many trades there are. Click it to open it. Press Esc to close it.
 4. Click the star to watch a stock. You can get a message when someone in Congress trades it.
+5. Have two screens? Click **Pop out** (the little box with an arrow). The trades open in their own window. Drag it to your second screen and it follows the chart.
 
 ## Is it safe?
 

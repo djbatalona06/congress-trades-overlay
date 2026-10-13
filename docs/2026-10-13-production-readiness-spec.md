@@ -164,6 +164,8 @@ Chrome and Firefox update the package themselves on their own schedule. The exte
 - `site/index.html` line 619 says "no account required." That is true, so keep it.
 - Panel limit message (G11): replace "(limit reached)" with "Daily free limit reached. Resets at midnight UTC. Add a free Bargo key in the popup for more." Link to the popup's Lookups tab.
 - Confirm the reset time in `lib/budget.ts` before writing "midnight UTC". Do not state a time that the code does not use.
+- **Bargo key link:** every place that asks for a key links to `https://www.bargo.ai/connect`. That covers the limit message in the panel, the popup's Lookups tab, the site copy near line 562, and the README section "Do I need a key?". Use this exact URL. It is the only key link the spec uses.
+- Add to the parity test (4.7): the README and site both contain `bargo.ai/connect`, and the popup's Lookups tab does too.
 
 ### 3.5 Shipping checks (fixes G9)
 

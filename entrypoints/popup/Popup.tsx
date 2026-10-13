@@ -9,6 +9,7 @@ import type { BudgetState, WatchlistItem } from '@/lib/types';
 import {
   type AddResult,
   FREE_WATCHLIST_LIMIT,
+  PRO_PRICE_MONTHLY,
   addToWatchlist,
   getWatchlist,
   removeFromWatchlist,
@@ -99,7 +100,10 @@ function Plan({ pro }: { pro: boolean }) {
         </>
       ) : (
         <>
-          <p>Pro, $8/month: unlimited watchlist and alerts when a watched ticker gets a new disclosure.</p>
+          <p>
+            Pro, ${PRO_PRICE_MONTHLY}/month: unlimited watchlist and alerts when a watched ticker gets
+            a new disclosure.
+          </p>
           <div className="row">
             <button type="button" className="primary" onClick={() => void extpay.openPaymentPage()}>
               Upgrade to Pro

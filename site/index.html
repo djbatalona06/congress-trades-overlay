@@ -136,6 +136,8 @@
     .hero h1 .up { color: var(--green); }
     .hero .sub { margin: 24px auto 0; max-width: 680px; color: var(--muted); font-size: clamp(17px, 0.6vw + 14px, 20px); }
     .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 40px; }
+    .brokers-list { list-style: none; padding: 0; }
+    .brokers { padding: 56px 0; text-align: center; }
     .fineprint { margin-top: 16px; font-size: 14px; color: var(--muted); }
 
     /* Browser mockup */
@@ -397,6 +399,21 @@
       </div>
     </section>
 
+    <!-- 3b. Broker links -->
+    <section class="brokers" aria-labelledby="brokers-title">
+      <div class="wrap">
+        <h2 id="brokers-title" class="h2">Already have a broker? Open its website.</h2>
+        <p class="lede">Capitol Tape works on the first four. Interactive Brokers is listed for convenience only and is not supported by the extension yet.</p>
+        <ul class="cta-row brokers-list">
+          <li><a class="btn btn-ghost" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView<span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="btn btn-ghost" href="https://robinhood.com/" target="_blank" rel="noopener noreferrer">Robinhood<span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="btn btn-ghost" href="https://www.webull.com/" target="_blank" rel="noopener noreferrer">Webull<span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="btn btn-ghost" href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer">Charles Schwab<span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a class="btn btn-ghost" href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer">Interactive Brokers (IBKR)<span class="sr-only"> (opens in a new tab)</span></a></li>
+        </ul>
+      </div>
+    </section>
+
     <!-- 4. Capabilities grid -->
     <section id="features" aria-labelledby="features-title">
       <div class="wrap">
@@ -627,7 +644,7 @@
         </div>
         <div class="foot-col">
           <h3>Platforms</h3>
-          <ul><li><a href="#features">TradingView</a></li><li><a href="#features">Robinhood</a></li><li><a href="#features">Webull</a></li><li><a href="#features">Schwab</a></li></ul>
+          <ul><li><a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">TradingView</a></li><li><a href="https://robinhood.com/" target="_blank" rel="noopener noreferrer">Robinhood</a></li><li><a href="https://www.webull.com/" target="_blank" rel="noopener noreferrer">Webull</a></li><li><a href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer">Schwab</a></li><li><a href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer">Interactive Brokers</a></li></ul>
         </div>
         <div class="foot-col">
           <h3>Resources</h3>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BARGO_HOME } from '@/lib/bargo';
+import { BARGO_HOME, BARGO_KEY_URL } from '@/lib/bargo';
 import { PARTY_NAME, formatDate } from '@/lib/format';
 import { requestPaymentPage } from '@/lib/messaging';
 import type { Detection } from '@/lib/platforms';
@@ -124,7 +124,7 @@ export function Overlay({
               {expanded ? '▾' : '▸'}
             </span>
             <span className="title">Congress Trades: {detection.ticker}</span>
-            <span className="count">{limited ? '(limit reached)' : `(${trades.length} recent)`}</span>
+            <span className="count">{limited ? '(daily limit reached)' : `(${trades.length} recent)`}</span>
           </button>
           <button
             type="button"
@@ -150,8 +150,11 @@ export function Overlay({
         <div className="body">
           {limited && (
             <p className="notice">
-              Today's free lookups are used up. Add your own free Bargo key in the extension popup
-              for more.
+              Daily free limit reached. Get a{' '}
+              <a href={BARGO_KEY_URL} target="_blank" rel="noopener noreferrer">
+                free Bargo key
+              </a>
+              , then paste it in the Capitol Tape popup (Lookups tab) for more.
             </p>
           )}
           {response.stale && response.fetchedAt !== null && (

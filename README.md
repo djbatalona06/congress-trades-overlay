@@ -44,6 +44,12 @@ Yes. Capitol Tape only reads the stock's name from the web page. It cannot see y
 - **Free:** you get the box on all four websites. You can watch 3 tickers (a ticker is a stock's short name, like NVDA).
 - **Pro ($8/month):** you can watch as many stocks as you want. You also get a message when there is a new form.
 
+## Do I need a key?
+
+No. Capitol Tape works the first time you open it. A "key" is like a library card for the data. It is free and you do not have to get one.
+
+Without a key you get about 20 stock look-ups a day. With a free key from [Bargo](https://www.bargo.ai/connect) you get more. If you see "daily limit reached", you used up the free look-ups for now. Get a key, then paste it in the Capitol Tape popup (the **Lookups** tab).
+
 ## Important
 
 Capitol Tape is **not** advice about money. It only shows forms that anyone can already read. The forms can be up to 45 days late, because the law gives Congress that much time. Always ask a grown-up you trust before you spend money on stocks.

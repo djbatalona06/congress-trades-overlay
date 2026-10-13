@@ -3,6 +3,7 @@ import { act } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
+import { BARGO_KEY_URL } from '@/lib/bargo';
 import { Overlay } from '@/entrypoints/overlay.content/Overlay';
 import type { Detection } from '@/lib/platforms';
 import { getOverlayExpanded } from '@/lib/settings';
@@ -118,9 +119,11 @@ describe('Overlay', () => {
 
   it('says so when the daily limit is reached and nothing is saved', async () => {
     await render(NVDA, response({ status: 'limited', trades: [], fromNetwork: false }));
-    expect(text()).toContain('(limit reached)');
+    expect(text()).toContain('(daily limit reached)');
     await click(toggle());
-    expect(text()).toContain("Today's free lookups are used up");
+    expect(text()).toContain('Daily free limit reached.');
+    expect(text()).toContain('Lookups tab');
+    expect(host.querySelector<HTMLAnchorElement>('.notice a')?.href).toBe(BARGO_KEY_URL);
   });
 
   it('labels saved results', async () => {

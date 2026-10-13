@@ -1,5 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { BARGO_HOME } from '@/lib/bargo';
+import { BARGO_HOME, BARGO_KEY_URL } from '@/lib/bargo';
 import { readBudget } from '@/lib/budget';
 import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
@@ -206,11 +206,11 @@ function Lookups() {
       ) : (
         <>
           <p className="muted">
-            Need more? Get a free key from{' '}
-            <a href={BARGO_HOME} target="_blank" rel="noopener noreferrer">
-              Bargo
+            Optional: a{' '}
+            <a href={BARGO_KEY_URL} target="_blank" rel="noopener noreferrer">
+              free Bargo key
             </a>{' '}
-            and paste it here. It stays on this device.
+            raises your daily lookups. Paste it here; it stays on this device.
           </p>
           <form
             className="row"

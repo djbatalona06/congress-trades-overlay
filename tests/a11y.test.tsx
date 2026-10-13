@@ -5,7 +5,27 @@ import { act } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
+import { Overlay } from '@/entrypoints/overlay.content/Overlay';
+import { Panel } from '@/entrypoints/panel/Panel';
 import { Popup } from '@/entrypoints/popup/Popup';
+import { setCurrentTicker } from '@/lib/settings';
+import type { TradesResponse } from '@/lib/types';
+import { budget, congressTrade } from './helpers';
+
+const TRADES: TradesResponse = {
+  status: 'ok',
+  ticker: 'NVDA',
+  trades: [congressTrade()],
+  fetchedAt: Date.now(),
+  stale: false,
+  fromNetwork: true,
+  budget: budget(),
+};
+vi.mock('@/lib/messaging', () => ({
+  requestTrades: async () => TRADES,
+  requestPaymentPage: vi.fn(),
+  requestPopOut: vi.fn(),
+}));
 
 vi.mock('@/lib/extpay', () => ({
   createExtPay: () => ({ openPaymentPage: vi.fn(), openLoginPage: vi.fn() }),
@@ -18,6 +38,8 @@ vi.mock('@/lib/extpay', () => ({
 
 const POPUP_CSS = readFileSync('entrypoints/popup/style.css', 'utf8');
 const PANEL_CSS = readFileSync('entrypoints/overlay.content/style.css', 'utf8');
+const POPOUT_CSS = readFileSync('entrypoints/panel/style.css', 'utf8');
+const TRADES_CSS = readFileSync('components/trades.css', 'utf8');
 
 function token(css: string, name: string): string {
   const match = css.match(new RegExp(`${name}:\\s*(#[0-9a-fA-F]{6})`));
@@ -44,6 +66,7 @@ const NON_TEXT = 3;
 describe.each([
   ['popup', POPUP_CSS, ['--muted', '--text', '--link', '--accent-text', '--error']],
   ['panel', PANEL_CSS, ['--muted', '--text', '--link', '--buy', '--sell']],
+  ['pop-out', POPOUT_CSS, ['--muted', '--text', '--link', '--buy', '--sell']],
 ] as const)('%s colour contrast', (_name, css, textTokens) => {
   const backgrounds = [token(css, '--bg'), token(css, '--bg-raised')];
 
@@ -71,7 +94,7 @@ describe('other coloured text', () => {
 
   it('white party-badge text is at least 7:1 on each badge colour', () => {
     for (const party of ['D', 'R', 'I']) {
-      const block = PANEL_CSS.match(new RegExp(`\\.party-${party}\\s*\\{[^}]*background:\\s*(#[0-9a-fA-F]{6})`));
+      const block = TRADES_CSS.match(new RegExp(`\\.party-${party}\\s*\\{[^}]*background:\\s*(#[0-9a-fA-F]{6})`));
       expect(block?.[1], `party-${party}`).toBeTruthy();
       expect(contrast('#ffffff', block?.[1] as string), `party-${party}`).toBeGreaterThanOrEqual(AAA_TEXT);
     }
@@ -80,7 +103,7 @@ describe('other coloured text', () => {
 
 describe('stylesheets', () => {
   it('both turn motion off for prefers-reduced-motion', () => {
-    for (const css of [POPUP_CSS, PANEL_CSS]) {
+    for (const css of [POPUP_CSS, PANEL_CSS, POPOUT_CSS]) {
       expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
       expect(css).toMatch(/transition: none !important/);
     }
@@ -88,8 +111,10 @@ describe('stylesheets', () => {
 
   it('buttons are at least 44x44 CSS px', () => {
     expect(POPUP_CSS).toMatch(/button \{[^}]*min-width: 44px;[^}]*min-height: 44px/s);
-    expect(PANEL_CSS).toMatch(/\.close \{[^}]*width: 44px;[^}]*height: 44px/s);
+    expect(PANEL_CSS).toMatch(/\.close,\s*\.popout \{[^}]*width: 44px;[^}]*height: 44px/s);
     expect(PANEL_CSS).toMatch(/\.toggle \{[^}]*min-height: 44px/s);
+    expect(PANEL_CSS).toMatch(/\.edge-tab \{[^}]*width: 44px;[^}]*min-height: 44px/s);
+    expect(TRADES_CSS).toMatch(/\.watch-button \{[^}]*min-height: 44px/s);
   });
 });
 
@@ -139,4 +164,26 @@ describe('axe (WCAG 2.2 A, AA and AAA rules)', () => {
       expect(await violations()).toEqual([]);
     });
   }
+});
+
+describe('axe on the page panel and the pop-out window', () => {
+  it('the edge tab and the opened drawer have no violations', async () => {
+    await act(async () =>
+      root.render(<Overlay detection={{ platform: 'tradingview', ticker: 'NVDA', bond: null }} response={TRADES} />),
+    );
+    expect(await violations()).toEqual([]);
+    await act(async () => host.querySelector<HTMLElement>('.edge-tab')?.click());
+    expect(host.querySelector('.drawer')).toBeTruthy();
+    expect(await violations()).toEqual([]);
+  });
+
+  it('the pop-out window has no violations, empty and with trades', async () => {
+    await act(async () => root.render(<Panel />));
+    expect(await violations()).toEqual([]);
+    await act(async () => {
+      await setCurrentTicker({ ticker: 'NVDA', bond: null, platform: 'tradingview', at: Date.now() });
+    });
+    expect(host.textContent).toContain('Nancy Pelosi');
+    expect(await violations()).toEqual([]);
+  });
 });

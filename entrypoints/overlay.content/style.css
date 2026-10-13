@@ -1,5 +1,6 @@
 /* Sizes are in px: rem inside a shadow root still follows the host page's root font size. */
-.panel {
+.panel,
+.edge-tab {
   --bg: #0f172a;
   --bg-raised: #1e293b;
   --border: #334155;
@@ -9,7 +10,9 @@
   --link: #7dd3fc;
   --buy: #4ade80;
   --sell: #fca5a5;
+}
 
+.panel {
   position: fixed;
   right: 16px;
   bottom: 16px;
@@ -31,32 +34,75 @@
   width: 380px;
 }
 
+/* Opened from the edge tab: sits beside the tab, centred, instead of the bottom corner. */
+.panel.drawer {
+  top: 50%;
+  right: 36px;
+  bottom: auto;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  transform: translateY(-50%);
+}
+
 .panel *,
 .panel *::before,
 .panel *::after {
   box-sizing: border-box;
 }
 
-.panel a,
-.link {
+.panel a {
   color: var(--link);
   text-decoration: none;
 }
 
-.panel a:hover,
-.link:hover {
+.panel a:hover {
   text-decoration: underline;
 }
 
-.panel button {
+.panel button,
+.edge-tab {
   font: inherit;
   color: inherit;
   cursor: pointer;
 }
 
-.panel :focus-visible {
+.panel :focus-visible,
+.edge-tab:focus-visible {
   outline: 2px solid var(--link);
   outline-offset: 2px;
+}
+
+/*
+ * The edge tab: a 28px strip on the right edge, vertically centred. The button is
+ * 44px wide (WCAG 2.5.5); only the right 28px is painted, the 16px to its left is
+ * a transparent hit area so the tab is easy to hit but covers almost nothing.
+ */
+.edge-tab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 44px;
+  min-height: 44px;
+  padding: 12px 0 12px 16px;
+  border: 0;
+  background: linear-gradient(to right, transparent 0 16px, var(--control-border) 16px 17px, var(--bg) 17px);
+  border-radius: 8px 0 0 8px;
+  color: var(--text);
+  font: 600 12px/1 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  text-align: center;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+}
+
+.edge-tab .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--link);
 }
 
 .bar {
@@ -66,7 +112,7 @@
 .bar-main {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   padding-right: 6px;
 }
 
@@ -109,7 +155,9 @@
   font-size: 11px;
 }
 
-.close {
+.close,
+.popout {
+  flex: none;
   width: 44px;
   height: 44px;
   padding: 0;
@@ -121,7 +169,8 @@
   line-height: 1;
 }
 
-.close:hover {
+.close:hover,
+.popout:hover {
   background: var(--bg-raised);
   color: var(--text);
 }
@@ -135,116 +184,6 @@
   border-top: 1px solid var(--border);
 }
 
-.trades {
-  max-height: 300px;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-  list-style: none;
-  scrollbar-color: var(--border) transparent;
-  scrollbar-width: thin;
-}
-
-.trade {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-.who,
-.what {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-}
-
-.what {
-  margin-top: 4px;
-}
-
-.member {
-  font-weight: 600;
-}
-
-.party {
-  min-width: 18px;
-  padding: 0 5px;
-  border-radius: 4px;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.party-D {
-  background: #1e40af;
-}
-
-.party-R {
-  background: #991b1b;
-}
-
-.party-I {
-  background: #475569;
-}
-
-.seat,
-.when {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.when {
-  margin-top: 4px;
-}
-
-.type {
-  font-weight: 700;
-}
-
-.type-purchase {
-  color: var(--buy);
-}
-
-.type-sale {
-  color: var(--sell);
-}
-
-.notice {
-  margin: 0;
-  padding: 8px 12px;
-  background: var(--bg-raised);
-  color: var(--text);
-  font-size: 12px;
-}
-
-.watch {
-  border-bottom: 1px solid var(--border);
-}
-
-.watch-button {
-  display: block;
-  width: calc(100% - 24px);
-  min-height: 44px;
-  margin: 10px 12px;
-  padding: 10px;
-  border: 1px solid var(--control-border);
-  border-radius: 6px;
-  background: var(--bg-raised);
-}
-
-.watch-button[aria-pressed='true'] {
-  border-color: var(--buy);
-  color: var(--buy);
-}
-
-.link {
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
-}
-
 .footer {
   padding: 8px 12px;
   color: var(--muted);
@@ -255,7 +194,8 @@
   .panel,
   .panel *,
   .panel *::before,
-  .panel *::after {
+  .panel *::after,
+  .edge-tab {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;

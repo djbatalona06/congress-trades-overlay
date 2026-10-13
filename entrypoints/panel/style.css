@@ -1,0 +1,84 @@
+:root {
+  --bg: #0f172a;
+  --bg-raised: #1e293b;
+  --border: #334155;
+  --control-border: #64748b;
+  --text: #e2e8f0;
+  --muted: #b4c0d3;
+  --link: #7dd3fc;
+  --buy: #4ade80;
+  --sell: #fca5a5;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+main {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+header {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+h1 {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.current {
+  margin: 2px 0 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+a {
+  color: var(--link);
+}
+
+/* The window itself scrolls, so the list is not capped. */
+.trades {
+  max-height: none;
+}
+
+.empty {
+  margin: 0;
+  padding: 16px 12px;
+  color: var(--muted);
+}
+
+footer {
+  margin-top: auto;
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

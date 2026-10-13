@@ -2,6 +2,7 @@ import { ALERT_ALARM, ALERT_PERIOD_MINUTES, pollAlerts } from '@/lib/alerts';
 import { pruneCache } from '@/lib/cache';
 import { createExtPay, refreshPro } from '@/lib/extpay';
 import { type AppMessage, isAppMessage } from '@/lib/messaging';
+import { openPopout } from '@/lib/popoutWindow';
 import { PRO_RECHECK_MS, readProStatus } from '@/lib/pro';
 import { getTrades } from '@/lib/service';
 import { resolveTicker } from '@/lib/ticker';
@@ -27,6 +28,9 @@ async function handle(message: AppMessage): Promise<unknown> {
     }
     case 'cto/open-payment':
       await createExtPay().openPaymentPage();
+      return null;
+    case 'cto/pop-out':
+      await openPopout();
       return null;
   }
 }

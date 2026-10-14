@@ -13,6 +13,7 @@
     "zip:firefox": "wxt zip -b firefox",
     "postinstall": "wxt prepare",
     "compile": "tsc --noEmit",
+    "check:links": "node scripts/check-links.mjs",
     "compile:worker": "tsc --noEmit -p worker",
     "test": "vitest run",
     "party-map": "node scripts/build-party-map.mjs"

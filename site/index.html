@@ -11,7 +11,16 @@
   <meta property="og:title" content="Capitol Tape — Congress Trades on Your Charts" />
   <meta property="og:description" content="See every congressional stock disclosure on the chart you're already reading." />
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://capitol-tape.pages.dev/" />
+  <meta property="og:site_name" content="Capitol Tape" />
+  <meta property="og:image" content="https://capitol-tape.pages.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Capitol Tape: congressional stock trades shown on your chart" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Capitol Tape — Congress Trades on Your Charts" />
+  <meta name="twitter:description" content="See every congressional stock disclosure on the chart you're already reading." />
+  <meta name="twitter:image" content="https://capitol-tape.pages.dev/og-image.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
@@ -20,6 +29,8 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Capitol Tape",
+    "url": "https://capitol-tape.pages.dev/",
+    "description": "Browser extension that shows STOCK Act congressional trade disclosures on TradingView, Robinhood, Webull and Schwab charts.",
     "applicationCategory": "BrowserApplication",
     "operatingSystem": "Chrome, Firefox",
     "offers": [
@@ -442,7 +453,7 @@
           <article class="card reveal" style="--i:0">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M13 13h5v4h-5z" /></svg></div>
             <h3>On-chart disclosure panel</h3>
-            <p>Reads the ticker from the page and docks a compact panel in the corner. Collapsed, it's one line. Expanded, it's the full filing record.</p>
+            <p>Reads the ticker from the page and shows a slim tab on the edge of the chart with the ticker and a count. Open it for the full filing record, or pop it out to a second screen.</p>
           </article>
           <article class="card reveal" style="--i:1">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" /></svg></div>
@@ -491,6 +502,7 @@
               <tr><th scope="row">Follows symbol changes</th><td class="no">No</td><td class="yes">Yes</td></tr>
               <tr><th scope="row">Bond → issuer lookup</th><td class="no">Manual</td><td class="yes">Automatic</td></tr>
               <tr><th scope="row">Watchlist alerts</th><td>Varies</td><td class="yes">Browser notification</td></tr>
+              <tr><th scope="row">Pop out to a second screen</th><td class="no">No</td><td class="yes">Yes</td></tr>
               <tr><th scope="row">Tabs to open</th><td>1+ per ticker</td><td class="yes">0</td></tr>
             </tbody>
           </table>
@@ -508,7 +520,7 @@
         <ol class="steps grid">
           <li class="step reveal" style="--i:0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups.</p><span class="time">10 seconds</span></li>
           <li class="step reveal" style="--i:1"><h3>Open a ticker</h3><p>Pull up any US stock or corporate bond on a supported platform. The symbol is detected automatically.</p><span class="time">Instant</span></li>
-          <li class="step reveal" style="--i:2"><h3>Read the tape</h3><p>Expand the panel to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
+          <li class="step reveal" style="--i:2"><h3>Read the tape</h3><p>Open the tab to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
           <li class="step reveal" style="--i:3"><h3>Watch &amp; get notified</h3><p>Star a ticker. When a member files a new disclosure on it, you get a browser notification.</p><span class="time">Runs in the background</span></li>
         </ol>
       </div>
@@ -530,31 +542,28 @@
       </div>
     </section>
 
-    <!-- 8. Client feedback -->
+    <!-- 8. Who it is for (no invented quotes; add verified reviews once the store listing has them) -->
     <section class="alt" aria-labelledby="quotes-title">
       <div class="wrap">
         <div class="head center reveal">
-          <span class="eyebrow">Results</span>
-          <h2 id="quotes-title" class="h2">Hours back, every week.</h2>
+          <span class="eyebrow">Who it's for</span>
+          <h2 id="quotes-title" class="h2">Made for people who already live on charts.</h2>
         </div>
         <div class="grid">
           <figure class="quote reveal" style="--i:0">
-            <span class="roi">−30 min / week</span>
-            <blockquote>“I used to cross-check a disclosure site against my watchlist every Sunday. That half hour is gone — the panel is already there when I open the chart.”</blockquote>
-            <figcaption><span class="avatar" style="background:#15803d" aria-hidden="true">DR</span><div><strong>Dana Reyes</strong><span>Independent swing trader</span></div></figcaption>
+            <span class="roi">Chart watchers</span>
+            <blockquote>Check a name before you trade it. The disclosures are already on the chart, so there is no extra tab to open and no site to remember.</blockquote>
           </figure>
           <figure class="quote reveal" style="--i:1">
-            <span class="roi">4 hrs → 1 hr per issue</span>
-            <blockquote>“Our weekly disclosure roundup used to take an afternoon of tab-switching. Now we work straight from the charts and the watchlist notifications.”</blockquote>
-            <figcaption><span class="avatar" style="background:#0a0a0a" aria-hidden="true">MT</span><div><strong>Marcus Tran</strong><span>Editor, markets newsletter</span></div></figcaption>
+            <span class="roi">Newsletter writers</span>
+            <blockquote>Work straight from the charts and a watchlist. Every row names the member, the side, the amount range and both dates, with a link to the official filing.</blockquote>
           </figure>
           <figure class="quote reveal" style="--i:2">
-            <span class="roi">0 missed filings</span>
-            <blockquote>“I follow several issuers only through their debt. The bond-to-issuer mapping means filings on those names reach me without a second lookup.”</blockquote>
-            <figcaption><span class="avatar" style="background:#dc2626" aria-hidden="true">PS</span><div><strong>Priya Shah</strong><span>Fixed-income analyst</span></div></figcaption>
+            <span class="roi">Bond followers</span>
+            <blockquote>Follow an issuer through its debt? Corporate-bond charts map to the issuer's stock, so its disclosures still reach you without a second lookup.</blockquote>
           </figure>
         </div>
-        <p class="illustrative">Illustrative customer stories. Replace with verified reviews before launch.</p>
+        <p class="illustrative">Reviews from real users will appear here once the store listings have them.</p>
       </div>
     </section>
 
@@ -594,15 +603,15 @@
           </article>
           <article class="tier reveal" style="--i:2">
             <h3>Desk</h3>
-            <p class="for">For newsletters, research teams and desks.</p>
-            <div class="price"><b>Custom</b></div>
+            <p class="for">For newsletters, research teams and desks. Not available yet.</p>
+            <div class="price"><b>Waitlist</b></div>
             <ul>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Everything in Pro, per seat</li>
-              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Related bills and executive orders by sector (preview)</li>
-              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Hosted data service with higher lookup limits</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Related bills and executive orders by sector (planned)</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Hosted data service with higher lookup limits (planned)</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Consolidated billing</li>
             </ul>
-            <a class="btn btn-ghost" href="mailto:hello@example.com?subject=Capitol%20Tape%20Desk">Join the Desk Waitlist</a>
+            <a class="btn btn-ghost" href="support.html#contact" data-contact="Capitol Tape Desk">Join the Desk Waitlist</a>
           </article>
         </div>
       </div>
@@ -648,15 +657,10 @@
         <div class="foot-brand">
           <a class="logo" href="#top">Capitol Tape</a>
           <p>Congressional trade disclosures, on the charts you already use.</p>
-          <div class="socials">
-            <a href="#" aria-label="Capitol Tape on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.2-8.3L2 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z" /></svg></a>
-            <a href="#" aria-label="Capitol Tape on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5a3.9 3.9 0 0 1 1-2.7c-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7a3.9 3.9 0 0 1 1 2.7c0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2Z" /></svg></a>
-            <a href="#" aria-label="Capitol Tape on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm7 0h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21h-4V9Z" /></svg></a>
-          </div>
         </div>
         <div class="foot-col">
           <h3>Product</h3>
-          <ul><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#how">How it works</a></li><li><a href="#">Changelog</a></li></ul>
+          <ul><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#how">How it works</a></li><li><a href="changelog.html">Changelog</a></li></ul>
         </div>
         <div class="foot-col">
           <h3>Platforms</h3>
@@ -664,11 +668,11 @@
         </div>
         <div class="foot-col">
           <h3>Resources</h3>
-          <ul><li><a href="#faq">FAQ</a></li><li><a href="#">Support</a></li><li><a href="https://www.bargo.ai" rel="noopener">Data via Bargo</a></li><li><a href="#">Press kit</a></li></ul>
+          <ul><li><a href="#faq">FAQ</a></li><li><a href="support.html">Support</a></li><li><a href="https://www.bargo.ai" rel="noopener">Data via Bargo</a></li></ul>
         </div>
         <div class="foot-col">
           <h3>Legal</h3>
-          <ul><li><a href="privacy.html">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#faq">Disclosures</a></li><li><a href="mailto:hello@example.com">Contact</a></li></ul>
+          <ul><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="#faq">Disclosures</a></li><li><a href="support.html#contact" data-contact="Capitol Tape">Contact</a></li></ul>
         </div>
       </div>
       <div class="legal">
@@ -685,6 +689,12 @@
       chrome: '',  // e.g. https://chromewebstore.google.com/detail/capitol-tape/<item-id>
       firefox: '', // e.g. https://addons.mozilla.org/firefox/addon/capitol-tape/
     };
+
+    // Support address. Leave empty until a real one exists; the links then go to the support page.
+    const CONTACT_EMAIL = '';
+    for (const link of document.querySelectorAll('[data-contact]')) {
+      if (CONTACT_EMAIL) link.href = 'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent(link.dataset.contact);
+    }
 
     document.body.classList.remove('no-js');
     document.getElementById('year').textContent = new Date().getFullYear();

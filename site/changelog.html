@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Changelog — Capitol Tape</title>
+  <meta name="description" content="What changed in each version of Capitol Tape." />
+  <meta name="theme-color" content="#15803D" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="canonical" href="https://capitol-tape.pages.dev/changelog.html" />
+  <meta property="og:title" content="Changelog — Capitol Tape" />
+  <meta property="og:description" content="What changed in each version of Capitol Tape." />
+  <meta property="og:image" content="https://capitol-tape.pages.dev/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    :root { --bg:#fff; --alt:#f8f9fa; --ink:#0a0a0a; --ink2:#374151; --muted:#6b7280; --line:#e5e7eb; --green:#15803d; --green-hover:#166534; --tint:#f0fdf4; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    a { color: var(--green); } a:hover { color: var(--green-hover); }
+    a:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 4px; }
+    header { border-bottom: 1px solid var(--line); }
+    .bar { max-width: 760px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .brand { font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    .bar nav { display: flex; gap: 16px; flex-wrap: wrap; font-size: 15px; }
+    .bar nav a { color: var(--ink2); text-decoration: none; min-height: 24px; }
+    .bar nav a:hover, .bar nav a[aria-current=page] { color: var(--green); }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 16px 72px; }
+    h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 8px; }
+    h2 { font-size: 20px; letter-spacing: -0.02em; margin: 36px 0 8px; }
+    h3 { font-size: 16px; margin: 20px 0 4px; }
+    p, li { color: var(--ink2); } ul { padding-left: 20px; } li { margin: 6px 0; }
+    .meta { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+    .box { background: var(--tint); border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .box p { margin: 0; color: var(--ink); }
+    details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+    summary { cursor: pointer; font-weight: 600; color: var(--ink); min-height: 24px; }
+    details p { margin: 8px 0 0; }
+    .rel { border-left: 3px solid var(--green); padding: 2px 0 2px 16px; margin: 28px 0; }
+    .rel h2 { margin: 0; } .rel .meta { margin: 2px 0 8px; }
+    footer { border-top: 1px solid var(--line); background: var(--alt); }
+    footer p { max-width: 760px; margin: 0 auto; padding: 20px 16px; font-size: 13px; color: var(--muted); }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header><div class="bar"><a class="brand" href="index.html">Capitol Tape</a><nav aria-label="Site"><a href="index.html">Home</a><a href="changelog.html" aria-current="page">Changelog</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></div></header>
+  <main>
+    <h1>Changelog</h1>
+    <p class="meta">Newest first. Each entry says what changed in plain words.</p>
+    <section class="rel" aria-labelledby="v110"><h2 id="v110">Version 1.1.0</h2><p class="meta">October 2026</p>
+      <ul>
+        <li>A slim tab on the edge of the chart replaces the box. It shows the ticker and a count; open it for the full list.</li>
+        <li>A Pop out button opens the trades in their own window, handy on a second screen. The window follows the chart you are looking at and remembers its size and place.</li>
+        <li>The popup has three tabs (Watchlist, Plan, Lookups) and clearer messages about your plan.</li>
+        <li>Easier-to-read colours, larger buttons, and respect for the "reduce motion" setting.</li>
+        <li>A short "what's new" card appears after an update, so the data never changes under you without notice.</li>
+      </ul></section>
+    <section class="rel" aria-labelledby="v100"><h2 id="v100">Version 1.0.0</h2><p class="meta">October 2026</p>
+      <ul>
+        <li>First version: congressional trade disclosures on TradingView, Robinhood, Webull and Schwab.</li>
+        <li>Corporate-bond charts on TradingView map to the issuer's stock.</li>
+        <li>Free watchlist of 3 tickers. Pro ($8/month) adds an unlimited watchlist and a browser notification when a watched ticker gets a new filing.</li>
+      </ul></section>
+    <h2>Coming next</h2>
+    <p>Planned, not promised: a graph view beside the trade list in the pop-out window, and a summary view with date ranges. Nothing on this page counts anything about you.</p>
+  </main>
+  <footer><p>Capitol Tape displays public U.S. congressional stock trade disclosures (STOCK Act data) for information only. It is not financial, investment or trading advice. Not affiliated with TradingView, Robinhood, Webull, Charles Schwab, Bargo, Google, Mozilla, the U.S. Congress or any government entity.</p></footer>
+</body>
+</html>

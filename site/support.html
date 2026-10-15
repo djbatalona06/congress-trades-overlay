@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support — Capitol Tape</title>
+  <meta name="description" content="Help with Capitol Tape: missing panels, daily limits, Pro and contact." />
+  <meta name="theme-color" content="#15803D" />
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="canonical" href="https://capitol-tape.pages.dev/support.html" />
+  <meta property="og:title" content="Support — Capitol Tape" />
+  <meta property="og:description" content="Help with Capitol Tape: missing panels, daily limits, Pro and contact." />
+  <meta property="og:image" content="https://capitol-tape.pages.dev/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <style>
+    :root { --bg:#fff; --alt:#f8f9fa; --ink:#0a0a0a; --ink2:#374151; --muted:#6b7280; --line:#e5e7eb; --green:#15803d; --green-hover:#166534; --tint:#f0fdf4; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    a { color: var(--green); } a:hover { color: var(--green-hover); }
+    a:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 4px; }
+    header { border-bottom: 1px solid var(--line); }
+    .bar { max-width: 760px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .brand { font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+    .bar nav { display: flex; gap: 16px; flex-wrap: wrap; font-size: 15px; }
+    .bar nav a { color: var(--ink2); text-decoration: none; min-height: 24px; }
+    .bar nav a:hover, .bar nav a[aria-current=page] { color: var(--green); }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 16px 72px; }
+    h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -0.03em; line-height: 1.15; margin: 0 0 8px; }
+    h2 { font-size: 20px; letter-spacing: -0.02em; margin: 36px 0 8px; }
+    h3 { font-size: 16px; margin: 20px 0 4px; }
+    p, li { color: var(--ink2); } ul { padding-left: 20px; } li { margin: 6px 0; }
+    .meta { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+    .box { background: var(--tint); border: 1px solid #bbf7d0; border-radius: 12px; padding: 14px 16px; margin: 20px 0; }
+    .box p { margin: 0; color: var(--ink); }
+    details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+    summary { cursor: pointer; font-weight: 600; color: var(--ink); min-height: 24px; }
+    details p { margin: 8px 0 0; }
+    .rel { border-left: 3px solid var(--green); padding: 2px 0 2px 16px; margin: 28px 0; }
+    .rel h2 { margin: 0; } .rel .meta { margin: 2px 0 8px; }
+    footer { border-top: 1px solid var(--line); background: var(--alt); }
+    footer p { max-width: 760px; margin: 0 auto; padding: 20px 16px; font-size: 13px; color: var(--muted); }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <header><div class="bar"><a class="brand" href="index.html">Capitol Tape</a><nav aria-label="Site"><a href="index.html">Home</a><a href="changelog.html">Changelog</a><a href="support.html" aria-current="page">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav></div></header>
+  <main>
+    <h1>Support</h1>
+    <p class="meta">Quick answers first. Contact details are at the bottom.</p>
+    <details><summary>The tab or panel does not show up</summary><p>It stays hidden when there is nothing to show: the page is not a stock page on TradingView, Robinhood, Webull or Schwab, the ticker was not recognised, no member filed a disclosure in the last ~90 days, or you dismissed it. Reload the page and try another ticker such as NVDA to check.</p></details>
+    <details><summary>It says I reached the daily limit</summary><p>The free data source allows a set number of lookups per day. Results are saved on your device for 6 hours, and half of the day's lookups are kept for charts. A free <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">Bargo key<span style="position:absolute;left:-9999px"> (opens in a new tab)</span></a> pasted into the popup (Lookups tab) raises the limit. The count resets later in the day.</p></details>
+    <details><summary>How do I open the second-screen window?</summary><p>Open the edge tab on the chart, then choose the Pop out button. Move the window to your other screen. It follows whichever chart tab you are looking at.</p></details>
+    <details><summary>How do I upgrade or cancel Pro?</summary><p>Open the extension popup, then the Plan tab. Choose Upgrade to Pro, or Manage subscription to cancel. Payment is handled by ExtensionPay and Stripe, so the extension never sees your card.</p></details>
+    <details><summary>Pro shows as "offline" or "could not check"</summary><p>The extension could not reach the payment service. Your Pro features keep working for up to 72 hours while it retries. Check your internet connection, then reopen the popup.</p></details>
+    <details><summary>Are the trades up to date?</summary><p>No disclosure is instant. Members have up to 45 days after a trade to file, so every row is delayed by law. Each row shows both the trade date and the filing date.</p></details>
+    <h2 id="contact">Contact</h2>
+    <div class="box"><p id="contact-line">An email address for support has not been published yet. Once the extension is in the Chrome Web Store or Firefox Add-ons, use the Support tab on its listing.</p></div>
+    <p>Please do not send passwords, card numbers or brokerage details. Capitol Tape never needs them.</p>
+    <script>
+      // Paste the real support address here once it exists.
+      const CONTACT_EMAIL = '';
+      if (CONTACT_EMAIL) {
+        const line = document.getElementById('contact-line');
+        line.textContent = 'Email: ';
+        const a = document.createElement('a'); a.href = 'mailto:' + CONTACT_EMAIL; a.textContent = CONTACT_EMAIL; line.append(a);
+      }
+    </script>
+  </main>
+  <footer><p>Capitol Tape displays public U.S. congressional stock trade disclosures (STOCK Act data) for information only. It is not financial, investment or trading advice. Not affiliated with TradingView, Robinhood, Webull, Charles Schwab, Bargo, Google, Mozilla, the U.S. Congress or any government entity.</p></footer>
+</body>
+</html>

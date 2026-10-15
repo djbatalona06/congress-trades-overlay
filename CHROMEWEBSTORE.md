@@ -1,6 +1,6 @@
 # Chrome Web Store / Firefox Add-ons Listing — Capitol Tape
 
-Last updated: 2026-10-07 · Version 1.0.0 · Not yet submitted
+Last updated: 2026-10-15 · Version 1.1.0 · Not yet submitted
 
 ## Listing
 
@@ -11,7 +11,7 @@ Last updated: 2026-10-07 · Version 1.0.0 · Not yet submitted
 
 **Detailed description**
 
-Shows what members of Congress have disclosed trading in the stock you are looking at, in a small panel on the page.
+Shows what members of Congress have disclosed trading in the stock you are looking at, in a slim tab on the edge of the chart. A Pop out button opens the list in its own window for a second screen.
 
 - Works on stock pages at TradingView, Robinhood, Webull and Schwab
 - Shows each disclosure's member, party, chamber, buy or sell, amount range, trade date and filing date
@@ -66,3 +66,4 @@ Remote code: none. All code is in the package.
 | Version | Date | Notes |
 |---|---|---|
 | 1.0.0 | — | First release |
+| 1.1.0 | — | Edge tab, pop-out window for a second screen, three-tab popup, clearer plan messages, higher-contrast colours |

@@ -20,6 +20,9 @@ jobs:
       - run: npm ci
       - run: npm run compile
       - run: npm test
+      # The Worker has its own dependencies and is not covered by the root compile.
+      - run: npm ci --prefix worker
+      - run: npm run compile:worker
       - run: npm run build
       - run: npm run build:firefox
       # Packaging only matters for a release.

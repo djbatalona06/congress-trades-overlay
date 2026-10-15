@@ -87,6 +87,17 @@ describe.each([
   }
 });
 
+describe('graph colours', () => {
+  it('chart marks are at least 3:1 on both pop-out backgrounds', () => {
+    const backgrounds = [token(POPOUT_CSS, '--bg'), token(POPOUT_CSS, '--bg-raised')];
+    for (const name of ['--chart-d', '--chart-r', '--chart-i', '--chart-unknown', '--chart-size', '--buy', '--sell']) {
+      for (const bg of backgrounds) {
+        expect(contrast(token(POPOUT_CSS, name), bg), `${name} on ${bg}`).toBeGreaterThanOrEqual(NON_TEXT);
+      }
+    }
+  });
+});
+
 describe('other coloured text', () => {
   it('primary button text is at least 7:1 on the accent fill', () => {
     expect(contrast(token(POPUP_CSS, '--on-accent'), token(POPUP_CSS, '--accent'))).toBeGreaterThanOrEqual(AAA_TEXT);
@@ -185,6 +196,25 @@ describe('axe on the page panel and the pop-out window', () => {
     });
     expect(host.textContent).toContain('Nancy Pelosi');
     expect(await violations()).toEqual([]);
+  });
+});
+
+describe('axe on the narrow pop-out (tabs)', () => {
+  it('has no violations on either tab', async () => {
+    window.innerWidth = 400;
+    try {
+      await act(async () => root.render(<Panel />));
+      await act(async () => {
+        await setCurrentTicker({ ticker: 'NVDA', bond: null, platform: 'tradingview', at: Date.now() });
+      });
+      expect(await violations()).toEqual([]);
+      const graphsTab = [...host.querySelectorAll<HTMLElement>('[role="tab"]')].find((t) => t.textContent === 'Graphs');
+      await act(async () => graphsTab?.click());
+      expect(host.textContent).toContain('Graphs for NVDA');
+      expect(await violations()).toEqual([]);
+    } finally {
+      window.innerWidth = 1024;
+    }
   });
 });
 

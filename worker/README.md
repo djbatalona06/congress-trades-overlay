@@ -52,7 +52,7 @@ The Worker never reads or stores the caller's address, sets no cookies, and keep
 
 ## Before you switch it on for users
 
-1. `docs/privacy.html` still says the extension has no server. Update it, and the permission table in `CHROMEWEBSTORE.md`, in the same release.
+1. `site/privacy.html` still says the extension has no server. Update it, and the permission table in `CHROMEWEBSTORE.md`, in the same release.
 2. `TRADE_SOURCE=bargo` proxies Bargo's free, personal-use API for everyone. Bargo's cap (30 requests and 100 rows a day without a key, 100 and 1,000 with one) is about 20 to 200 distinct tickers a day, and its terms are silent on commercial use. Ask Bargo, or move to a licensed vendor, before charging. `TRADE_SOURCE=none` returns only the legislation lists.
 3. 5 U.S.C. 13107(c) still needs a lawyer's answer (spec section 7).
 4. The Congress.gov and Federal Register parsing follows their published docs and is covered by fixture tests, but it has not been run against the live APIs yet. Watch the first cron runs (`npx wrangler tail`) and check `bills` and `executive_orders` fill up.

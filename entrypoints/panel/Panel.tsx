@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { type KeyboardEvent, type PointerEvent, useEffect, useRef, useState } from 'react';
+import { GraphPanel } from '@/components/GraphPanel';
 import { TradesBody } from '@/components/TradesBody';
 import { WatchButton } from '@/components/WatchButton';
 import { useTrades } from '@/components/useTrades';
@@ -33,8 +34,32 @@ function useSaveBounds() {
   }, []);
 }
 
+/** Wide enough for the list and the graphs side by side; narrower windows get tabs instead. */
+export const SPLIT_MIN_WIDTH = 560;
+const SPLIT_MIN = 30;
+const SPLIT_MAX = 70;
+const SPLIT_STEP = 5;
+
+function useWindowWidth(): number {
+  const [width, setWidth] = useState(() => window.innerWidth);
+  useEffect(() => {
+    const onResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return width;
+}
+
+const clampSplit = (value: number) => Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(value)));
+
+type Pane = 'list' | 'graphs';
+
 export function Panel() {
   const [current, setCurrent] = useState<CurrentTicker | null>(null);
+  const [pane, setPane] = useState<Pane>('list');
+  const [split, setSplit] = useState(50);
+  const splitRef = useRef<HTMLDivElement>(null);
+  const width = useWindowWidth();
   useSaveBounds();
 
   useEffect(() => {
@@ -64,6 +89,32 @@ export function Panel() {
     );
   }
 
+  const graphs =
+    ticker && response && response.trades.length > 0 ? (
+      <GraphPanel ticker={ticker} trades={response.trades} />
+    ) : (
+      <p className="empty">Graphs show here once a stock has recent disclosures.</p>
+    );
+
+  const dragTo = (event: PointerEvent<HTMLDivElement>) => {
+    const box = splitRef.current?.getBoundingClientRect();
+    if (!box || box.width === 0) return;
+    setSplit(clampSplit(((event.clientX - box.left) / box.width) * 100));
+  };
+  const onDividerKey = (event: KeyboardEvent<HTMLDivElement>) => {
+    const next =
+      event.key === 'ArrowLeft' ? split - SPLIT_STEP
+      : event.key === 'ArrowRight' ? split + SPLIT_STEP
+      : event.key === 'Home' ? SPLIT_MIN
+      : event.key === 'End' ? SPLIT_MAX
+      : null;
+    if (next === null) return;
+    event.preventDefault();
+    setSplit(clampSplit(next));
+  };
+
+  const wide = width >= SPLIT_MIN_WIDTH;
+
   return (
     <main>
       <header>
@@ -76,7 +127,66 @@ export function Panel() {
           Data via Bargo
         </a>
       </header>
-      {body}
+      {wide ? (
+        <div
+          className="split"
+          ref={splitRef}
+          style={{ gridTemplateColumns: `${split}fr 8px ${100 - split}fr` }}
+        >
+          <section className="pane" aria-label="Trades">
+            {body}
+          </section>
+          <div
+            className="divider"
+            role="separator"
+            tabIndex={0}
+            aria-orientation="vertical"
+            aria-label="Resize trades and graphs"
+            aria-valuenow={split}
+            aria-valuemin={SPLIT_MIN}
+            aria-valuemax={SPLIT_MAX}
+            onKeyDown={onDividerKey}
+            onPointerDown={(event) => event.currentTarget.setPointerCapture(event.pointerId)}
+            onPointerMove={(event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) dragTo(event);
+            }}
+          />
+          <section className="pane" aria-label="Graphs">
+            {graphs}
+          </section>
+        </div>
+      ) : (
+        <>
+          <div role="tablist" aria-label="Trades or graphs" className="pane-tabs">
+            {(['list', 'graphs'] as const).map((id) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                id={`pane-tab-${id}`}
+                aria-selected={pane === id}
+                aria-controls="pane-body"
+                tabIndex={pane === id ? 0 : -1}
+                className="pane-tab"
+                onClick={() => setPane(id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    const other = id === 'list' ? 'graphs' : 'list';
+                    setPane(other);
+                    document.getElementById(`pane-tab-${other}`)?.focus();
+                  }
+                }}
+              >
+                {id === 'list' ? 'List' : 'Graphs'}
+              </button>
+            ))}
+          </div>
+          <div role="tabpanel" id="pane-body" aria-labelledby={`pane-tab-${pane}`} className="pane">
+            {pane === 'list' ? body : graphs}
+          </div>
+        </>
+      )}
       <footer>
         Public STOCK Act disclosures, filed up to 45 days after a trade. For information only; not
         financial, investment or trading advice.

@@ -8,6 +8,11 @@
   --link: #7dd3fc;
   --buy: #4ade80;
   --sell: #fca5a5;
+  --chart-d: #93c5fd;
+  --chart-r: #fdba74;
+  --chart-i: #cbd5e1;
+  --chart-unknown: #94a3b8;
+  --chart-size: #7dd3fc;
   color-scheme: dark;
 }
 
@@ -81,4 +86,57 @@ footer {
     scroll-behavior: auto !important;
     transition: none !important;
   }
+}
+
+/* Side by side when the window is wide; tabs when it is narrow (see Panel.tsx). */
+.split {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+}
+
+.pane {
+  min-width: 0;
+  overflow-y: auto;
+}
+
+.divider {
+  position: relative;
+  background: var(--border);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.divider::after {
+  /* A wider grab area than the 8px line. */
+  content: '';
+  position: absolute;
+  inset: 0 -6px;
+}
+
+.divider:hover,
+.divider:focus-visible {
+  background: var(--link);
+}
+
+.pane-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.pane-tab {
+  flex: 1;
+  min-height: 44px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pane-tab[aria-selected='true'] {
+  border-bottom-color: var(--link);
+  color: var(--text);
+  font-weight: 700;
 }

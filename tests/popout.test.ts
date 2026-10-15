@@ -91,3 +91,13 @@ describe('openPopout', () => {
     expect(await getPopoutBounds()).toBeNull();
   });
 });
+
+describe('pop-out stylesheet order', () => {
+  it('loads the window stylesheet after the shared ones so "max-height: none" wins', async () => {
+    const { readFileSync } = await import('node:fs');
+    const source = readFileSync('entrypoints/panel/main.tsx', 'utf8');
+    const order = [...source.matchAll(/import '([^']+\.css)'/g)].map((m) => m[1]);
+    expect(order.at(-1)).toBe('./style.css');
+    expect(order).toContain('@/components/trades.css');
+  });
+});

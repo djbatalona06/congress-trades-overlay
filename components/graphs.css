@@ -1,0 +1,236 @@
+/* Graph panel styles for the pop-out window. The host defines --bg, --bg-raised,
+   --border, --control-border, --text, --muted, --link, --buy, --sell and the
+   --chart-* tokens. Chart marks are at least 3:1 against the background. */
+.graphs {
+  padding: 12px;
+}
+
+.graphs-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.graphs h2 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.graphs h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ranges {
+  display: flex;
+  gap: 4px;
+}
+
+.range {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.range[aria-pressed='true'] {
+  background: var(--bg-raised);
+  border-color: var(--link);
+  font-weight: 700;
+}
+
+.scorecards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.scorecards > div {
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-raised);
+}
+
+.scorecards dt {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.scorecards dd {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.scorecards dd.change {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.graph-block {
+  margin: 14px 0;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: 110px;
+}
+
+.chart .axis {
+  stroke: var(--control-border);
+  stroke-width: 1;
+}
+
+.bar-buy {
+  fill: var(--buy);
+}
+
+.bar-sell {
+  fill: var(--sell);
+}
+
+.axis-labels {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.legend {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 6px;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+
+.swatch-buy {
+  background: var(--buy);
+}
+
+.swatch-sell {
+  background: var(--sell);
+}
+
+.as-table summary {
+  cursor: pointer;
+  min-height: 24px;
+  margin-top: 6px;
+  color: var(--link);
+  font-size: 12px;
+}
+
+.as-table table {
+  width: 100%;
+  margin-top: 6px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.as-table th,
+.as-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.bars {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bars li {
+  display: grid;
+  grid-template-columns: 96px 1fr 24px;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar-label {
+  font-size: 12px;
+}
+
+.bar-track {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--bg-raised);
+  overflow: hidden;
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+}
+
+.tone-party-D {
+  background: var(--chart-d);
+}
+
+.tone-party-R {
+  background: var(--chart-r);
+}
+
+.tone-party-I {
+  background: var(--chart-i);
+}
+
+.tone-party-unknown {
+  background: var(--chart-unknown);
+}
+
+.tone-size {
+  background: var(--chart-size);
+}
+
+.bar-count {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.graph-empty,
+.graph-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.graph-note {
+  margin-top: 14px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}

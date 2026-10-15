@@ -4,7 +4,14 @@ import { readBudget } from '@/lib/budget';
 import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
 import { isPro } from '@/lib/pro';
-import { getApiKey, getHudEnabled, setApiKey, setHudEnabled } from '@/lib/settings';
+import {
+  getApiKey,
+  getHudEnabled,
+  getInfluenceEnabled,
+  setApiKey,
+  setHudEnabled,
+  setInfluenceEnabled,
+} from '@/lib/settings';
 import type { BudgetState, WatchlistItem } from '@/lib/types';
 import {
   type AddResult,
@@ -117,6 +124,36 @@ function HudToggle() {
       <p className="muted">
         A small box that says how busy Congress has been in a stock: Quiet, Watch or Hot. You can drag it
         anywhere.
+      </p>
+    </section>
+  );
+}
+
+function InfluenceToggle() {
+  const [on, setOn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    getInfluenceEnabled().then(setOn);
+  }, []);
+
+  return (
+    <section>
+      <h2>Influence (early)</h2>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={on ?? false}
+          disabled={on === undefined}
+          onChange={(event) => {
+            setOn(event.target.checked);
+            void setInfluenceEnabled(event.target.checked);
+          }}
+        />
+        Show tax breaks and outside money
+      </label>
+      <p className="muted">
+        Adds an Influence list to the panel when the extra data service is on. It only reports what was
+        filed. It never says why, and it never changes Quiet, Watch or Hot.
       </p>
     </section>
   );
@@ -307,6 +344,7 @@ export function Popup() {
           <>
             <Watchlist pro={pro} />
             <HudToggle />
+            <InfluenceToggle />
           </>
         )}
         {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}

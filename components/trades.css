@@ -132,3 +132,33 @@
   background: none;
   color: var(--link);
 }
+
+/* Influence section: a native disclosure, so the list stays short until asked for. */
+.influence {
+  border-bottom: 1px solid var(--border);
+}
+
+.influence summary {
+  min-height: 44px;
+  padding: 12px;
+  box-sizing: border-box;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.influence h3 {
+  margin: 0;
+  padding: 4px 12px 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.influence-list {
+  margin: 0;
+  padding: 4px 12px 8px 28px;
+  font-size: 12px;
+}
+
+.influence a {
+  color: var(--link);
+}

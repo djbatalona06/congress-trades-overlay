@@ -129,3 +129,14 @@ export async function getHudPosition(): Promise<HudPosition | null> {
 export async function setHudPosition(position: HudPosition): Promise<void> {
   await storage.setItem(HUD_POSITION, position);
 }
+
+// The Influence layer (tax-break and outside-money chips plus the Influence tab). Off until the user opts in.
+const INFLUENCE_ENABLED = 'local:influenceEnabled';
+
+export async function getInfluenceEnabled(): Promise<boolean> {
+  return (await storage.getItem<boolean>(INFLUENCE_ENABLED)) ?? false;
+}
+
+export async function setInfluenceEnabled(enabled: boolean): Promise<void> {
+  await storage.setItem(INFLUENCE_ENABLED, enabled);
+}

@@ -1,4 +1,4 @@
-import type { BargoTrade, ExecOrder, RelatedBill } from '../../lib/types';
+import type { BargoTrade, ExecOrder, IeSpend, RelatedBill, TaxFlag } from '../../lib/types';
 import type { BillRow } from './bills';
 
 export type StoredOrder = ExecOrder & { abstract: string };
@@ -18,6 +18,10 @@ export interface Store {
 
   upsertOrders(rows: StoredOrder[]): Promise<void>;
   recentOrders(sinceDay: string): Promise<StoredOrder[]>;
+
+  ieSpendForMembers(memberSlugs: readonly string[], sinceDay: string, limit: number): Promise<IeSpend[]>;
+  /** Only flags a person has reviewed, on the given bills. */
+  reviewedTaxFlags(billIds: readonly string[]): Promise<TaxFlag[]>;
 
   getState(key: string): Promise<string | null>;
   setState(key: string, value: string): Promise<void>;

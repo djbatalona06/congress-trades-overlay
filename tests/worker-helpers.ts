@@ -1,6 +1,6 @@
 import type { BillRow } from '../worker/src/bills';
 import type { Store, StoredOrder, TradeCacheEntry } from '../worker/src/types';
-import type { RelatedBill } from '@/lib/types';
+import type { IeSpend, RelatedBill, TaxFlag } from '@/lib/types';
 
 /** In-memory stand-in for the D1 store, same filtering rules as the SQL. */
 export class FakeStore implements Store {
@@ -51,6 +51,23 @@ export class FakeStore implements Store {
     return [...this.orders.values()]
       .filter((o) => (o.signing_date ?? o.publication_date) >= sinceDay)
       .sort((a, b) => (b.signing_date ?? b.publication_date).localeCompare(a.signing_date ?? a.publication_date));
+  }
+
+  ieSpend: (IeSpend)[] = [];
+  /** Tax flags with the reviewed state the SQL checks. */
+  taxFlags: (TaxFlag & { reviewed: boolean })[] = [];
+
+  async ieSpendForMembers(slugs: readonly string[], sinceDay: string, limit: number) {
+    return this.ieSpend
+      .filter((row) => slugs.includes(row.member_slug) && row.date >= sinceDay)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, limit);
+  }
+
+  async reviewedTaxFlags(billIds: readonly string[]) {
+    return this.taxFlags
+      .filter((flag) => flag.reviewed && billIds.includes(flag.bill_id))
+      .map(({ reviewed: _reviewed, ...flag }) => flag);
   }
 
   async getState(key: string) {

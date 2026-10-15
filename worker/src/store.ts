@@ -1,4 +1,4 @@
-import type { BargoTrade, RelatedBill } from '../../lib/types';
+import type { BargoTrade, IeSpend, RelatedBill, TaxFlag } from '../../lib/types';
 import type { BillRow } from './bills';
 import type { Store } from './types';
 
@@ -98,6 +98,36 @@ export function d1Store(db: D1Database): Store {
           url: string;
         }>();
       return results.map(({ eo_number, ...rest }) => ({ ...rest, number: eo_number }));
+    },
+
+    async ieSpendForMembers(memberSlugs, sinceDay, limit) {
+      const slugs = memberSlugs.slice(0, MAX_AREAS);
+      if (slugs.length === 0) return [];
+      const marks = slugs.map(() => '?').join(', ');
+      const { results } = await db
+        .prepare(
+          `SELECT committee_id, committee_name, member_slug, candidate_name, support_or_oppose, amount, spend_date, url
+           FROM ie_spend WHERE member_slug IN (${marks}) AND spend_date >= ?
+           ORDER BY spend_date DESC, id LIMIT ?`,
+        )
+        .bind(...slugs, sinceDay, limit)
+        .all<Omit<IeSpend, 'date'> & { spend_date: string }>();
+      return results.map(({ spend_date, ...rest }) => ({ ...rest, date: spend_date }));
+    },
+
+    async reviewedTaxFlags(billIds) {
+      const ids = billIds.slice(0, MAX_AREAS);
+      if (ids.length === 0) return [];
+      const marks = ids.map(() => '?').join(', ');
+      const { results } = await db
+        .prepare(
+          `SELECT f.bill_id, f.section_cite, b.url FROM bill_tax_flags f JOIN bills b ON b.id = f.bill_id
+           WHERE f.bill_id IN (${marks}) AND f.reviewer IS NOT NULL
+           ORDER BY f.bill_id, f.section_cite`,
+        )
+        .bind(...ids)
+        .all<TaxFlag>();
+      return results;
     },
 
     async getState(key) {

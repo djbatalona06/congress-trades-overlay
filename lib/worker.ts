@@ -1,4 +1,4 @@
-import type { ExecOrder, RelatedBill, TickerPayload } from './types';
+import type { ExecOrder, IeSpend, RelatedBill, TaxFlag, TickerPayload } from './types';
 
 export type WorkerErrorKind = 'network' | 'bad_response';
 
@@ -45,6 +45,22 @@ function isOrder(value: unknown): value is ExecOrder {
   return !!o && isText(o.document_number) && isText(o.title) && isText(o.publication_date) && isLink(o.url);
 }
 
+function isIeSpend(value: unknown): value is IeSpend {
+  const r = value as Partial<Record<keyof IeSpend, unknown>> | null;
+  return (
+    !!r &&
+    isText(r.committee_id) && isText(r.committee_name) && isText(r.member_slug) && isText(r.candidate_name) &&
+    (r.support_or_oppose === 'support' || r.support_or_oppose === 'oppose') &&
+    typeof r.amount === 'number' && Number.isFinite(r.amount) &&
+    isText(r.date) && isLink(r.url)
+  );
+}
+
+function isTaxFlag(value: unknown): value is TaxFlag {
+  const f = value as Partial<Record<keyof TaxFlag, unknown>> | null;
+  return !!f && isText(f.bill_id) && isText(f.section_cite) && isLink(f.url);
+}
+
 /** Asks the Worker for one ticker. Sends nothing but the ticker: no cookies, no headers, no key. */
 export async function fetchTickerPayload(
   ticker: string,
@@ -77,5 +93,8 @@ export async function fetchTickerPayload(
     trades: body.trades as TickerPayload['trades'],
     related_bills: list(body.related_bills).filter(isBill),
     exec_orders: list(body.exec_orders).filter(isOrder),
+    // Left out entirely when the Worker does not send them, so older Workers keep working.
+    ...(Array.isArray(body.ie_spend) && { ie_spend: body.ie_spend.filter(isIeSpend) }),
+    ...(Array.isArray(body.tax_flags) && { tax_flags: body.tax_flags.filter(isTaxFlag) }),
   };
 }

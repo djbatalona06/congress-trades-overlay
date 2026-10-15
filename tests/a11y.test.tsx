@@ -209,6 +209,39 @@ describe('axe on the page panel and the pop-out window', () => {
     expect(await violations()).toEqual([]);
   });
 
+  it('the opened Influence section has no violations and names its sources', async () => {
+    const withInfluence: TradesResponse = {
+      ...TRADES,
+      context: {
+        related_bills: [],
+        exec_orders: [],
+        tax_flags: [{ bill_id: '119-hr-1', section_cite: '26 U.S.C. 45X', url: 'https://www.congress.gov/bill/119th-congress/house-bill/1' }],
+        ie_spend: [
+          {
+            committee_id: 'C001',
+            committee_name: 'Some Committee',
+            member_slug: 'nancy-pelosi',
+            candidate_name: 'Nancy Pelosi',
+            support_or_oppose: 'support',
+            amount: 5000,
+            date: '2026-09-01',
+            url: 'https://docs.fec.gov/x',
+          },
+        ],
+      },
+    };
+    await act(async () =>
+      root.render(<Overlay detection={{ platform: 'tradingview', ticker: 'NVDA', bond: null }} response={withInfluence} />),
+    );
+    await act(async () => host.querySelector<HTMLElement>('.edge-tab')?.click());
+    const details = host.querySelector<HTMLDetailsElement>('details.influence');
+    expect(details?.querySelector('summary')?.textContent).toBe('Influence (2)');
+    details?.setAttribute('open', '');
+    expect(details?.textContent).toContain('Some Committee reported $5,000 to support Nancy Pelosi');
+    expect(details?.querySelectorAll('a[href^="https://"]')).toHaveLength(2);
+    expect(await violations()).toEqual([]);
+  });
+
   it('the pop-out window has no violations, empty and with trades', async () => {
     await act(async () => root.render(<Panel />));
     expect(await violations()).toEqual([]);

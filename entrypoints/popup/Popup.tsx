@@ -4,7 +4,7 @@ import { readBudget } from '@/lib/budget';
 import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
 import { isPro } from '@/lib/pro';
-import { getApiKey, setApiKey } from '@/lib/settings';
+import { getApiKey, getHudEnabled, setApiKey, setHudEnabled } from '@/lib/settings';
 import type { BudgetState, WatchlistItem } from '@/lib/types';
 import {
   type AddResult,
@@ -91,6 +91,37 @@ function Watchlist({ pro }: { pro: boolean }) {
   );
 }
 
+function HudToggle() {
+  // undefined until the saved choice is read, so the box never flickers.
+  const [on, setOn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    getHudEnabled().then(setOn);
+  }, []);
+
+  return (
+    <section>
+      <h2>Floating signal box</h2>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={on ?? true}
+          disabled={on === undefined}
+          onChange={(event) => {
+            setOn(event.target.checked);
+            void setHudEnabled(event.target.checked);
+          }}
+        />
+        Show it on charts
+      </label>
+      <p className="muted">
+        A small box that says how busy Congress has been in a stock: Quiet, Watch or Hot. You can drag it
+        anywhere.
+      </p>
+    </section>
+  );
+}
+
 export type PlanStatus =
   | { kind: 'checking' }
   | { kind: 'pro'; checkedAt: number }
@@ -141,7 +172,7 @@ function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) 
       </div>
       {status.kind === 'pro' && (
         <>
-          <p>Unlimited watchlist and new-disclosure alerts.</p>
+          <p>Unlimited watchlist, new-disclosure alerts, and a heads-up when a watched stock turns Hot.</p>
           <button type="button" onClick={() => void extpay.openPaymentPage()}>
             Manage subscription
           </button>
@@ -151,7 +182,7 @@ function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) 
         <>
           <p>
             Pro, ${PRO_PRICE_MONTHLY}/month: unlimited watchlist and alerts when a watched ticker gets
-            a new disclosure.
+            a new disclosure or turns Hot.
           </p>
           <div className="row">
             <button type="button" className="primary" onClick={() => void extpay.openPaymentPage()}>
@@ -272,7 +303,12 @@ export function Popup() {
       </header>
       <UpdateGate />
       <div role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(tab)} tabIndex={0}>
-        {tab === 'watchlist' && <Watchlist pro={pro} />}
+        {tab === 'watchlist' && (
+          <>
+            <Watchlist pro={pro} />
+            <HudToggle />
+          </>
+        )}
         {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}
         {tab === 'lookups' && <Lookups />}
       </div>

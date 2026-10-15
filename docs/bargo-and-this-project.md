@@ -42,6 +42,8 @@ No.
 | Popup tabs, plan messages | None | Plan status comes from ExtensionPay, not Bargo |
 | Update notes card | None | It reads the version and the saved budget only |
 | New limit message | None | It only adds the key link |
+| Signal box (Quiet / Watch / Hot) | None | It works the signals out on the device from trades the panel already fetched. It keeps the "Data via Bargo" credit in view, even when collapsed |
+| Hot alerts (Pro) | None | They run inside the existing hourly check, on the trades it already fetches for the new-filing alert |
 
 Opening the pop-out and the on-page panel for the same stock costs one look-up, not two.
 

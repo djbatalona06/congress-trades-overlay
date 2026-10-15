@@ -213,6 +213,7 @@
     .icon svg { width: 22px; height: 22px; }
     @media (max-width: 1000px) { .card { grid-column: span 6; } }
     @media (max-width: 640px) { .card { grid-column: span 12; } }
+    .card.wide { grid-column: 1 / -1; }
 
     /* Differentiator */
     .diff { position: relative; background: var(--green-tint); border-top: 1px solid rgba(21, 128, 61, 0.12); border-bottom: 1px solid rgba(21, 128, 61, 0.12); overflow: hidden; }
@@ -469,6 +470,11 @@
             <h3>Party, chamber and seat context</h3>
             <p>Each row shows member, party, chamber, state or district, amount range, trade date, filing date and a link to the official filing portal.</p>
           </article>
+          <article class="card wide reveal" style="--i:6">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 4a8 8 0 0 1 8 8" /><path d="M12 8v4l2.5 2.5" /></svg></div>
+            <h3>Floating signal box: Quiet, Watch or Hot</h3>
+            <p>A small box you can drag anywhere on the chart. It reads the filings already on screen and lights up simple signals: three members buying the same stock within 30 days, both parties buying, a big trade, a brand-new filing, or a filing that came in past the 45-day deadline. Tap a signal to read why it is lit. It is free, it costs no extra lookups, and it is information only, never advice.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -575,6 +581,7 @@
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Panel on all four platforms</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Bond-to-issuer mapping</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Watchlist of 3 tickers</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Floating signal box: Quiet, Watch or Hot</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>About 20 chart lookups a day, more with a <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free Bargo key<span class="sr-only"> (opens in a new tab)</span></a></li>
             </ul>
             <a class="btn btn-ghost" href="#get" data-install="chrome">Add to Chrome</a>
@@ -587,7 +594,7 @@
             <ul>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Everything in Free</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Unlimited watchlist</li>
-              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Browser notification when a watched ticker gets a new filing</li>
+              <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Browser notification when a watched ticker gets a new filing or turns Hot</li>
               <li><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M8 13.6 4.4 10l-1.4 1.4L8 16.4l9-9L15.6 6z" /></svg>Secure checkout via Stripe; cancel any time</li>
             </ul>
             <a class="btn btn-primary" href="#get" data-install="chrome">Start Free, Upgrade in the Popup</a>

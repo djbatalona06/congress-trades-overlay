@@ -1,4 +1,5 @@
 import './style.css';
+import './hud.css';
 import '@/components/trades.css';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -6,6 +7,7 @@ import type { ContentScriptContext } from '#imports';
 import { useTrades } from '@/components/useTrades';
 import { setCurrentTicker } from '@/lib/settings';
 import { CONTENT_SCRIPT_MATCHES, type Detection, detect } from '@/lib/platforms';
+import { Hud } from './Hud';
 import { Overlay } from './Overlay';
 
 const RECHECK_DELAY_MS = 400;
@@ -75,7 +77,12 @@ function App({ ctx }: { ctx: ContentScriptContext }) {
   usePublishTicker(detection);
   const response = useTrades(detection?.ticker ?? null);
   if (!detection || !response) return null;
-  return <Overlay key={detection.ticker} detection={detection} response={response} />;
+  return (
+    <>
+      <Overlay key={detection.ticker} detection={detection} response={response} />
+      <Hud key={detection.ticker} ticker={detection.ticker} response={response} />
+    </>
+  );
 }
 
 export default defineContentScript({

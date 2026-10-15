@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GA-style dashboard spec - Capitol Tape</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#166534;--bad:#991b1b;--warn:#92400e;--info:#1e40af;--chip:#e2e8f0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--ink:#f1f5f9;--muted:#b4c0d3;--line:#475569;--accent:#4ade80;--bad:#fca5a5;--warn:#fcd34d;--info:#93c5fd;--chip:#334155}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+nav a{padding:8px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;background:var(--card)}
+nav a[aria-current=page]{border-color:var(--accent);font-weight:600}
+h1{font-size:28px;margin:0 0 4px}h2{font-size:20px;margin:32px 0 8px}p.sub{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--chip)}
+.wrap{overflow-x:auto}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;background:var(--chip)}
+.high{color:var(--bad)}.med{color:var(--warn)}.low{color:var(--info)}
+code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
+ul{padding-left:20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note{border-left:4px solid var(--accent);padding:8px 12px;background:var(--card)}
+svg text{fill:var(--ink);font:12px system-ui}
+</style></head>
+<body><main><nav aria-label="Documents"><a href="index.html">Home</a><a href="gap-register.html">Gap register</a><a href="launch-blockers.html">Launch blockers</a><a href="research-competitors-seo.html">Competitors and SEO</a><a href="spec-ga-dashboard.html" aria-current="page">GA-style dashboard spec</a><a href="spec-dual-display.html">Dual display spec</a></nav>
+<h1>GA-style dashboard spec</h1><p class="sub">Design only. Nothing is built or tracked.</p>
+<div class="note"><b>Decision made:</b> a Google-Analytics-<i>style</i> view of congressional trades. It records nothing about the user. The "no analytics" promise stays true.</div>
+<h2>Wireframe (sample numbers)</h2>
+<div class="grid"><div class="card"><div class="sub">Trades (30d)</div><b style="font-size:24px">128</b> <span class="tag">+12%</span></div><div class="card"><div class="sub">Net buy vs sell</div><b style="font-size:24px">58 / 70</b> <span class="tag">-4%</span></div><div class="card"><div class="sub">Unique members</div><b style="font-size:24px">31</b> <span class="tag">+3</span></div><div class="card"><div class="sub">Top ticker</div><b style="font-size:24px">NVDA</b> <span class="tag">14</span></div></div>
+<div class="card"><b>Trades per week</b><svg viewBox="0 0 300 70" width="100%" height="70" role="img" aria-label="Sample trend line"><polyline fill="none" stroke="currentColor" stroke-width="2" points="0,55 40,48 80,52 120,30 160,36 200,18 240,26 300,10" style="color:var(--accent)"/></svg><div class="sub">Date range: 7d | 30d | 90d | compare to previous period</div></div>
+<h2>Components</h2><div class="wrap"><table><thead><tr><th>Component</th><th>Data</th><th>Source in repo</th></tr></thead><tbody><tr><td>Scorecards (4)</td><td>Count, net buy/sell, unique members, top ticker</td><td><code>CongressTrade[]</code> from <code>lib/service.ts getTrades</code></td></tr><tr><td>Date range</td><td>7/30/90 days, capped at Bargo's ~90-day window</td><td><code>lib/bargo.ts</code></td></tr><tr><td>Trend chart</td><td>Trades per week, buy and sell lines</td><td>new pure function over trades</td></tr><tr><td>Breakdown tables</td><td>Party, chamber, size band</td><td><code>lib/party.ts</code>, trade amount ranges</td></tr><tr><td>Delta chips</td><td>Change vs previous equal period</td><td>same function, shifted window</td></tr></tbody></table></div><h2>Rules</h2><ul>
+<li>Only data already fetched; no extra Bargo calls. Respect the daily budget (<code>lib/budget.ts</code>).</li>
+<li>Per ticker first; watchlist rollup uses cached rows only (Pro).</li>
+<li>Every chart has a data-table fallback and keyboard focus (WCAG AAA tokens already enforced by <code>tests/a11y.test.tsx</code>).</li>
+<li>Empty, loading, rate-limited and error states copied from <code>components/TradesBody.tsx</code>.</li></ul>
+<h2>Measurement spec: if you ever want real GA4</h2><div class="wrap"><table><thead><tr><th>Option</th><th>What it needs</th><th>Risk</th></tr></thead><tbody><tr><td>Marketing site only (recommended)</td><td>gtag snippet, consent banner, privacy page update, Google Fonts + GA disclosure</td><td>Low; extension stays tracking-free</td></tr><tr><td>Inside the extension</td><td>Measurement Protocol calls (MV3 forbids remote gtag script), new host permission, Chrome and Firefox data-use changes, privacy rewrite, opt-in UI</td><td>High; store review and trust cost</td></tr><tr><td>Neither</td><td>Use store dashboard install counts and ExtensionPay data</td><td>None</td></tr></tbody></table></div><p><b>Decision gate:</b> choose one row before any build. Default is "Neither".</p>
+<p class="sub" style="margin-top:40px">Research round, 2026-10-15. Read-only audit of the repo at commit 7197618. Not legal advice.</p>
+</main></body></html>

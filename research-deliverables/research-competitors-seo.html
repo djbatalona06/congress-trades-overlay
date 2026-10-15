@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Competitors and SEO - Capitol Tape</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#166534;--bad:#991b1b;--warn:#92400e;--info:#1e40af;--chip:#e2e8f0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--ink:#f1f5f9;--muted:#b4c0d3;--line:#475569;--accent:#4ade80;--bad:#fca5a5;--warn:#fcd34d;--info:#93c5fd;--chip:#334155}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+nav a{padding:8px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;background:var(--card)}
+nav a[aria-current=page]{border-color:var(--accent);font-weight:600}
+h1{font-size:28px;margin:0 0 4px}h2{font-size:20px;margin:32px 0 8px}p.sub{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--chip)}
+.wrap{overflow-x:auto}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;background:var(--chip)}
+.high{color:var(--bad)}.med{color:var(--warn)}.low{color:var(--info)}
+code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
+ul{padding-left:20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note{border-left:4px solid var(--accent);padding:8px 12px;background:var(--card)}
+svg text{fill:var(--ink);font:12px system-ui}
+</style></head>
+<body><main><nav aria-label="Documents"><a href="index.html">Home</a><a href="gap-register.html">Gap register</a><a href="launch-blockers.html">Launch blockers</a><a href="research-competitors-seo.html" aria-current="page">Competitors and SEO</a><a href="spec-ga-dashboard.html">GA-style dashboard spec</a><a href="spec-dual-display.html">Dual display spec</a></nav>
+<h1>Competitors and SEO</h1><p class="sub">Who else does this, and what the site is missing for search.</p>
+<div class="note"><b>Data quality:</b> from one search round. Pricing comes from comparison pages, some vendor-written, and they disagree. Verify on each vendor's site before using any number.</div>
+<h2>Competitors</h2><div class="wrap"><table><thead><tr><th>Product</th><th>What it is</th><th>Price (as reported)</th><th>Note</th></tr></thead><tbody><tr><td>Politraders</td><td>Chrome extension, side panel on TradingView; also Robinhood, Webull, Schwab; data since 2020</td><td>Not found</td><td><b>Same four sites as Capitol Tape.</b> Seen only on a third-party mirror, version 0.0.1. Verify on the Chrome Web Store.</td></tr><tr><td>Quiver Quantitative</td><td>Web dashboard and API for congress trades and alt data</td><td>Free / $15 (one source) or $25 (another)</td><td>Sources conflict</td></tr><tr><td>Capitol Trades</td><td>Free web tracker</td><td>Free</td><td>Known for disclosure lag</td></tr><tr><td>Unusual Whales</td><td>Congress trades plus options flow, dark pool, API</td><td>$48-110/mo per one review</td><td>Vendor page claims an API; review says none</td></tr></tbody></table></div><h2>Where Capitol Tape can win</h2><ul>
+<li>It sits <b>on the chart</b> you already use; web trackers make you switch tabs.</li>
+<li>Second-monitor pop-out and (planned) split graph panel - none of the listed rivals advertise this.</li>
+<li>Plain-language, read-only, no tracking, no affiliate codes: a trust story.</li>
+<li>Cheapest paid tier of the set at $8, but the daily lookup limit is its weak point.</li></ul>
+<h2>SEO audit of site/index.html</h2><div class="wrap"><table><thead><tr><th>Check</th><th>Status</th></tr></thead><tbody><tr><td>Title and meta description</td><td>Present</td></tr><tr><td>Canonical URL</td><td>Present (capitol-tape.pages.dev)</td></tr><tr><td>og:title</td><td>Present</td></tr><tr><td>og:image / og:url</td><td><b>Missing</b></td></tr><tr><td>Twitter card</td><td>Present, "summary" only (no large image)</td></tr><tr><td>JSON-LD SoftwareApplication</td><td>Present; could add aggregateRating only when real reviews exist</td></tr><tr><td>sitemap.xml / robots.txt</td><td><b>Missing</b></td></tr><tr><td>Install button targets</td><td><b>Empty</b>, blocks conversion tracking later too</td></tr><tr><td>Fonts</td><td>Google Fonts request; mention in privacy page</td></tr><tr><td>Testimonials</td><td>Fictional; remove before search engines index them as claims</td></tr></tbody></table></div><h2>Keyword set to test (needs a volume tool)</h2><ul>
+<li>congress stock trades, congress trading tracker, STOCK Act tracker</li>
+<li>TradingView congress trades, Robinhood congress trades extension</li>
+<li>what stocks did [member] buy (long-tail, per-member pages are an idea)</li></ul>
+<h2>Chrome Web Store policy note</h2>
+<p>Adding user analytics to the extension would trigger the store's user-data disclosure and Limited Use rules. The dashboard spec avoids this by tracking nobody. Source: <a href="https://developer.chrome.com/docs/webstore/program-policies/limited-use/">Chrome Web Store Limited Use policy</a>. Re-read the live text before any change.</p>
+<h2>Sources</h2><ul>
+<li><a href="https://pineify.app/congress-stock-trades-tracker">Pineify tracker comparison</a> (promotes its own product)</li>
+<li><a href="https://unusualwhales.com/vs/quiver-quantitative">Unusual Whales vs Quiver</a> (vendor page)</li>
+<li><a href="https://www.holdingsintel.com/vs/quiver-quantitative">HoldingsIntel vs Quiver</a> (vendor page)</li>
+<li><a href="https://chromeboard.com/extension/politraders-nmdnjnckhegpdcoifooakgldnciicogd">Politraders mirror listing</a></li></ul>
+<p class="sub" style="margin-top:40px">Research round, 2026-10-15. Read-only audit of the repo at commit 7197618. Not legal advice.</p>
+</main></body></html>

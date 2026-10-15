@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Capitol Tape research round - Capitol Tape</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#166534;--bad:#991b1b;--warn:#92400e;--info:#1e40af;--chip:#e2e8f0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--ink:#f1f5f9;--muted:#b4c0d3;--line:#475569;--accent:#4ade80;--bad:#fca5a5;--warn:#fcd34d;--info:#93c5fd;--chip:#334155}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+nav a{padding:8px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;background:var(--card)}
+nav a[aria-current=page]{border-color:var(--accent);font-weight:600}
+h1{font-size:28px;margin:0 0 4px}h2{font-size:20px;margin:32px 0 8px}p.sub{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--chip)}
+.wrap{overflow-x:auto}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;background:var(--chip)}
+.high{color:var(--bad)}.med{color:var(--warn)}.low{color:var(--info)}
+code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
+ul{padding-left:20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note{border-left:4px solid var(--accent);padding:8px 12px;background:var(--card)}
+svg text{fill:var(--ink);font:12px system-ui}
+</style></head>
+<body><main><nav aria-label="Documents"><a href="index.html" aria-current="page">Home</a><a href="gap-register.html">Gap register</a><a href="launch-blockers.html">Launch blockers</a><a href="research-competitors-seo.html">Competitors and SEO</a><a href="spec-ga-dashboard.html">GA-style dashboard spec</a><a href="spec-dual-display.html">Dual display spec</a></nav>
+<h1>Capitol Tape research round</h1><p class="sub">Gap audit, launch blockers, competitors and two design specs.</p>
+<div class="grid"><div class="card"><a href="gap-register.html"><b>Gap register</b></a></div><div class="card"><a href="launch-blockers.html"><b>Launch blockers</b></a></div><div class="card"><a href="research-competitors-seo.html"><b>Competitors and SEO</b></a></div><div class="card"><a href="spec-ga-dashboard.html"><b>GA-style dashboard spec</b></a></div><div class="card"><a href="spec-dual-display.html"><b>Dual display spec</b></a></div></div><h2>Headline findings</h2><ul><li><b>22 gaps</b> found; 8 are high severity and most of those need a decision or action from you, not code.</li><li>A direct competitor (Politraders) appears to cover the same four broker sites.</li><li>The repo has no analytics and no charts today; the GA-style dashboard and split graph panel are specified but not built.</li><li>Three earlier claims were corrected: the site test only blocks tracking on broker links, SEO basics partly exist, and the repo has 29 test files.</li></ul>
+<p class="sub" style="margin-top:40px">Research round, 2026-10-15. Read-only audit of the repo at commit 7197618. Not legal advice.</p>
+</main></body></html>

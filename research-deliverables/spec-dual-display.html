@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dual display spec - Capitol Tape</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--ink:#0f172a;--muted:#475569;--line:#cbd5e1;--accent:#166534;--bad:#991b1b;--warn:#92400e;--info:#1e40af;--chip:#e2e8f0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f172a;--card:#1e293b;--ink:#f1f5f9;--muted:#b4c0d3;--line:#475569;--accent:#4ade80;--bad:#fca5a5;--warn:#fcd34d;--info:#93c5fd;--chip:#334155}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+nav a{padding:8px 12px;border:1px solid var(--line);border-radius:8px;color:var(--ink);text-decoration:none;font-size:14px;background:var(--card)}
+nav a[aria-current=page]{border-color:var(--accent);font-weight:600}
+h1{font-size:28px;margin:0 0 4px}h2{font-size:20px;margin:32px 0 8px}p.sub{color:var(--muted);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--chip)}
+.wrap{overflow-x:auto}
+.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;background:var(--chip)}
+.high{color:var(--bad)}.med{color:var(--warn)}.low{color:var(--info)}
+code{background:var(--chip);padding:1px 5px;border-radius:4px;font-size:13px}
+ul{padding-left:20px}li{margin:4px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.note{border-left:4px solid var(--accent);padding:8px 12px;background:var(--card)}
+svg text{fill:var(--ink);font:12px system-ui}
+</style></head>
+<body><main><nav aria-label="Documents"><a href="index.html">Home</a><a href="gap-register.html">Gap register</a><a href="launch-blockers.html">Launch blockers</a><a href="research-competitors-seo.html">Competitors and SEO</a><a href="spec-ga-dashboard.html">GA-style dashboard spec</a><a href="spec-dual-display.html" aria-current="page">Dual display spec</a></nav>
+<h1>Dual display spec</h1><p class="sub">Pop-out split with a trade list and a graph panel. Design only.</p>
+<div class="note"><b>Decision made:</b> a side-by-side split <b>inside the pop-out window</b>. The broker page layout is never touched (already rejected in the PRD delta as fragile across four sites).</div>
+<h2>Wireframe</h2><div class="card"><svg viewBox="0 0 520 240" width="100%" role="img" aria-label="Pop-out split layout wireframe">
+<rect x="1" y="1" width="518" height="238" rx="8" fill="none" stroke="currentColor" style="color:var(--line)"/>
+<rect x="1" y="1" width="518" height="28" rx="8" fill="var(--chip)"/><text x="12" y="20">Capitol Tape - NVDA</text>
+<rect x="12" y="40" width="230" height="188" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="22" y="60" font-weight="600">Trade list</text>
+<text x="22" y="84">Member A  Buy  $15k-50k</text><text x="22" y="104">Member B  Sell $1k-15k</text><text x="22" y="124">Member C  Buy  $50k-100k</text>
+<rect x="246" y="40" width="6" height="188" fill="var(--accent)"/><text x="232" y="238" font-size="10"> </text>
+<rect x="258" y="40" width="250" height="188" rx="6" fill="var(--card)" stroke="var(--line)"/><text x="268" y="60" font-weight="600">Graph panel</text>
+<polyline fill="none" stroke="var(--accent)" stroke-width="2" points="270,150 310,130 350,140 390,100 430,110 490,80"/>
+<rect x="272" y="170" width="40" height="40" fill="var(--accent)"/><rect x="320" y="185" width="40" height="25" fill="var(--info)"/><rect x="368" y="175" width="40" height="35" fill="var(--warn)"/>
+</svg><div class="sub">Draggable divider (green). Below about 560px wide it becomes two tabs: List | Graphs.</div></div>
+<h2>Behaviour</h2><ul>
+<li>Default pop-out stays 380x720, so it opens as tabs; widen it and the split appears. Width is already saved via <code>lib/popout.ts</code>.</li>
+<li>The graph panel follows the same <code>local:currentTicker</code> as the list (<code>Panel.tsx:40-47</code>).</li>
+<li>The on-page drawer keeps the list only; "open graphs" button opens the pop-out.</li></ul>
+<h2>Graphs</h2><div class="wrap"><table><thead><tr><th>Graph</th><th>Data</th><th>Gate</th></tr></thead><tbody><tr><td>Buy vs sell over time</td><td>Trades by week</td><td>Free</td></tr><tr><td>Party split</td><td>Party lookup via <code>lib/party.ts</code></td><td>Free</td></tr><tr><td>Size bands</td><td>Amount ranges</td><td>Free</td></tr><tr><td>Trades vs bills and orders timeline</td><td><code>lib/timeline.ts</code> + Worker</td><td>Worker flag on, Pro</td></tr></tbody></table></div><h2>Build notes for a later round</h2><ul>
+<li>Hand-rolled SVG, no chart library, to keep the bundle small and the shadow-DOM styling simple.</li>
+<li>One shared tokens file replaces the three copies of the CSS variables; add a light theme.</li>
+<li>Reuse <code>components/TradesBody.tsx</code> unchanged on the left pane.</li>
+<li>Tests: split/tabs breakpoint, divider keyboard control, axe on both themes, chart data-table fallback.</li></ul>
+<h2>Open questions</h2><ul><li>Should the split remember the divider position? (suggested: yes)</li><li>Is the timeline overlay worth turning on the Worker for?</li></ul>
+<p class="sub" style="margin-top:40px">Research round, 2026-10-15. Read-only audit of the repo at commit 7197618. Not legal advice.</p>
+</main></body></html>

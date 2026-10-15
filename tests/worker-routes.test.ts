@@ -29,7 +29,7 @@ describe('GET /v1/ticker/{T}', () => {
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toContain('application/json');
     const body = (await response.json()) as TickerPayload;
-    expect(Object.keys(body).sort()).toEqual(['exec_orders', 'ie_spend', 'related_bills', 'tax_flags', 'trades']);
+    expect(Object.keys(body).sort()).toEqual(['exec_orders', 'ie_spend', 'lobbying', 'related_bills', 'tax_flags', 'trades']);
     expect(body.trades).toHaveLength(1);
     expect(body.related_bills).toEqual([
       {
@@ -203,8 +203,16 @@ describe('Influence data', () => {
     expect(body.tax_flags).toEqual([{ ...base, section_cite: '26 U.S.C. 45X' }]);
   });
 
+  it('sends lobbying filings for the ticker’s sector only', async () => {
+    const filing = { registrant: 'Firm', client: 'Acme', issue_codes: ['DEF'], amount: null, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' };
+    store.lobbying = [filing];
+    expect(((await (await get('/v1/ticker/LMT')).json()) as TickerPayload).lobbying).toEqual([filing]);
+    // Unknown sector: nothing guessed.
+    expect(((await (await get('/v1/ticker/ZZZZ')).json()) as TickerPayload).lobbying).toEqual([]);
+  });
+
   it('sends empty lists when there is nothing', async () => {
     const body = (await (await get('/v1/ticker/LMT')).json()) as TickerPayload;
-    expect(body).toMatchObject({ ie_spend: [], tax_flags: [] });
+    expect(body).toMatchObject({ ie_spend: [], tax_flags: [], lobbying: [] });
   });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { computeSignals } from '@/lib/signals';
-import type { IeSpend, RelatedBill, TaxFlag, TickerContext } from '@/lib/types';
+import type { IeSpend, LobbyFiling, RelatedBill, TaxFlag, TickerContext } from '@/lib/types';
 import { NOON, congressTrade } from './helpers';
 
 const bill = (overrides: Partial<RelatedBill> = {}): RelatedBill => ({
@@ -25,6 +25,15 @@ const spend = (overrides: Partial<IeSpend> = {}): IeSpend => ({
   url: 'https://docs.fec.gov/x',
   ...overrides,
 });
+const lobby: LobbyFiling = {
+  registrant: 'Big Firm LLP',
+  client: 'Acme',
+  issue_codes: ['DEF'],
+  amount: 1000,
+  period: '2026 Q3',
+  date: '2026-10-08',
+  url: 'https://lda.senate.gov/x',
+};
 const ctx = (extra: Partial<TickerContext>): TickerContext => ({ related_bills: [], exec_orders: [], ...extra });
 const chipIds = (context: TickerContext) =>
   computeSignals([congressTrade()], context, NOON).chips.map((chip) => chip.id);
@@ -41,6 +50,11 @@ describe('Influence chips', () => {
     expect(chipIds(ctx({ ie_spend: [spend({ member_slug: 'someone-else' })] }))).not.toContain('outside-money');
   });
 
+  it('light a lobbying chip when filings exist, and not otherwise', () => {
+    expect(chipIds(ctx({ lobbying: [lobby] }))).toContain('lobbying');
+    expect(chipIds(ctx({ lobbying: [] }))).not.toContain('lobbying');
+  });
+
   it('treat every group the same and never move the score', () => {
     const a = computeSignals([congressTrade()], ctx({ ie_spend: [spend({ committee_name: 'A' })] }), NOON);
     const b = computeSignals([congressTrade()], ctx({ ie_spend: [spend({ committee_name: 'B', amount: 1 })] }), NOON);
@@ -48,9 +62,9 @@ describe('Influence chips', () => {
       b.chips.find((c) => c.id === 'outside-money')?.detail,
     );
     const plain = computeSignals([congressTrade()], ctx({}), NOON);
-    const full = computeSignals([congressTrade()], ctx({ related_bills: [bill()], tax_flags: [flag], ie_spend: [spend()] }), NOON);
+    const full = computeSignals([congressTrade()], ctx({ related_bills: [bill()], tax_flags: [flag], ie_spend: [spend()], lobbying: [lobby] }), NOON);
     expect(full.score).toBe(plain.score);
     expect(full.level).toBe(plain.level);
-    expect(full.chips.filter((c) => ['tax-break', 'outside-money'].includes(c.id)).every((c) => c.points === 0)).toBe(true);
+    expect(full.chips.filter((c) => ['tax-break', 'outside-money', 'lobbying'].includes(c.id)).every((c) => c.points === 0)).toBe(true);
   });
 });

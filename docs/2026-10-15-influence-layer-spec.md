@@ -5,10 +5,10 @@
 | Phase | State |
 |---|---|
 | 0 Decisions and legal | **Open.** Bargo written permission, counsel on 5 U.S.C. 13107, Senate eFD terms. Nothing below ships to the store until these are answered in writing here. |
-| 1 Schema | **Partly done.** `worker/migrations/0002_influence.sql` adds `ie_spend` and `bill_tax_flags`. The `trade`, `member`, `lobby_filing`, `exec_order`/`bill` copies in the plan are not new tables: bills and orders already exist from `0001`, and trades stay in Bargo's cache. |
-| 2 Ingest | **Not built.** No code fills `ie_spend` or `bill_tax_flags` yet. FEC committee IDs and the LDA issue-code list must be confirmed on the official sites first, so none were guessed. The API sends empty lists until then. |
-| 3 Read API, chips, Influence section | **Built, off by default.** `GET /v1/ticker/{T}` now includes `ie_spend` and `tax_flags`. Two 0-point chips (`tax-break`, `outside-money`) and an "Influence" list in the panel. A popup checkbox turns it on. |
-| Lobbying chip | **Deferred** with ingest (needs the verified issue-code to sector map). |
+| 1 Schema | **Done.** `0002_influence.sql` (`ie_spend`, `bill_tax_flags`) and `0003_lobbying.sql` (`lobby_filing`, `lobby_issue`, `member_fec`). Bills and orders already existed from `0001`; trades stay in Bargo's cache. |
+| 2 Ingest | **Code and tests done; not yet run against the real sites.** `syncMemberLinks`, `syncOutsideMoney` (every spender in a member's race, nobody picked by name) and `syncLobbying` (only issue codes the Senate's own list confirms) in `worker/src/ingest.ts`. Field names follow the official docs but are unchecked live. `npm run verify:influence` (needs `FEC_API_KEY` and network access to `api.open.fec.gov`, `lda.senate.gov`, `unitedstates.github.io`) checks them and writes `docs/influence-verification-<date>.md`. **The FEC ids and issue codes count as verified only when that report says clean.** Tax-flag ingest and the review queue are still not built. |
+| 3 Read API, chips, Influence section | **Built, off by default.** `GET /v1/ticker/{T}` now includes `ie_spend`, `tax_flags` and `lobbying`. Three 0-point chips (`tax-break`, `outside-money`, `lobbying`) and an "Influence" list in the panel. A popup checkbox turns it on. |
+| Lobbying chip | **Built** (0 points, off with the Influence switch). Its issue-code list is a proposal, filtered against the Senate's list at run time. |
 | 4 Dual display and Bargo match badge | **Not built.** Needs the official-source trade feed from Phase 2, and Bargo's permission. |
 | 5 Review queue, 6 store pass | **Not built.** Until a person reviews a tax flag (`reviewer` set), it is never sent. |
 

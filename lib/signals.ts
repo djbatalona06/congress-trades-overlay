@@ -15,7 +15,8 @@ export type SignalId =
   | 'filed-late'
   | 'policy-nearby'
   | 'tax-break'
-  | 'outside-money';
+  | 'outside-money'
+  | 'lobbying';
 
 export interface SignalChip {
   id: SignalId;
@@ -219,6 +220,19 @@ function outsideMoneyChip(trades: readonly CongressTrade[], context: TickerConte
   };
 }
 
+/** Lobbying filings on issues tied to this sector. Information only: says who hired whom, nothing about outcomes. */
+function lobbyingChip(context: TickerContext | undefined): SignalChip | null {
+  const count = context?.lobbying?.length ?? 0;
+  if (count === 0) return null;
+  return {
+    id: 'lobbying',
+    label: 'Lobbying on this issue',
+    detail: `${plural(count, 'recent lobbying filing')} on issues tied to this sector. Filings show who hired whom, not what came of it.`,
+    points: 0,
+    tradeIds: [],
+  };
+}
+
 export function levelFor(score: number): SignalLevel {
   if (score >= HOT_SCORE) return 'hot';
   if (score >= WATCH_SCORE) return 'watch';
@@ -243,6 +257,7 @@ export function computeSignals(
     lateChip(recent),
     taxBreakChip(context),
     outsideMoneyChip(trades, context),
+    lobbyingChip(context),
   ].filter((chip): chip is SignalChip => chip !== null);
   const score = chips.reduce((sum, chip) => sum + chip.points, 0);
   return { level: levelFor(score), score, chips };

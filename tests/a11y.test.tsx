@@ -215,6 +215,7 @@ describe('axe on the page panel and the pop-out window', () => {
       context: {
         related_bills: [],
         exec_orders: [],
+        lobbying: [{ registrant: 'Big Firm LLP', client: 'Acme', issue_codes: ['DEF'], amount: 120000, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' }],
         tax_flags: [{ bill_id: '119-hr-1', section_cite: '26 U.S.C. 45X', url: 'https://www.congress.gov/bill/119th-congress/house-bill/1' }],
         ie_spend: [
           {
@@ -235,10 +236,11 @@ describe('axe on the page panel and the pop-out window', () => {
     );
     await act(async () => host.querySelector<HTMLElement>('.edge-tab')?.click());
     const details = host.querySelector<HTMLDetailsElement>('details.influence');
-    expect(details?.querySelector('summary')?.textContent).toBe('Influence (2)');
+    expect(details?.querySelector('summary')?.textContent).toBe('Influence (3)');
     details?.setAttribute('open', '');
     expect(details?.textContent).toContain('Some Committee reported $5,000 to support Nancy Pelosi');
-    expect(details?.querySelectorAll('a[href^="https://"]')).toHaveLength(2);
+    expect(details?.querySelectorAll('a[href^="https://"]')).toHaveLength(3);
+    expect(details?.textContent).toContain('Big Firm LLP for Acme, 2026 Q3, $120,000 (DEF)');
     expect(await violations()).toEqual([]);
   });
 

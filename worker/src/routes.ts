@@ -1,6 +1,6 @@
 import { isValidTicker } from '../../lib/ticker';
 import type { BargoTrade, ExecOrder, TickerPayload } from '../../lib/types';
-import { policyAreasFor, sectorFor, textMatchesSector } from './sectors';
+import { SECTOR_ISSUE_CODES, policyAreasFor, sectorFor, textMatchesSector } from './sectors';
 import type { Store } from './types';
 
 export const TRADE_CACHE_MS = 6 * 60 * 60 * 1000;
@@ -9,6 +9,7 @@ const MAX_DAYS = 365;
 const MAX_BILLS = 10;
 const MAX_ORDERS = 10;
 const MAX_IE = 10;
+const MAX_LOBBY = 10;
 // Outside spending is reported per race over a long stretch, so it looks back further than bills do.
 const IE_DAYS = 365;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -76,16 +77,17 @@ export async function handleRequest(request: Request, deps: Deps): Promise<Respo
       sector ? deps.store.recentOrders(sinceDay) : [],
     ]);
     const memberSlugs = [...new Set(trades.map((trade) => trade.member_slug).filter((slug): slug is string => !!slug))];
-    const [ie_spend, tax_flags] = await Promise.all([
+    const [ie_spend, tax_flags, lobbying] = await Promise.all([
       deps.store.ieSpendForMembers(memberSlugs, ieSince, MAX_IE),
       deps.store.reviewedTaxFlags(related_bills.map((bill) => bill.id)),
+      sector ? deps.store.lobbyingFor(SECTOR_ISSUE_CODES[sector], sinceDay, MAX_LOBBY) : [],
     ]);
     const exec_orders: ExecOrder[] = orders
       .filter((order) => sector && textMatchesSector(sector, `${order.title} ${order.abstract}`))
       .slice(0, MAX_ORDERS)
       .map(({ abstract: _abstract, ...order }) => order);
 
-    const payload: TickerPayload = { trades, related_bills, exec_orders, ie_spend, tax_flags };
+    const payload: TickerPayload = { trades, related_bills, exec_orders, ie_spend, tax_flags, lobbying };
     return json(payload, 200, { 'cache-control': 'public, max-age=300' });
   } catch (error) {
     console.warn('[ticker] failed', ticker, String(error));

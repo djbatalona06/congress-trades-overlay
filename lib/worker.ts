@@ -1,4 +1,4 @@
-import type { ExecOrder, IeSpend, RelatedBill, TaxFlag, TickerPayload } from './types';
+import type { ExecOrder, IeSpend, LobbyFiling, RelatedBill, TaxFlag, TickerPayload } from './types';
 
 export type WorkerErrorKind = 'network' | 'bad_response';
 
@@ -61,6 +61,16 @@ function isTaxFlag(value: unknown): value is TaxFlag {
   return !!f && isText(f.bill_id) && isText(f.section_cite) && isLink(f.url);
 }
 
+function isLobbyFiling(value: unknown): value is LobbyFiling {
+  const l = value as Partial<Record<keyof LobbyFiling, unknown>> | null;
+  return (
+    !!l &&
+    isText(l.registrant) && isText(l.client) && isText(l.period) && isText(l.date) && isLink(l.url) &&
+    Array.isArray(l.issue_codes) && l.issue_codes.every(isText) &&
+    (l.amount === null || (typeof l.amount === 'number' && Number.isFinite(l.amount)))
+  );
+}
+
 /** Asks the Worker for one ticker. Sends nothing but the ticker: no cookies, no headers, no key. */
 export async function fetchTickerPayload(
   ticker: string,
@@ -96,5 +106,6 @@ export async function fetchTickerPayload(
     // Left out entirely when the Worker does not send them, so older Workers keep working.
     ...(Array.isArray(body.ie_spend) && { ie_spend: body.ie_spend.filter(isIeSpend) }),
     ...(Array.isArray(body.tax_flags) && { tax_flags: body.tax_flags.filter(isTaxFlag) }),
+    ...(Array.isArray(body.lobbying) && { lobbying: body.lobbying.filter(isLobbyFiling) }),
   };
 }

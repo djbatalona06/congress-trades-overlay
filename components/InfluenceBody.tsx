@@ -3,9 +3,12 @@ import type { TickerContext } from '@/lib/types';
 
 const dollars = (amount: number) => `$${amount.toLocaleString('en-US')}`;
 
+const influenceCount = (context: TickerContext | undefined) =>
+  (context?.tax_flags?.length ?? 0) + (context?.ie_spend?.length ?? 0) + (context?.lobbying?.length ?? 0);
+
 /** True when there is anything to show, so callers can skip the section. */
 export function hasInfluence(context: TickerContext | undefined): boolean {
-  return (context?.tax_flags?.length ?? 0) > 0 || (context?.ie_spend?.length ?? 0) > 0;
+  return influenceCount(context) > 0;
 }
 
 /**
@@ -16,10 +19,11 @@ export function hasInfluence(context: TickerContext | undefined): boolean {
 export function InfluenceBody({ context }: { context: TickerContext }) {
   const flags = context.tax_flags ?? [];
   const spend = context.ie_spend ?? [];
+  const lobbying = context.lobbying ?? [];
   const billTitle = (id: string) => context.related_bills.find((bill) => bill.id === id)?.title ?? id;
   return (
     <details className="influence">
-      <summary>Influence ({flags.length + spend.length})</summary>
+      <summary>Influence ({influenceCount(context)})</summary>
       {flags.length > 0 && (
         <>
           <h3>Tax provisions in recent laws</h3>
@@ -45,6 +49,22 @@ export function InfluenceBody({ context }: { context: TickerContext }) {
                 {formatDate(row.date)}.{' '}
                 <a href={row.url} target="_blank" rel="noopener noreferrer">
                   FEC filing
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {lobbying.length > 0 && (
+        <>
+          <h3>Lobbying on related issues</h3>
+          <ul className="influence-list">
+            {lobbying.map((filing) => (
+              <li key={`${filing.registrant}|${filing.client}|${filing.period}|${filing.date}`}>
+                {filing.registrant} for {filing.client}, {filing.period}
+                {filing.amount !== null && `, ${dollars(filing.amount)}`} ({filing.issue_codes.join(', ')}){' '}
+                <a href={filing.url} target="_blank" rel="noopener noreferrer">
+                  Senate filing
                 </a>
               </li>
             ))}

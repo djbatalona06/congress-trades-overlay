@@ -1,6 +1,8 @@
 import type { BillRow } from '../worker/src/bills';
-import type { Store, StoredOrder, TradeCacheEntry } from '../worker/src/types';
-import type { IeSpend, RelatedBill, TaxFlag } from '@/lib/types';
+import type { IeSpendRow } from '../worker/src/fec';
+import type { LobbyingRow } from '../worker/src/lda';
+import type { MemberLink, Store, StoredOrder, TradeCacheEntry } from '../worker/src/types';
+import type { IeSpend, LobbyFiling, RelatedBill, TaxFlag } from '@/lib/types';
 
 /** In-memory stand-in for the D1 store, same filtering rules as the SQL. */
 export class FakeStore implements Store {
@@ -56,6 +58,66 @@ export class FakeStore implements Store {
   ieSpend: (IeSpend)[] = [];
   /** Tax flags with the reviewed state the SQL checks. */
   taxFlags: (TaxFlag & { reviewed: boolean })[] = [];
+
+  /** Rows written by the ingest, keyed by id, and what the read side serves. */
+  ieRows = new Map<string, IeSpendRow>();
+  lobbyRows = new Map<string, LobbyingRow>();
+  links: (MemberLink & { synced_at: number | null })[] = [];
+  /** Slugs the saved trade rows would hold. */
+  tradeMembers: string[] = [];
+  lobbying: LobbyFiling[] = [];
+
+  async upsertIeSpend(rows: IeSpendRow[]) {
+    for (const row of rows) this.ieRows.set(row.id, row);
+    this.ieSpend = [...this.ieRows.values()];
+  }
+
+  async upsertLobbying(rows: LobbyingRow[]) {
+    for (const row of rows) this.lobbyRows.set(row.id, row);
+  }
+
+  async lobbyingFor(codes: readonly string[], sinceDay: string, limit: number) {
+    const fromIngest = [...this.lobbyRows.values()]
+      .filter((r) => r.posted_date >= sinceDay && r.issue_codes.some((c) => codes.includes(c)))
+      .map((r): LobbyFiling => ({ registrant: r.registrant, client: r.client, issue_codes: [...r.issue_codes].sort(), amount: r.amount, period: r.period, date: r.posted_date, url: r.url }));
+    return [...fromIngest, ...this.lobbying.filter((l) => l.date >= sinceDay)]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, limit);
+  }
+
+  async upsertMemberLinks(rows: MemberLink[]) {
+    for (const row of rows) {
+      const found = this.links.find((l) => l.member_slug === row.member_slug && l.fec_candidate_id === row.fec_candidate_id);
+      if (found) Object.assign(found, row);
+      else this.links.push({ ...row, synced_at: null });
+    }
+  }
+
+  async membersDueForSync(limit: number) {
+    return [...this.links]
+      .sort((a, b) => (a.synced_at ?? -1) - (b.synced_at ?? -1) || a.member_slug.localeCompare(b.member_slug))
+      .slice(0, limit)
+      .map(({ synced_at: _s, ...link }) => link);
+  }
+
+  async markMemberSynced(link: Pick<MemberLink, 'member_slug' | 'fec_candidate_id'>, at: number) {
+    const found = this.links.find((l) => l.member_slug === link.member_slug && l.fec_candidate_id === link.fec_candidate_id);
+    if (found) found.synced_at = at;
+  }
+
+  async distinctCommittees() {
+    const seen = new Map<string, string>();
+    for (const row of this.ieSpend) seen.set(row.committee_id, row.committee_name);
+    return [...seen].map(([committee_id, committee_name]) => ({ committee_id, committee_name }));
+  }
+
+  async distinctTradeMembers() {
+    return this.tradeMembers;
+  }
+
+  async allMemberLinks() {
+    return this.links.map(({ synced_at: _s, ...link }) => link);
+  }
 
   async ieSpendForMembers(slugs: readonly string[], sinceDay: string, limit: number) {
     return this.ieSpend

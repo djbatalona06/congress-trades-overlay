@@ -108,11 +108,22 @@ describe('fetchTickerPayload', () => {
     const payload = await fetchTickerPayload('LMT', BASE);
     expect(payload.ie_spend).toEqual([ie]);
     expect(payload.tax_flags).toEqual([flag]);
+    expect(payload).not.toHaveProperty('lobbying');
 
     vi.stubGlobal('fetch', reply({ trades: [] }));
     const bare = await fetchTickerPayload('LMT', BASE);
     expect(bare).not.toHaveProperty('ie_spend');
     expect(bare).not.toHaveProperty('tax_flags');
+  });
+
+  it('keeps well-formed lobbying rows and drops bad ones', async () => {
+    const filing = { registrant: 'Firm', client: 'Acme', issue_codes: ['DEF'], amount: null, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' };
+    vi.stubGlobal(
+      'fetch',
+      reply({ trades: [], lobbying: [filing, { ...filing, url: 'http://x' }, { ...filing, issue_codes: [1] }, { ...filing, amount: 'lots' }, { ...filing, amount: 5 }] }),
+    );
+    const payload = await fetchTickerPayload('LMT', BASE);
+    expect(payload.lobbying).toEqual([filing, { ...filing, amount: 5 }]);
   });
 
   it('treats missing lists as empty', async () => {

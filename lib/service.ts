@@ -29,7 +29,7 @@ export function getTrades(ticker: string, purpose: RequestPurpose): Promise<Trad
 async function load(ticker: string, purpose: RequestPurpose): Promise<TradesResponse> {
   const response = await loadTrades(ticker, purpose);
   if (!response.context || (await getInfluenceEnabled())) return response;
-  const { ie_spend: _ie, tax_flags: _tax, ...context } = response.context;
+  const { ie_spend: _ie, tax_flags: _tax, lobbying: _lobby, ...context } = response.context;
   return { ...response, context };
 }
 
@@ -61,6 +61,7 @@ async function loadTrades(ticker: string, purpose: RequestPurpose): Promise<Trad
         exec_orders: payload.exec_orders,
         ...(payload.ie_spend && { ie_spend: payload.ie_spend }),
         ...(payload.tax_flags && { tax_flags: payload.tax_flags }),
+        ...(payload.lobbying && { lobbying: payload.lobbying }),
       };
       const fetchedAt = Date.now();
       await writeCache(ticker, trades, fetchedAt, context);

@@ -11,7 +11,8 @@ A short list under the trades. It is **off** until you tick "Show tax breaks and
 | Part | What it means | Where it comes from |
 |---|---|---|
 | Tax provisions in recent laws | A person checked that a law tied to this kind of company has a tax rule in it | Congress.gov bills, checked by a person first |
-| Outside spending | Money groups reported spending for or against a member who traded this stock | FEC filings |
+| Outside spending | Money groups reported spending for or against a member who traded this stock. Every group in the race is stored, none picked by name | FEC filings |
+| Lobbying on related issues | Who hired whom to lobby on issues tied to this kind of company | Senate lobbying disclosures |
 
 Every line links to the real filing. Every group is shown with the same facts, in the same order, so no group is treated differently.
 
@@ -24,4 +25,8 @@ Every line links to the real filing. Every group is shown with the same facts, i
 
 ## Not built yet
 
-Filling the lists with real data (the nightly jobs), the lobbying tag, and the side-by-side "official record vs Bargo" view. See the status table in `2026-10-15-influence-layer-spec.md`.
+Checking the nightly jobs against the real sites (run `npm run verify:influence`, which needs a free FEC key), tax-flag filling and review, and the side-by-side "official record vs Bargo" view. See the status table in `2026-10-15-influence-layer-spec.md`.
+
+## Before any of this ships
+
+The list of IDs and codes is only trusted after `npm run verify:influence` says "clean". Even then, do not put it in the store until Bargo's written permission, a lawyer's view on 5 U.S.C. 13107, and the Senate eFD terms are all answered.

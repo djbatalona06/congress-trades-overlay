@@ -85,6 +85,47 @@ describe('fetchTickerPayload', () => {
     expect(payload.exec_orders.map((o) => o.document_number)).toEqual(['2026-0001']);
   });
 
+  it('keeps well-formed Influence rows and drops bad ones, but leaves them out when the Worker sends none', async () => {
+    const ie = {
+      committee_id: 'C001',
+      committee_name: 'Some Committee',
+      member_slug: 'nancy-pelosi',
+      candidate_name: 'Nancy Pelosi',
+      support_or_oppose: 'oppose',
+      amount: 5000,
+      date: '2026-09-01',
+      url: 'https://docs.fec.gov/x',
+    };
+    const flag = { bill_id: '119-hr-1', section_cite: '26 U.S.C. 45X', url: bill.url };
+    vi.stubGlobal(
+      'fetch',
+      reply({
+        trades: [],
+        ie_spend: [ie, { ...ie, support_or_oppose: 'maybe' }, { ...ie, amount: 'lots' }, { ...ie, url: 'http://x' }],
+        tax_flags: [flag, { ...flag, section_cite: '' }],
+      }),
+    );
+    const payload = await fetchTickerPayload('LMT', BASE);
+    expect(payload.ie_spend).toEqual([ie]);
+    expect(payload.tax_flags).toEqual([flag]);
+    expect(payload).not.toHaveProperty('lobbying');
+
+    vi.stubGlobal('fetch', reply({ trades: [] }));
+    const bare = await fetchTickerPayload('LMT', BASE);
+    expect(bare).not.toHaveProperty('ie_spend');
+    expect(bare).not.toHaveProperty('tax_flags');
+  });
+
+  it('keeps well-formed lobbying rows and drops bad ones', async () => {
+    const filing = { registrant: 'Firm', client: 'Acme', issue_codes: ['DEF'], amount: null, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' };
+    vi.stubGlobal(
+      'fetch',
+      reply({ trades: [], lobbying: [filing, { ...filing, url: 'http://x' }, { ...filing, issue_codes: [1] }, { ...filing, amount: 'lots' }, { ...filing, amount: 5 }] }),
+    );
+    const payload = await fetchTickerPayload('LMT', BASE);
+    expect(payload.lobbying).toEqual([filing, { ...filing, amount: 5 }]);
+  });
+
   it('treats missing lists as empty', async () => {
     vi.stubGlobal('fetch', reply({ trades: [] }));
     expect(await fetchTickerPayload('LMT', BASE)).toEqual({ trades: [], related_bills: [], exec_orders: [] });

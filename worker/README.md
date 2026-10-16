@@ -4,12 +4,13 @@ A small Cloudflare Worker that holds the Congress.gov key, keeps bills and execu
 
 ```
 GET /v1/ticker/{T}[?days=30]
--> { "trades": [...], "related_bills": [...], "exec_orders": [...] }
+-> { "trades": [...], "related_bills": [...], "exec_orders": [...], "ie_spend": [...], "tax_flags": [...], "lobbying": [...] }
 ```
 
 - `trades`: Bargo rows as returned, cached 6 hours per ticker so all users share one lookup.
 - `related_bills`: bills that passed a chamber, reached the President or became law, whose Congress.gov policy area maps to the ticker's sector (`src/sectors.ts`). Newest first, up to 10.
 - `exec_orders`: Federal Register executive orders whose title or abstract names the sector. Up to 10.
+- `ie_spend`: outside spending in the races of members in `trades` (FEC, last 365 days, up to 10). `tax_flags`: only person-reviewed tax provisions in the returned bills. `lobbying`: Senate filings on issue codes tied to the sector (`SECTOR_ISSUE_CODES`). All three are empty until their jobs have run.
 - Unknown ticker (not in the seed list in `src/sectors.ts`): trades only, empty lists. Nothing is guessed.
 - `days`: 1 to 365, default 30. History starts when the cron first runs (14 days of bills on the first run).
 - Errors: `400 bad_ticker`, `404 not_found`, `405 method_not_allowed`, `502 unavailable` (no trades from upstream and none saved).
@@ -22,6 +23,9 @@ Copy rule: the extension calls these "related legislation", never "impact" and n
 |---|---|
 | `7 * * * *` | Congress.gov bills updated since the last run, then policy areas for up to 40 new bills |
 | `17 */6 * * *` | Federal Register executive orders from the last 90 days |
+| `47 4 * * *` | Member to FEC candidate links (public legislators list, no key) |
+| `37 * * * *` | Outside spending for the 25 members synced longest ago (needs `FEC_API_KEY`; skipped without it) |
+| `27 */6 * * *` | Senate lobbying filings posted since the last run, on confirmed issue codes |
 
 ## Set up
 
@@ -30,6 +34,8 @@ cd worker && npm install
 npx wrangler d1 create congress-trades          # paste the printed id into wrangler.toml
 npm run migrate                                 # creates the tables
 npx wrangler secret put CONGRESS_API_KEY        # free key from api.data.gov
+npx wrangler secret put FEC_API_KEY             # free key from api.data.gov (outside money)
+npx wrangler secret put LDA_API_TOKEN           # optional
 npx wrangler secret put BARGO_API_KEY           # optional
 npm run deploy
 ```
@@ -56,3 +62,7 @@ The Worker never reads or stores the caller's address, sets no cookies, and keep
 2. `TRADE_SOURCE=bargo` proxies Bargo's free, personal-use API for everyone. Bargo's cap (30 requests and 100 rows a day without a key, 100 and 1,000 with one) is about 20 to 200 distinct tickers a day, and its terms are silent on commercial use. Ask Bargo, or move to a licensed vendor, before charging. `TRADE_SOURCE=none` returns only the legislation lists.
 3. 5 U.S.C. 13107(c) still needs a lawyer's answer (spec section 7).
 4. The Congress.gov and Federal Register parsing follows their published docs and is covered by fixture tests, but it has not been run against the live APIs yet. Watch the first cron runs (`npx wrangler tail`) and check `bills` and `executive_orders` fill up.
+
+## Checking the ids and codes
+
+`FEC_API_KEY=... npm run verify:influence` (from the repo root, with internet access) asks the FEC and Senate sites whether each member id, committee id and issue code is real and named as expected, and writes `docs/influence-verification-<date>.md`. It only reads. Run it before relying on the Influence data.

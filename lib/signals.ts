@@ -13,7 +13,10 @@ export type SignalId =
   | 'big-trade'
   | 'fresh-filing'
   | 'filed-late'
-  | 'policy-nearby';
+  | 'policy-nearby'
+  | 'tax-break'
+  | 'outside-money'
+  | 'lobbying';
 
 export interface SignalChip {
   id: SignalId;
@@ -189,6 +192,47 @@ function policyChip(recent: Dated[], context: TickerContext | undefined, today: 
   };
 }
 
+/** Reviewed tax provisions in bills that became law for this sector. Information only: scores nothing. */
+function taxBreakChip(context: TickerContext | undefined): SignalChip | null {
+  const lawIds = new Set(context?.related_bills.filter((bill) => bill.status === 'became_law').map((bill) => bill.id));
+  const flags = context?.tax_flags?.filter((flag) => lawIds.has(flag.bill_id)) ?? [];
+  if (flags.length === 0) return null;
+  return {
+    id: 'tax-break',
+    label: 'Tax break passed in this sector',
+    detail: `${plural(flags.length, 'reviewed tax provision')} in a recent law tied to this sector. Each links to the bill.`,
+    points: 0,
+    tradeIds: [],
+  };
+}
+
+/** Outside spending reported in the races of members who traded this stock. Information only; says nothing about intent. */
+function outsideMoneyChip(trades: readonly CongressTrade[], context: TickerContext | undefined): SignalChip | null {
+  const traders = new Set(trades.map((trade) => trade.memberSlug).filter(Boolean));
+  const spend = context?.ie_spend?.filter((row) => traders.has(row.member_slug)) ?? [];
+  if (spend.length === 0) return null;
+  return {
+    id: 'outside-money',
+    label: 'Outside money in this race',
+    detail: `${plural(spend.length, 'spending report')} filed with the FEC in races of members who traded this stock. Reports show what was spent, not why.`,
+    points: 0,
+    tradeIds: trades.filter((trade) => spend.some((row) => row.member_slug === trade.memberSlug)).map((trade) => trade.id),
+  };
+}
+
+/** Lobbying filings on issues tied to this sector. Information only: says who hired whom, nothing about outcomes. */
+function lobbyingChip(context: TickerContext | undefined): SignalChip | null {
+  const count = context?.lobbying?.length ?? 0;
+  if (count === 0) return null;
+  return {
+    id: 'lobbying',
+    label: 'Lobbying on this issue',
+    detail: `${plural(count, 'recent lobbying filing')} on issues tied to this sector. Filings show who hired whom, not what came of it.`,
+    points: 0,
+    tradeIds: [],
+  };
+}
+
 export function levelFor(score: number): SignalLevel {
   if (score >= HOT_SCORE) return 'hot';
   if (score >= WATCH_SCORE) return 'watch';
@@ -211,6 +255,9 @@ export function computeSignals(
     freshChip(recent, today),
     policyChip(recent, context, today),
     lateChip(recent),
+    taxBreakChip(context),
+    outsideMoneyChip(trades, context),
+    lobbyingChip(context),
   ].filter((chip): chip is SignalChip => chip !== null);
   const score = chips.reduce((sum, chip) => sum + chip.points, 0);
   return { level: levelFor(score), score, chips };

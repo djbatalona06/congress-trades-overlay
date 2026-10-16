@@ -10,8 +10,8 @@ database_id = "REPLACE_WITH_D1_DATABASE_ID"
 migrations_dir = "migrations"
 
 [triggers]
-# Keep in step with BILLS_CRON and ORDERS_CRON in src/index.ts.
-crons = ["7 * * * *", "17 */6 * * *"]
+# Keep in step with the *_CRON constants in src/index.ts.
+crons = ["7 * * * *", "17 */6 * * *", "47 4 * * *", "37 * * * *", "27 */6 * * *"]
 
 [vars]
 # "bargo" or "none". See README before charging for the data.
@@ -23,4 +23,6 @@ enabled = false
 
 # Secrets (never in this file):
 #   npx wrangler secret put CONGRESS_API_KEY
+#   npx wrangler secret put FEC_API_KEY        (free key from api.data.gov; outside money)
+#   npx wrangler secret put LDA_API_TOKEN      (optional)
 #   npx wrangler secret put BARGO_API_KEY      (optional)

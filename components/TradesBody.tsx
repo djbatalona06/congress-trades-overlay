@@ -1,6 +1,7 @@
 import { BARGO_KEY_URL } from '@/lib/bargo';
 import { formatDate } from '@/lib/format';
 import type { TradesResponse } from '@/lib/types';
+import { InfluenceBody, hasInfluence } from './InfluenceBody';
 import { TradeRow } from './TradeRow';
 
 /** The limit and saved-results notices plus the list, shared by the page panel and the pop-out. */
@@ -26,6 +27,7 @@ export function TradesBody({ response }: { response: TradesResponse }) {
           <TradeRow key={trade.id} trade={trade} />
         ))}
       </ul>
+      {response.context && hasInfluence(response.context) && <InfluenceBody context={response.context} />}
     </>
   );
 }

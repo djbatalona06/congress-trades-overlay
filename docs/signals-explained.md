@@ -22,6 +22,8 @@ Only forms that were made public in the **last 90 days**. A form with no usable 
 | Big trade | Did a form's range go **above** $250,000? | 1 |
 | Fresh filing | Was a form made public in the last 7 days? | 1 |
 | Policy nearby | Did a related bill or presidential order move within 30 days of a trade? (needs the extra data from the optional Worker) | 1 |
+| Tax break passed in this sector | (Influence is on) Did a person-checked tax rule become law in this sector? | 0 (information only) |
+| Outside money in this race | (Influence is on) Did a group report spending in the race of a member who traded this? See `influence-explained.md`. | 0 (information only) |
 | Filed late | Did a form arrive more than 45 days after the trade? | 0 (information only) |
 
 One member filing three times still counts as **one** member for a cluster.

@@ -285,7 +285,7 @@ section { padding: var(--section-y) 0; }
 .step:first-child { border-top-color: var(--brand); }
 .step h3 { font-size: 20px; letter-spacing: -0.02em; }
 .step p { margin-top: 8px; color: var(--muted); font-size: 16px; }
-.step p a { color: var(--navy); }
+.step p a { color: var(--brand); }
 .step .time { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 2px 10px; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
 @media (max-width: 1000px) { .step { grid-column: span 6; margin-bottom: 32px; } }
 @media (max-width: 640px) { .step { grid-column: span 12; } }
@@ -450,10 +450,10 @@ footer.site { padding: 80px 0 48px; border-top: 1px solid var(--line); backgroun
 .trust-strip { padding: var(--s6) 0; border-bottom: 1px solid var(--line); background: var(--bg-alt); }
 .trust-strip ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s3); margin: 0; padding: 0; list-style: none; }
 .trust-strip li { display: flex; gap: 12px; align-items: flex-start; }
-.trust-strip svg { flex: none; width: 24px; height: 24px; margin-top: 2px; color: var(--navy); }
+.trust-strip svg { flex: none; width: 24px; height: 24px; margin-top: 2px; color: var(--brand); }
 .trust-strip b { display: block; font-size: 16px; }
 .trust-strip span { display: block; margin-top: 4px; font-size: 15px; color: var(--muted); }
-.trust-strip a { color: var(--navy); }
+.trust-strip a { color: var(--brand); }
 @media (max-width: 1000px) { .trust-strip ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .trust-strip ul { grid-template-columns: minmax(0, 1fr); } }
 
@@ -462,13 +462,13 @@ footer.site { padding: 80px 0 48px; border-top: 1px solid var(--line); backgroun
 .faq-page { padding-top: var(--s6); }
 .faq-group { max-width: 800px; margin: var(--s6) auto var(--s2); font-size: 22px; }
 .faq-group:first-child { margin-top: 0; }
-.faq .a a, .page-head .lede a { color: var(--navy); }
+.faq .a a, .page-head .lede a { color: var(--brand); }
 .howto { margin: var(--s2) 0; padding-left: var(--s3); display: grid; gap: var(--s1); }
 .faq div.a p + p, .faq div.a p + ol, .faq div.a ol + p { margin-top: var(--s1); }
 
 /* Legal pages */
-.prose a, .legal a { color: var(--navy); }
-.callout { margin-top: var(--s3) !important; padding: var(--s2) var(--s3); border-left: 4px solid var(--navy); border-radius: var(--radius-sm); background: var(--navy-tint); color: var(--ink); }
+.prose a, .legal a { color: var(--brand); }
+.callout { margin-top: var(--s3) !important; padding: var(--s2) var(--s3); border-left: 4px solid var(--brand); border-radius: var(--radius-sm); background: var(--brand-tint); color: var(--ink); }
 .table-wrap { margin-top: var(--s2); overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
 .table-wrap table { width: 100%; border-collapse: collapse; font-size: 15px; }
 .table-wrap th, .table-wrap td { padding: 12px var(--s2); text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }

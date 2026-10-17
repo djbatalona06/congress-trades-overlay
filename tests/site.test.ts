@@ -55,7 +55,7 @@ describe('broker links on the site', () => {
   });
 
   it('lists the same links in the footer, IBKR marked as not supported', () => {
-    const footer = html.slice(html.indexOf('<h3>Platforms</h3>'), html.indexOf('<h3>Resources</h3>'));
+    const footer = html.slice(html.indexOf('<h2>Platforms</h2>'), html.indexOf('<h2>Resources</h2>'));
     for (const [, url] of BROKERS) expect(footer).toContain(`href="${url}"`);
     expect(footer).toContain('not supported yet');
   });

@@ -48,8 +48,8 @@ describe('colour contrast of the site tokens', () => {
     ['ink', 'bg', 7],
     ['muted', 'bg', 7],
     ['muted', 'bg-alt', 4.5],
-    ['navy', 'bg', 7],
-    ['navy', 'navy-tint', 7],
+    ['brand', 'bg', 7],
+    ['brand', 'brand-tint', 7],
     ['quiet', 'quiet-tint', 4.5],
     ['watch', 'watch-tint', 4.5],
     ['hot', 'hot-tint', 4.5],
@@ -61,8 +61,8 @@ describe('colour contrast of the site tokens', () => {
     expect(ratio(token('line-strong'), token('bg'))).toBeGreaterThanOrEqual(2.5);
   });
 
-  it('white button text on navy is at least 7:1', () => {
-    expect(ratio('#ffffff', token('navy'))).toBeGreaterThanOrEqual(7);
+  it('white button text on the brand slate is at least 7:1', () => {
+    expect(ratio('#ffffff', token('brand'))).toBeGreaterThanOrEqual(7);
   });
 });
 

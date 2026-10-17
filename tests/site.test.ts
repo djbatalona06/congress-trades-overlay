@@ -188,10 +188,10 @@ describe('brand and visual system', () => {
     expect(css).not.toMatch(/\.b-[dr]\s*\{/);
   });
 
-  it('uses navy, not green or red, for buttons, links and focus', () => {
+  it('uses the logo slate, not green or red, for buttons, links and focus', () => {
     const rule = (selector: string) => css.match(new RegExp(`${selector.replace(/[.:-]/g, '\\$&')} \\{([^}]*)\\}`))?.[1] ?? '';
-    expect(rule('.btn-primary')).toContain('var(--navy)');
-    expect(rule(':focus-visible')).toContain('var(--navy)');
+    expect(rule('.btn-primary')).toContain('var(--brand)');
+    expect(rule(':focus-visible')).toContain('var(--brand)');
     expect(css).not.toMatch(/--green|--red/);
   });
 

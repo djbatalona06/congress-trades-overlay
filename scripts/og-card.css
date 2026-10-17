@@ -1,5 +1,5 @@
 /* Styles for scripts/og-card.html, the 1200x630 social share card. */
-body{margin:0;width:1200px;height:630px;font-family:Inter,sans-serif;background:#fff;color:#0f172a;display:flex;flex-direction:column;justify-content:space-between;padding:72px 80px;box-sizing:border-box;background:radial-gradient(60% 80% at 80% 0%,#eef3f9,#fff 70%)}
+body{margin:0;width:1200px;height:630px;font-family:Inter,sans-serif;background:#fff;color:#0f172a;display:flex;flex-direction:column;justify-content:space-between;padding:72px 80px;box-sizing:border-box;background:radial-gradient(60% 80% at 80% 0%,#eef1f4,#fff 70%)}
 .brand{display:flex;align-items:center;gap:16px;font-weight:700;font-size:34px}
 .brand img{width:56px;height:56px}
 h1{font-family:'Source Serif 4',Georgia,serif;font-weight:600;font-size:76px;line-height:1.05;margin:0;letter-spacing:-0.01em;max-width:1000px}

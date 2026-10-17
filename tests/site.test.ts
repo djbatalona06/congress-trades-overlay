@@ -1,7 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const html = readFileSync('site/index.html', 'utf8');
+const css = readFileSync('site/styles.css', 'utf8');
 const BROKERS = [
   ['TradingView', 'https://www.tradingview.com/', true],
   ['Robinhood', 'https://robinhood.com/', true],
@@ -46,7 +47,7 @@ describe('broker links on the site', () => {
   it('is honest: only the four supported brokers say they work; every other broker says it is not supported', () => {
     for (const [name, , supported] of BROKERS) {
       const escaped = name.replace(/[*]/g, '\\*');
-      const item = brokerSection.match(new RegExp(`<li><a [^>]*>${escaped}[\\s\\S]*?</li>`))?.[0] ?? '';
+      const item = brokerSection.match(new RegExp(`<li><a [^>]*>(?:<img [^>]*>)?${escaped}[\\s\\S]*?</li>`))?.[0] ?? '';
       expect(item, name).not.toBe('');
       if (supported) expect(item).toContain('Works with Capitol Tape');
       else expect(item).toContain('not supported by the extension yet');
@@ -60,9 +61,15 @@ describe('broker links on the site', () => {
   });
 
   it('wraps the cards and centres the last row, so no card is left alone at the edge', () => {
-    const rule = html.match(/\.broker-list \{([^}]*)\}/)?.[1] ?? '';
+    const rule = css.match(/\.broker-list \{([^}]*)\}/)?.[1] ?? '';
     expect(rule).toContain('flex-wrap: wrap');
     expect(rule).toContain('justify-content: center');
+  });
+
+  it('gives every broker a logo file that exists', () => {
+    const logos = [...brokerSection.matchAll(/<img src="(logos\/[a-z]+\.svg)" alt=""/g)].map((m) => m[1]);
+    expect(logos).toHaveLength(BROKERS.length);
+    for (const file of logos) expect(existsSync(`site/${file}`), file).toBe(true);
   });
 
   it('names every broker in the not-affiliated sentence', () => {
@@ -71,5 +78,52 @@ describe('broker links on the site', () => {
     for (const [name] of BROKERS) {
       expect(sentence, name).toContain(name);
     }
+  });
+});
+
+const PAGES = ['index', 'pricing', 'login', 'account', 'privacy'] as const;
+const page = (name: string) => readFileSync(`site/${name}.html`, 'utf8');
+const header = (source: string) => source.slice(source.indexOf('<header'), source.indexOf('</header>'));
+
+describe('site pages', () => {
+  it('share one header with the sub-links and the grid menu', () => {
+    const reference = header(page('index'));
+    expect(reference).toContain('href="pricing.html"');
+    expect(reference).toContain('href="login.html"');
+    expect(reference).toContain('class="menu-btn"');
+    for (const name of PAGES) expect(header(page(name)), name).toBe(reference);
+  });
+
+  it('keep CSS and scripts in their own files, not inside the HTML', () => {
+    for (const name of PAGES) {
+      const source = page(name).replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, '');
+      expect(source, name).toContain('href="styles.css"');
+      expect(source, name).not.toMatch(/<style[\s>]/);
+      expect(source, name).not.toMatch(/<script>/);
+    }
+  });
+
+  it('load the config before the shared script, and every script file exists', () => {
+    for (const name of PAGES) {
+      const source = page(name);
+      const scripts = [...source.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
+      expect(scripts.slice(0, 2), name).toEqual(['config.js', 'site.js']);
+      for (const file of scripts) expect(existsSync(`site/${file}`), `${name}: ${file}`).toBe(true);
+    }
+  });
+
+  it('every Add to Chrome button is wired to the desktop-only check', () => {
+    expect(readFileSync('site/site.js', 'utf8')).toContain("document.querySelectorAll('[data-install]')");
+    expect(readFileSync('site/site.js', 'utf8')).toContain('Desktop only');
+    expect(page('index').match(/data-install="chrome"/g)!.length).toBeGreaterThanOrEqual(3);
+    expect(page('index')).toMatch(/Not available on mobile/);
+  });
+
+  it('offer Google and GitHub sign-in', () => {
+    const login = page('login');
+    expect(login).toContain('data-provider="google"');
+    expect(login).toContain('data-provider="github"');
+    expect(login).toContain('Continue with Google');
+    expect(login).toContain('Continue with GitHub');
   });
 });

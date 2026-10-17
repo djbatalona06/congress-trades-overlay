@@ -40,7 +40,7 @@ The box only reports what the forms say. It is **not** advice. Read [docs/signal
 
 ## Where it works
 
-It works on these four stock websites:
+It only works on a computer (desktop Chrome or Firefox), not on phones or tablets. It works on these four stock websites:
 
 1. TradingView
 2. Robinhood
@@ -82,7 +82,7 @@ Capitol Tape is **not** advice about money. It only shows forms that anyone can 
 |---|---|
 | `entrypoints/` | The parts you see: the pop-up box and the menu |
 | `lib/` | The brain: finds the stock name and gets the forms |
-| `site/` | The website |
+| `site/` | The website: home, pricing, sign-in and account pages |
 | `tests/` | Checks that make sure everything still works |
 | `worker/` | An extra helper on the internet (turned off for now) |
 | `docs/` | The plan for the whole project |

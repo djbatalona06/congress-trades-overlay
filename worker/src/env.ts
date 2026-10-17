@@ -1,4 +1,6 @@
-export interface Env {
+import type { AuthEnv } from './accounts';
+
+export interface Env extends AuthEnv {
   DB: D1Database;
   /** api.data.gov key for Congress.gov. Set with `wrangler secret put CONGRESS_API_KEY`. */
   CONGRESS_API_KEY: string;

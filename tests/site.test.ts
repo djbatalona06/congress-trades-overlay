@@ -1,8 +1,8 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const html = readFileSync('site/index.html', 'utf8');
-const css = readFileSync('site/styles.css', 'utf8');
+const html = readFileSync('site/dist/index.html', 'utf8');
+const css = readFileSync('site/dist/styles.css', 'utf8');
 const BROKERS = [
   ['TradingView', 'https://www.tradingview.com/', true],
   ['Robinhood', 'https://robinhood.com/', true],
@@ -69,7 +69,7 @@ describe('broker links on the site', () => {
   it('gives every broker a logo file that exists', () => {
     const logos = [...brokerSection.matchAll(/<img src="(logos\/[a-z]+\.svg)" alt=""/g)].map((m) => m[1]);
     expect(logos).toHaveLength(BROKERS.length);
-    for (const file of logos) expect(existsSync(`site/${file}`), file).toBe(true);
+    for (const file of logos) expect(existsSync(`site/dist/${file}`), file).toBe(true);
   });
 
   it('names every broker in the not-affiliated sentence', () => {
@@ -82,7 +82,7 @@ describe('broker links on the site', () => {
 });
 
 const PAGES = ['index', 'pricing', 'login', 'account', 'privacy'] as const;
-const page = (name: string) => readFileSync(`site/${name}.html`, 'utf8');
+const page = (name: string) => readFileSync(`site/dist/${name}.html`, 'utf8');
 const header = (source: string) => source.slice(source.indexOf('<header'), source.indexOf('</header>'));
 
 describe('site pages', () => {
@@ -108,13 +108,13 @@ describe('site pages', () => {
       const source = page(name);
       const scripts = [...source.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
       expect(scripts.slice(0, 2), name).toEqual(['config.js', 'site.js']);
-      for (const file of scripts) expect(existsSync(`site/${file}`), `${name}: ${file}`).toBe(true);
+      for (const file of scripts) expect(existsSync(`site/dist/${file}`), `${name}: ${file}`).toBe(true);
     }
   });
 
   it('every Add to Chrome button is wired to the desktop-only check', () => {
-    expect(readFileSync('site/site.js', 'utf8')).toContain("document.querySelectorAll('[data-install]')");
-    expect(readFileSync('site/site.js', 'utf8')).toContain('Desktop only');
+    expect(readFileSync('site/dist/site.js', 'utf8')).toContain("document.querySelectorAll('[data-install]')");
+    expect(readFileSync('site/dist/site.js', 'utf8')).toContain('Desktop only');
     expect(page('index').match(/data-install="chrome"/g)!.length).toBeGreaterThanOrEqual(3);
     expect(page('index')).toMatch(/Not available on mobile/);
   });
@@ -125,5 +125,39 @@ describe('site pages', () => {
     expect(login).toContain('data-provider="github"');
     expect(login).toContain('Continue with Google');
     expect(login).toContain('Continue with GitHub');
+  });
+});
+
+describe('site build', () => {
+  const src = (path: string) => readFileSync(`site/src/${path}`, 'utf8');
+
+  it('page sources pull in the shared header and footer instead of copying them', () => {
+    for (const path of ['pages/index.html', 'pages/pricing.html', 'pages/login.html', 'pages/account.html', 'legal/privacy.html']) {
+      expect(src(path), path).toContain('<!-- @include Header -->');
+      expect(src(path), path).toContain('<!-- @include FooterLegal -->');
+      expect(src(path), path).not.toContain('<header');
+    }
+  });
+
+  it('leaves no include markers or {{values}} in the built pages', () => {
+    for (const name of PAGES) {
+      expect(page(name), name).not.toContain('@include');
+      expect(page(name), name).not.toMatch(/\{\{\w+\}\}/);
+    }
+  });
+
+  it('writes config.js from env vars, with nothing filled in by default', async () => {
+    const { buildSite } = await import('../scripts/build-site.mjs');
+    const out = 'site/dist-env-test';
+    try {
+      buildSite({ out, env: { SITE_CHROME_URL: 'https://store.example/item', SITE_AUTH_BASE: 'https://api.example/', SITE_CONTACT_EMAIL: 'team@capitol.example' } });
+      const config = readFileSync(`${out}/config.js`, 'utf8');
+      expect(config).toContain('"chrome": "https://store.example/item"');
+      expect(config).toContain('"AUTH_BASE": "https://api.example"');
+      expect(readFileSync(`${out}/index.html`, 'utf8')).toContain('mailto:team@capitol.example');
+    } finally {
+      rmSync(out, { recursive: true, force: true });
+    }
+    expect(readFileSync('site/dist/config.js', 'utf8')).toContain('"chrome": ""');
   });
 });

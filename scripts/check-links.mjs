@@ -1,8 +1,8 @@
-// Opens every external link on the site's pages (broker row, footer), plus the Bargo key link.
+// Opens every external link on the built site's pages (broker row, footer), plus the Bargo key link.
 // Run on a machine with normal internet access: npm run check:links
 import { readdirSync, readFileSync } from 'node:fs';
 
-const html = readdirSync('site').filter((file) => file.endsWith('.html')).map((file) => readFileSync(`site/${file}`, 'utf8')).join('\n');
+const html = readdirSync('site/dist', { recursive: true }).filter((file) => file.endsWith('.html')).map((file) => readFileSync(`site/dist/${file}`, 'utf8')).join('\n');
 const urls = new Set(['https://www.bargo.ai/connect']);
 for (const [, href] of html.matchAll(/<a href="(https:\/\/[^"]+)" target="_blank"/g)) urls.add(href);
 

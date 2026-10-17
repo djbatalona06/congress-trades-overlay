@@ -27,6 +27,8 @@
 
     <!-- @include PlatformBadges -->
 
+    <!-- @include TrustStrip -->
+
     <!-- Broker links -->
     <section class="brokers" id="brokers" aria-labelledby="brokers-title">
       <div class="wrap">
@@ -133,7 +135,7 @@
           <h2 id="how-title" class="h2">From install to first disclosure in under a minute.</h2>
         </div>
         <ol class="steps grid">
-          <li class="step reveal d0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups.</p><span class="time">10 seconds</span></li>
+          <li class="step reveal d0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups (<a href="faq.html#bargo-key">how to add one</a>; <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">get a key<span class="sr-only"> (opens in a new tab)</span></a>).</p><span class="time">10 seconds</span></li>
           <li class="step reveal d1"><h3>Open a ticker</h3><p>Pull up any US stock or corporate bond on a supported platform. The symbol is detected automatically.</p><span class="time">Instant</span></li>
           <li class="step reveal d2"><h3>Read the tape</h3><p>Expand the panel to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
           <li class="step reveal d3"><h3>Watch &amp; get notified</h3><p>Star a ticker. When a member files a new disclosure on it, you get a browser notification.</p><span class="time">Runs in the background</span></li>
@@ -212,10 +214,8 @@
           <details><summary>Where does the data come from?</summary><p class="a">From the Bargo Congress Trades API, which publishes the periodic transaction reports that members of the House and Senate must file under the STOCK Act. Coverage is the most recent ~90 days.</p></details>
           <details><summary>How current are the disclosures?</summary><p class="a">Members have up to 45 days after a trade to file, so every disclosure is delayed by law. Capitol Tape shows both the trade date and the filing date, and refreshes each ticker at most every 6 hours.</p></details>
           <details><summary>Can it see my brokerage account?</summary><p class="a">No. It reads only the ticker symbol from the page address or title. It cannot read balances, positions or orders, and it cannot place trades.</p></details>
-          <details><summary>Which sites does it work on?</summary><p class="a">Stock pages on TradingView, Robinhood, Webull and Schwab, in Chrome and Firefox. On a TradingView corporate-bond chart, it shows disclosures for the issuing company's stock.</p></details>
-          <details><summary>Why is there a daily lookup limit?</summary><p class="a">The free data API allows a set number of requests per day per network. Capitol Tape caches results and reserves half the budget for charts. Get a <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free Bargo key<span class="sr-only"> (opens in a new tab)</span></a> and paste it in the popup (Lookups tab) to raise the limit.</p></details>
-          <details><summary>How do I upgrade or cancel Pro?</summary><p class="a">Open the extension popup and choose Upgrade to Pro. Payment runs through ExtensionPay and Stripe; the extension never sees your card. Cancel any time under Manage subscription in the same popup.</p></details>
         </div>
+        <p class="faq-more"><a class="btn btn-ghost" href="faq.html">See all questions</a></p>
       </div>
     </section>
 

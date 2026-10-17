@@ -81,7 +81,7 @@ describe('broker links on the site', () => {
   });
 });
 
-const PAGES = ['index', 'pricing', 'login', 'account', 'privacy'] as const;
+const PAGES = ['index', 'pricing', 'login', 'account', 'privacy', 'terms', 'data', 'security', 'faq', 'changelog'] as const;
 const page = (name: string) => readFileSync(`site/dist/${name}.html`, 'utf8');
 const header = (source: string) => source.slice(source.indexOf('<header'), source.indexOf('</header>'));
 
@@ -208,7 +208,63 @@ describe('brand and visual system', () => {
   });
 
   it('keeps pages free of inline style attributes', () => {
-    for (const name of ['pricing', 'login', 'account', 'privacy'] as const) expect(page(name), name).not.toMatch(/\sstyle="/);
+    for (const name of PAGES.filter((n) => n !== 'index')) expect(page(name), name).not.toMatch(/\sstyle="/);
     expect(page('index').replace(/<figure class="quote[\s\S]*?<\/figure>/g, '')).not.toMatch(/\sstyle="/);
+  });
+});
+
+describe('legal and trust pages', () => {
+  const footer = (source: string) => source.slice(source.indexOf('<footer'), source.indexOf('</footer>'));
+
+  it('every page has the same footer, with the full legal row and no placeholder links', () => {
+    const reference = footer(page('index'));
+    for (const href of ['privacy.html', 'terms.html', 'data.html', 'security.html', 'faq.html', 'changelog.html']) {
+      expect(reference, href).toContain(`href="${href}"`);
+    }
+    expect(reference).toContain('href="mailto:');
+    expect(reference).not.toContain('href="#"');
+    for (const name of PAGES) expect(footer(page(name)), name).toBe(reference);
+  });
+
+  it('says "not financial advice" on every page', () => {
+    for (const name of PAGES) expect(page(name), name).toMatch(/not financial advice/i);
+  });
+
+  it('the data page covers the source, the delay, accuracy, liability and the use limits', () => {
+    const data = page('data');
+    for (const phrase of ['Bargo', '45 days', 'not responsible for errors, omissions', 'Not financial advice', '13107(c)']) {
+      expect(data, phrase).toContain(phrase);
+    }
+  });
+
+  it('the terms disclaim advice and warranties and limit liability', () => {
+    const terms = page('terms');
+    for (const phrase of ['Not advice', 'provided "as is"', 'Limit of liability', 'ExtensionPay and Stripe', '13107(c)']) {
+      expect(terms, phrase).toContain(phrase);
+    }
+  });
+
+  it('the security page lists exactly the permissions the extension asks for', () => {
+    const config = readFileSync('wxt.config.ts', 'utf8');
+    const permissions = JSON.parse((config.match(/permissions: (\[[^\]]*\])/)?.[1] ?? '[]').replace(/'/g, '"')) as string[];
+    expect(permissions.length).toBeGreaterThan(0);
+    for (const permission of permissions) expect(page('security'), permission).toContain(`<code>${permission}</code>`);
+  });
+
+  it('the privacy page has a real contact link, not a placeholder', () => {
+    expect(page('privacy')).not.toContain('[publisher contact email]');
+    expect(page('privacy')).toMatch(/href="mailto:[^"]+@[^"]+"/);
+  });
+
+  it('the FAQ explains how to add a Bargo key, step by step', () => {
+    const faq = page('faq');
+    expect(faq).toContain('id="bargo-key"');
+    expect(faq).toContain('bargo.ai/connect');
+    expect(faq).toMatch(/<ol class="howto">[\s\S]*Lookups[\s\S]*Save[\s\S]*<\/ol>/);
+  });
+
+  it('the home page shows the trust strip', () => {
+    const strip = page('index').slice(page('index').indexOf('class="trust-strip"'));
+    for (const fact of ['No brokerage access', 'Public filings only', 'Delayed by law', 'Not financial advice']) expect(strip, fact).toContain(fact);
   });
 });

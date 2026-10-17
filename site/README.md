@@ -11,9 +11,9 @@ npx serve site/dist    # preview at http://localhost:3000
 
 | Folder | What is inside |
 |---|---|
-| `src/pages/` | One file per page: `index`, `pricing`, `login`, `account` |
-| `src/legal/` | Legal pages: `privacy` (the store listing links to this one) |
-| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature` |
+| `src/pages/` | One file per page: `index`, `pricing`, `faq`, `changelog`, `login`, `account` |
+| `src/legal/` | Legal and trust pages: `privacy` (the store listing links to this one), `terms`, `data` (Data & Disclaimers), `security` (permissions and how to report a problem) |
+| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature`, `TrustStrip` |
 | `src/js/` | Scripts: `site.js` (shared), `demo.js`, `reveal.js`, `login.js`, `account.js` |
 | `src/styles/` | `styles.css`, all the styling for every page |
 | `public/` | Copied as-is: `icon.png` (the 128px extension icon) and `logos/` |
@@ -54,9 +54,10 @@ These are public values. **Never put a secret here**: everything in them ends up
 ## Before going live
 
 1. Set `SITE_CHROME_URL` and `SITE_FIREFOX_URL` once the listings are live.
-2. Set `SITE_CONTACT_EMAIL`, and replace the `#` social links in `src/components/FooterLegal.html`.
-3. Replace the three testimonials with real reviews. They are made up and marked as illustrative on the page.
-4. To switch sign-in on, follow "Website sign-in" in `worker/README.md`, then set `SITE_AUTH_BASE`.
+2. Set `SITE_CONTACT_EMAIL`. It fills every contact, support and security link. To show social links, add them to `src/components/FooterLegal.html` (they were removed while they pointed nowhere).
+3. Have a lawyer read `terms`, `privacy` and `data`. The Terms have no governing-law section yet on purpose.
+4. Replace the three testimonials with real reviews. They are made up and marked as illustrative on the page.
+5. To switch sign-in on, follow "Website sign-in" in `worker/README.md`, then set `SITE_AUTH_BASE`.
 
 ## Publish
 

@@ -195,6 +195,18 @@ describe('brand and visual system', () => {
     expect(css).not.toMatch(/--green|--red/);
   });
 
+  it('uses the brand folder\'s mark for the favicon, touch icon and header logo', () => {
+    for (const file of ['favicon.svg', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png']) {
+      expect(readFileSync(`site/dist/${file}`), file).toEqual(readFileSync(`brand/${file}`));
+    }
+    for (const name of PAGES) {
+      const source = page(name);
+      expect(source, name).toContain('<link rel="icon" type="image/svg+xml" href="favicon.svg" />');
+      expect(source, name).toContain('<link rel="apple-touch-icon" href="apple-touch-icon.png" />');
+      expect(header(source), name).toContain('<img class="logo-mark" src="favicon.svg"');
+    }
+  });
+
   it('keeps pages free of inline style attributes', () => {
     for (const name of PAGES.filter((n) => n !== 'index')) expect(page(name), name).not.toMatch(/\sstyle="/);
     expect(page('index').replace(/<figure class="quote[\s\S]*?<\/figure>/g, '')).not.toMatch(/\sstyle="/);

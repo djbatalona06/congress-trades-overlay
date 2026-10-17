@@ -16,7 +16,8 @@ npx serve site/dist    # preview at http://localhost:3000
 | `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature`, `TrustStrip` |
 | `src/js/` | Scripts: `site.js` (shared), `demo.js`, `reveal.js`, `login.js`, `account.js` |
 | `src/styles/` | `styles.css`, all the styling for every page |
-| `public/` | Copied as-is: `mark.svg` (the favicon), `icon.png` (fallback, from `public/icon/128.png` at the repo root) and `logos/` |
+| `public/` | Copied as-is: `icon.png` (the 128px extension icon) and `logos/` |
+| `../brand/` | The logo. The build copies `favicon.svg`, `favicon-16.png`, `favicon-32.png` and `apple-touch-icon.png` into `dist/`; the header logo is `favicon.svg`. Change the logo there, not here |
 | `dist/` | The built site. Made by the build, never edited, not committed |
 
 HTML files hold only HTML. CSS and JavaScript live in their own files. Colours, type and spacing follow `docs/brand-voice.md`.

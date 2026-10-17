@@ -82,6 +82,7 @@ describe('broker links on the site', () => {
 });
 
 const PAGES = ['index', 'pricing', 'login', 'account', 'privacy', 'terms', 'data', 'security', 'faq', 'changelog'] as const;
+const GUIDES = ['guides/index', 'guides/tradingview-congress-trades', 'guides/stock-act-disclosures-explained', 'guides/congress-trade-data-api'] as const;
 const page = (name: string) => readFileSync(`site/dist/${name}.html`, 'utf8');
 const header = (source: string) => source.slice(source.indexOf('<header'), source.indexOf('</header>'));
 
@@ -197,7 +198,7 @@ describe('brand and visual system', () => {
 
   it('keeps pages free of inline style attributes', () => {
     for (const name of PAGES.filter((n) => n !== 'index')) expect(page(name), name).not.toMatch(/\sstyle="/);
-    expect(page('index').replace(/<figure class="quote[\s\S]*?<\/figure>/g, '')).not.toMatch(/\sstyle="/);
+    expect(page('index')).not.toMatch(/\sstyle="/);
   });
 });
 
@@ -254,5 +255,63 @@ describe('legal and trust pages', () => {
   it('the home page shows the trust strip', () => {
     const strip = page('index').slice(page('index').indexOf('class="trust-strip"'));
     for (const fact of ['No brokerage access', 'Public filings only', 'Delayed by law', 'Not financial advice']) expect(strip, fact).toContain(fact);
+  });
+});
+
+describe('marketing and growth', () => {
+  it('shows no made-up testimonials: every quote links to where it came from', () => {
+    const index = page('index');
+    expect(index).not.toMatch(/Illustrative customer stories/i);
+    for (const name of ['Dana Reyes', 'Marcus Tran', 'Priya Shah']) expect(index, name).not.toContain(name);
+    for (const [quote] of index.matchAll(/<figure class="quote">[\s\S]*?<\/figure>/g)) {
+      expect(quote).toMatch(/class="quote-source" href="https:\/\//);
+    }
+  });
+
+  it('has a labelled waitlist form with mobile, Desk and beta, plus an email fallback', () => {
+    const index = page('index');
+    expect(index).toContain('id="waitlist"');
+    for (const list of ['mobile', 'desk', 'beta']) expect(index, list).toContain(`name="list" value="${list}"`);
+    expect(index).toContain('<label class="sr-only" for="waitlist-email">');
+    expect(index).toContain('role="status"');
+    expect(index).toMatch(/id="waitlist-fallback">[\s\S]*?href="mailto:/);
+    expect(index).toContain('<script src="waitlist.js"></script>');
+  });
+
+  it('points the Desk button and the mobile notice at the waitlist', () => {
+    expect(page('pricing')).toContain('href="index.html?list=desk#waitlist"');
+    expect(readFileSync('site/dist/site.js', 'utf8')).toContain("'/index.html?list=mobile#waitlist'");
+  });
+
+  it('publishes the three guides, each saying it is not advice and linking to official sources', () => {
+    for (const guide of GUIDES.slice(1)) {
+      const html = page(guide);
+      expect(html, guide).toContain('href="../styles.css"');
+      expect(html, guide).toMatch(/not (financial )?advice|never advice|not a buy or sell signal|not a prediction/i);
+    }
+    expect(page('guides/tradingview-congress-trades')).toContain('efdsearch.senate.gov');
+    expect(page('guides/congress-trade-data-api')).toContain('13107(c)');
+  });
+
+  it('lists every public page in the sitemap, but not sign-in or account', () => {
+    const sitemap = readFileSync('site/dist/sitemap.xml', 'utf8');
+    for (const path of ['', 'pricing.html', 'faq.html', 'terms.html', 'data.html', 'guides/', 'guides/stock-act-disclosures-explained.html']) {
+      expect(sitemap, path).toContain(`<loc>https://capitol-tape.pages.dev/${path}</loc>`);
+    }
+    expect(sitemap).not.toContain('login.html');
+    expect(sitemap).not.toContain('account.html');
+    expect(readFileSync('site/dist/robots.txt', 'utf8')).toContain('Sitemap: https://capitol-tape.pages.dev/sitemap.xml');
+  });
+
+  it('gives every page a social card image that exists', () => {
+    expect(existsSync('site/dist/og.png')).toBe(true);
+    for (const name of [...PAGES, ...GUIDES]) expect(page(name), name).toContain('<meta property="og:image" content="https://capitol-tape.pages.dev/og.png" />');
+  });
+
+  it('keeps compliance-safe wording: no hype or copy-trading claims anywhere', () => {
+    for (const name of [...PAGES, ...GUIDES]) {
+      const text = page(name).replace(/<[^>]+>/g, ' ');
+      expect(text, name).not.toMatch(/copy (congress|politicians)|beat the market|insider trad(es|ing) (data|alerts)|guaranteed|alpha|edge over/i);
+    }
   });
 });

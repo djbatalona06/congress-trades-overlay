@@ -1,0 +1,31 @@
+<!-- WaitlistForm: email + which list. waitlist.js sends it to the Worker and shows the person's share link.
+     Without a Worker address (SITE_AUTH_BASE) the form hides and the email fallback shows. -->
+<form class="waitlist" id="waitlist-form" novalidate hidden>
+  <fieldset>
+    <legend>Tell me when this opens</legend>
+    <div class="waitlist-choices">
+      <label><input type="radio" name="list" value="mobile" checked /> Mobile version</label>
+      <label><input type="radio" name="list" value="desk" /> Desk plan for teams</label>
+      <label><input type="radio" name="list" value="beta" /> Beta tester (try new features, give feedback)</label>
+    </div>
+  </fieldset>
+  <div class="waitlist-row">
+    <label class="sr-only" for="waitlist-email">Email address</label>
+    <input id="waitlist-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+    <button class="btn btn-primary" type="submit">Join the waitlist</button>
+  </div>
+  <!-- People never see or fill this; spam bots do. -->
+  <div class="hp" aria-hidden="true"><label for="waitlist-website">Website</label><input id="waitlist-website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+  <p class="waitlist-fine">One email when it opens. Nothing else. Unsubscribe by replying. See the <a href="{{base}}privacy.html">privacy policy</a>.</p>
+</form>
+<p class="waitlist-msg" id="waitlist-msg" role="status" hidden></p>
+<div class="waitlist-share" id="waitlist-share" hidden>
+  <p><strong>You're on the list.</strong> Share your link; we count who joins with it and will thank early sharers first.</p>
+  <div class="waitlist-row">
+    <label class="sr-only" for="waitlist-link">Your share link</label>
+    <input id="waitlist-link" type="text" readonly />
+    <button class="btn btn-ghost" id="waitlist-copy" type="button">Copy link</button>
+  </div>
+  <p class="waitlist-fine" id="waitlist-count"></p>
+</div>
+<p class="waitlist-fallback" id="waitlist-fallback">The waitlist opens soon. Until then, email <a href="mailto:{{contactEmail}}?subject=Capitol%20Tape%20waitlist">{{contactEmail}}</a> and say which one you want: mobile, Desk or beta.</p>

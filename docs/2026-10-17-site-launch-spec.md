@@ -106,7 +106,7 @@ Home ─┬─ Add to Chrome ─→ Chrome Web Store (desktop) │ "Desktop only
 
 ## 4. UI/UX design brief
 
-**Feel.** Calm, factual, tool-like. Like a well-made public-records page, not a trading app. Light theme, white and slate, navy for actions.
+**Feel.** Calm, factual, tool-like. Like a well-made public-records page, not a trading app. Light theme: white, with the logo slate for text and actions.
 
 **Colour.** Everything is neutral except signal states.
 
@@ -117,7 +117,7 @@ Home ─┬─ Add to Chrome ─→ Chrome Web Store (desktop) │ "Desktop only
 | `--muted` | `#475569` | Captions (7.6:1 on white) |
 | `--line` | `#e2e8f0` | Borders |
 | `--bg` / `--bg-alt` | `#ffffff` / `#f8fafc` | Page / alternate sections |
-| `--navy` / `--navy-hover` | `#1e3a5f` / `#152b47` | Buttons, links, focus ring |
+| `--brand` / `--brand-hover` | `#172536` / `#0b131d` | Buttons, links, focus ring (the logo slate) |
 | `--quiet` | `#475569` | Signal: Quiet |
 | `--watch` | `#b45309` | Signal: Watch (amber, 5.0:1 on white) |
 | `--hot` | `#b91c1c` | Signal: Hot |
@@ -133,7 +133,7 @@ No red or blue as brand colour. Party badges in the demo are neutral slate with 
 
 | Component | Rule |
 |---|---|
-| Button | Two kinds only: primary (navy, white text) and secondary (white, slate border). 48px tall, 40px for small. One primary per view |
+| Button | Two kinds only: primary (slate, white text) and secondary (white, slate border). 48px tall, 40px for small. One primary per view |
 | Card | White, 1px `--line` border, 12px radius, 32px padding, no hover jump |
 | SignalBox | Icon + word + short reason. Quiet = dash in a circle, Watch = eye, Hot = flame. Colour is the third cue, never the only one |
 | PlatformBadges | Logo + name, greyscale until hover |
@@ -275,7 +275,7 @@ The three home-page quotes are invented. Even with the "illustrative" note, made
 
 **9.3 Referral reward is not extra lookups.** Lookups are limited by Bargo per network, not by Capitol Tape, so there is nothing to give. The waitlist stores referral codes and counts so a reward can be chosen later (waitlist priority, an early Desk seat, or a Pro month once ExtensionPay coupons are confirmed). Promising "extra lookups" now would be a promise we cannot keep.
 
-**9.4 Signal colours.** The notes said "one accent colour". We read that as one accent *set* (the traffic-light trio) used only for signal states, with buy/sell green and red allowed inside trade data only. Everything else is navy, slate and white.
+**9.4 Signal colours.** The notes said "one accent colour". We read that as one accent *set* (the traffic-light trio) used only for signal states, with buy/sell green and red allowed inside trade data only. Everything else is the logo slate and white.
 
 ---
 

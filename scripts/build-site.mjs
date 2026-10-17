@@ -6,6 +6,8 @@
 //   site/src/js, site/src/styles   copied to the top level, so URLs stay /site.js, /styles.css
 //   site/public/      copied as-is (logos, icon, _headers)
 //
+// A block include wraps content, which the component places with {{children}}:
+//   <!-- @include PricingCard name="Pro" -->…list items…<!-- @end PricingCard -->
 // Inside a component or page, {{key}} is replaced by an include argument or a site value.
 // An unknown {{key}} or a missing component stops the build, so typos never ship.
 //
@@ -17,8 +19,11 @@ import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statS
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const INCLUDE = /<!-- @include ([A-Za-z]+)((?:\s+[a-zA-Z]+="[^"]*")*)\s*-->/g;
-const ARG = /([a-zA-Z]+)="([^"]*)"/g;
+const ATTRS = `((?:\\s+[a-zA-Z]+=(?:"[^"]*"|'[^']*'))*)\\s*`;
+const BLOCK = new RegExp(`<!-- @include ([A-Za-z]+)${ATTRS}-->([\\s\\S]*?)<!-- @end \\1 -->`, 'g');
+const INCLUDE = new RegExp(`<!-- @include ([A-Za-z]+)${ATTRS}-->`, 'g');
+// Arguments use double quotes, or single quotes when the value holds HTML with double quotes.
+const ARG = /([a-zA-Z]+)=(?:"([^"]*)"|'([^']*)')/g;
 const VAR = /\{\{([a-zA-Z]+)\}\}/g;
 
 export function siteValues(env = process.env) {
@@ -40,12 +45,16 @@ function listFiles(dir) {
 
 function render(source, vars, components, file, depth = 0) {
   if (depth > 8) throw new Error(`${file}: includes nest too deep`);
-  const included = source.replace(INCLUDE, (_, name, rawArgs) => {
+  const expand = (name, rawArgs, children) => {
     const part = components.get(name);
     if (part === undefined) throw new Error(`${file}: no component called ${name}`);
-    const args = Object.fromEntries([...rawArgs.matchAll(ARG)].map(([, key, value]) => [key, value]));
-    return render(part.replace(/\n$/, ''), { ...vars, ...args }, components, `${file} > ${name}`, depth + 1);
-  });
+    const args = Object.fromEntries([...rawArgs.matchAll(ARG)].map(([, key, double, single]) => [key, double ?? single]));
+    const childVars = children === undefined ? {} : { children: render(children, vars, components, file, depth + 1) };
+    return render(part.replace(/\n$/, ''), { ...vars, ...args, ...childVars }, components, `${file} > ${name}`, depth + 1);
+  };
+  const included = source
+    .replace(BLOCK, (_, name, rawArgs, children) => expand(name, rawArgs, children))
+    .replace(INCLUDE, (_, name, rawArgs) => expand(name, rawArgs));
   return included.replace(VAR, (_, key) => {
     if (!(key in vars)) throw new Error(`${file}: {{${key}}} has no value`);
     return vars[key];

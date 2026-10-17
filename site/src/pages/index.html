@@ -18,81 +18,14 @@
 </head>
 <body class="no-js">
   <a class="skip" href="#main">Skip to content</a>
+  <!-- @include SignalIcons -->
 
   <!-- @include Header -->
 
   <main id="main">
-    <!-- Hero -->
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="wrap">
-        <p class="pill reveal"><b>New</b> Bond charts now map to the issuer's stock</p>
-        <h1 id="hero-title" class="reveal" style="--i:1">See every congressional stock trade <span class="up">right on your chart.</span></h1>
-        <p class="sub reveal" style="--i:2">Capitol Tape overlays STOCK Act disclosures on TradingView, Robinhood, Webull and Schwab — member, party, buy or sell, amount and filing date — without leaving the ticker.</p>
-        <div class="cta-row reveal" style="--i:3">
-          <a class="btn btn-primary" href="#get" data-install="chrome">Add to Chrome — It's Free</a>
-          <a class="btn btn-ghost" href="#how">See How It Works</a>
-        </div>
-        <p class="desktop-only reveal" style="--i:4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>Desktop only: Chrome and Firefox on a computer. Not available on mobile.</p>
-        <p class="fineprint reveal" style="--i:4">Also on Firefox · Read-only · No account needed to use it</p>
+    <!-- @include Hero title="Nonpartisan congressional trade data, right on your chart." sub="Capitol Tape shows public STOCK Act disclosures on TradingView, Robinhood, Webull and Schwab: who traded, buy or sell, the amount range, and when it was filed. Read-only, with no access to your brokerage account." -->
 
-        <figure class="frame reveal" style="--i:4" aria-label="Capitol Tape panel shown on a stock chart">
-          <div class="frame-bar" aria-hidden="true">
-            <div class="dots"><i></i><i></i><i></i></div>
-            <div class="url">tradingview.com/chart/?symbol=NASDAQ:NVDA</div>
-          </div>
-          <div class="stage" role="img" aria-label="Example: a stock chart for NVDA with three numbered flags marking congressional trades, and the Capitol Tape panel listing the same three disclosures: a Senate buy, a House sell and a House buy.">
-            <div class="tv-top" aria-hidden="true">
-              <span class="tv-sym">NVDA<small>NASDAQ · 1D</small></span>
-              <span class="tv-tf"><span>1H</span><span class="on">1D</span><span>1W</span></span>
-              <span class="tv-tools"><span>Indicators</span><span>Alerts</span><span>Replay</span></span>
-            </div>
-            <div class="tv-rail" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 20 4" /><circle cx="4" cy="20" r="1.5" /><circle cx="20" cy="4" r="1.5" /></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-6 4 3 8-9" /></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" /></svg>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></svg>
-            </div>
-            <div class="tv-plot" aria-hidden="true">
-              <div class="tv-canvas" id="demo-canvas">
-                <svg id="demo-chart" viewBox="0 0 1000 500" preserveAspectRatio="none"></svg>
-                <div class="tv-readout">NVDA · 1D<span>▲ 2.41%</span></div>
-                <div class="tv-signal"><i></i>Watch: 2 members buying in 30 days</div>
-              </div>
-              <div class="tv-axis" id="demo-axis"></div>
-            </div>
-            <div class="panel">
-              <div class="panel-bar">
-                <strong>▾ Congress Trades: NVDA</strong><span class="count">(3 recent)</span>
-                <div class="chips"><span class="chip on">All</span><span class="chip">Buys</span><span class="chip">Sells</span></div>
-                <small>Data via Bargo</small>
-              </div>
-              <ul class="rows">
-                <li><span class="n buy">1</span><span class="who"><b>Sen. Jordan Hale</b><span class="badge b-d">D</span><small>Senate · OR · Traded Sep 02 · Filed Sep 24</small></span><span class="what"><b class="t-buy">Buy</b><small>$15K–$50K</small></span></li>
-                <li><span class="n sell">2</span><span class="who"><b>Rep. Avery Brooks</b><span class="badge b-r">R</span><small>House · TX-31 · Traded Aug 28 · Filed Sep 19</small></span><span class="what"><b class="t-sell">Sell</b><small>$1K–$15K</small></span></li>
-                <li><span class="n buy">3</span><span class="who"><b>Rep. Casey Lin</b><span class="badge b-d">D</span><small>House · CA-12 · Traded Aug 15 · Filed Sep 11</small></span><span class="what"><b class="t-buy">Buy</b><small>$50K–$100K</small></span></li>
-              </ul>
-              <div class="panel-foot">Not financial advice. Public STOCK Act data. Delayed.</div>
-            </div>
-          </div>
-        </figure>
-        <p class="mock-note">Illustrative example with fictional members and made-up prices.</p>
-      </div>
-    </section>
-
-    <!-- Supported platforms -->
-    <section class="trust" aria-label="Supported platforms">
-      <div class="wrap">
-        <p>Works where you already trade</p>
-        <ul class="logos">
-          <li class="reveal" style="--i:0"><img src="logos/tradingview.svg" alt="" width="24" height="24" loading="lazy">TradingView</li>
-          <li class="reveal" style="--i:1"><img src="logos/robinhood.svg" alt="" width="24" height="24" loading="lazy">Robinhood</li>
-          <li class="reveal" style="--i:2"><img src="logos/webull.svg" alt="" width="24" height="24" loading="lazy">Webull</li>
-          <li class="reveal" style="--i:3"><img src="logos/schwab.svg" alt="" width="24" height="24" loading="lazy">Charles Schwab</li>
-          <li class="reveal" style="--i:4"><img src="logos/chrome.svg" alt="" width="24" height="24" loading="lazy">Chrome</li>
-          <li class="reveal" style="--i:5"><img src="logos/firefox.svg" alt="" width="24" height="24" loading="lazy">Firefox</li>
-        </ul>
-      </div>
-    </section>
+    <!-- @include PlatformBadges -->
 
     <!-- Broker links -->
     <section class="brokers" id="brokers" aria-labelledby="brokers-title">
@@ -100,16 +33,16 @@
         <h2 id="brokers-title">Already have a broker?</h2>
         <p>Open the account you already use, or start a new one. These are plain links to each company's own website. We add no affiliate codes and no tracking.</p>
         <ul class="broker-list">
-          <li><a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer"><img src="logos/tradingview.svg" alt="" width="36" height="36" loading="lazy">TradingView<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://robinhood.com/" target="_blank" rel="noopener noreferrer"><img src="logos/robinhood.svg" alt="" width="36" height="36" loading="lazy">Robinhood<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.webull.com/" target="_blank" rel="noopener noreferrer"><img src="logos/webull.svg" alt="" width="36" height="36" loading="lazy">Webull<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer"><img src="logos/schwab.svg" alt="" width="36" height="36" loading="lazy">Charles Schwab<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer"><img src="logos/interactivebrokers.svg" alt="" width="36" height="36" loading="lazy">Interactive Brokers (IBKR)<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.sofi.com/" target="_blank" rel="noopener noreferrer"><img src="logos/sofi.svg" alt="" width="36" height="36" loading="lazy">SoFi<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.fidelity.com/" target="_blank" rel="noopener noreferrer"><img src="logos/fidelity.svg" alt="" width="36" height="36" loading="lazy">Fidelity<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://www.etrade.com/" target="_blank" rel="noopener noreferrer"><img src="logos/etrade.svg" alt="" width="36" height="36" loading="lazy">E*TRADE<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://investor.vanguard.com/" target="_blank" rel="noopener noreferrer"><img src="logos/vanguard.svg" alt="" width="36" height="36" loading="lazy">Vanguard<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
-          <li><a href="https://public.com/" target="_blank" rel="noopener noreferrer"><img src="logos/public.svg" alt="" width="36" height="36" loading="lazy">Public<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/tradingview.svg" alt="" width="36" height="36" loading="lazy">TradingView<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://robinhood.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/robinhood.svg" alt="" width="36" height="36" loading="lazy">Robinhood<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.webull.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/webull.svg" alt="" width="36" height="36" loading="lazy">Webull<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.schwab.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/schwab.svg" alt="" width="36" height="36" loading="lazy">Charles Schwab<small>Works with Capitol Tape</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.interactivebrokers.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/interactivebrokers.svg" alt="" width="36" height="36" loading="lazy">Interactive Brokers (IBKR)<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.sofi.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/sofi.svg" alt="" width="36" height="36" loading="lazy">SoFi<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.fidelity.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/fidelity.svg" alt="" width="36" height="36" loading="lazy">Fidelity<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://www.etrade.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/etrade.svg" alt="" width="36" height="36" loading="lazy">E*TRADE<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://investor.vanguard.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/vanguard.svg" alt="" width="36" height="36" loading="lazy">Vanguard<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
+          <li><a href="https://public.com/" target="_blank" rel="noopener noreferrer"><img src="{{base}}logos/public.svg" alt="" width="36" height="36" loading="lazy">Public<small>Listed for convenience only; not supported by the extension yet</small><span class="sr-only"> (opens in a new tab)</span></a></li>
         </ul>
       </div>
     </section>
@@ -119,44 +52,49 @@
       <div class="wrap">
         <div class="head reveal">
           <span class="eyebrow">Capabilities</span>
-          <h2 id="features-title" class="h2">Disclosure data, at the point of decision.</h2>
-          <p class="lede">Every field the STOCK Act requires, parsed and placed beside the price action — so you read filings in context, not in a separate tab.</p>
+          <h2 id="features-title" class="h2">The public record, beside the chart.</h2>
+          <p class="lede">Every field the STOCK Act requires, placed next to the chart you already have open, so you can read filings without another tab.</p>
         </div>
         <div class="grid">
-          <article class="card reveal" style="--i:0">
+          <article class="card reveal d0">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M13 13h5v4h-5z" /></svg></div>
             <h3>On-chart disclosure panel</h3>
             <p>Reads the ticker from the page and docks a compact panel in the corner. Collapsed, it's one line. Expanded, it's the full filing record.</p>
           </article>
-          <article class="card reveal" style="--i:1">
+          <article class="card reveal d1">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10" /></svg></div>
             <h3>Four platforms, zero setup</h3>
             <p>TradingView, Robinhood, Webull and Schwab. Switch symbols in a single-page app and the panel follows — no reload, no configuration.</p>
           </article>
-          <article class="card reveal" style="--i:2">
-            <div class="icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></svg></div>
+          <article class="card reveal d2">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10" /><path d="M7 17 17 7" /></svg></div>
             <h3>Bond-to-issuer mapping</h3>
             <p>Viewing a FINRA corporate bond? Capitol Tape resolves the CUSIP-style symbol to the issuer's equity and shows its disclosures.</p>
           </article>
-          <article class="card reveal" style="--i:3">
+          <article class="card reveal d3">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg></div>
             <h3>New-filing notifications</h3>
             <p>Watch any ticker. Capitol Tape works through your watchlist in the background every hour and sends a browser notification when a new disclosure appears.</p>
           </article>
-          <article class="card reveal" style="--i:4">
+          <article class="card reveal d4">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg></div>
             <h3>Read-only by architecture</h3>
             <p>Three permissions: storage, alarms, notifications. No brokerage access, no balances, no positions, no order entry. Nothing to audit but the ticker.</p>
           </article>
-          <article class="card reveal" style="--i:5">
-            <div class="icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3" /><path d="M3 20a6 6 0 0 1 12 0" /><path d="M17 11h4M19 9v4" /></svg></div>
+          <article class="card reveal d5">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3" /><path d="M3 20a6 6 0 0 1 12 0" /><path d="M17 11h4M19 9v4" /></svg></div>
             <h3>Party, chamber and seat context</h3>
             <p>Each row shows member, party, chamber, state or district, amount range, trade date, filing date and a link to the official filing portal.</p>
           </article>
-          <article class="card wide reveal" style="--i:6">
+          <article class="card wide reveal d6">
             <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 4a8 8 0 0 1 8 8" /><path d="M12 8v4l2.5 2.5" /></svg></div>
             <h3>Floating signal box: Quiet, Watch or Hot</h3>
-            <p>A small box you can drag anywhere on the chart. It reads the filings already on screen and lights up simple signals: three members buying the same stock within 30 days, both parties buying, a big trade, a brand-new filing, or a filing that came in past the 45-day deadline. Tap a signal to read why it is lit. It is free, it costs no extra lookups, and it is information only, never advice.</p>
+            <p>A small box you can drag anywhere on the chart. It counts what the filings on screen show: several members trading the same stock within 30 days, both parties buying, a large amount range, a brand-new filing, or a filing that came in past the 45-day deadline. Tap a tag to read why it is lit. It is free and costs no extra lookups. It describes filing activity only; it is not a buy or sell signal.</p>
+            <div class="signal-legend" role="list" aria-label="The three levels">
+              <div role="listitem"><!-- @include SignalBox level="quiet" label="Quiet" reason="0 or 1 points: nothing unusual" --></div>
+              <div role="listitem"><!-- @include SignalBox level="watch" label="Watch" reason="2 to 4 points" --></div>
+              <div role="listitem"><!-- @include SignalBox level="hot" label="Hot" reason="5 or more points" --></div>
+            </div>
           </article>
         </div>
       </div>
@@ -166,12 +104,12 @@
     <section class="diff" aria-labelledby="diff-title">
       <div class="wrap grid">
         <div class="diff-copy reveal">
-          <span class="eyebrow red">Why Capitol Tape</span>
+          <span class="eyebrow">Why Capitol Tape</span>
           <h2 id="diff-title" class="sr-only">Why Capitol Tape</h2>
           <blockquote>Trackers make you go to the data. <em>Capitol Tape brings the data to the ticker.</em></blockquote>
           <p>Disclosure sites are destinations you have to remember to check. Capitol Tape is ambient: the record is already on screen when you pull up a chart, and it disappears when there's nothing to show.</p>
         </div>
-        <div class="compare reveal" style="--i:1">
+        <div class="compare reveal d1">
           <table>
             <caption class="sr-only">Capitol Tape compared with disclosure websites</caption>
             <thead><tr><th scope="col">Workflow</th><th scope="col">Websites</th><th scope="col">Capitol Tape</th></tr></thead>
@@ -195,10 +133,10 @@
           <h2 id="how-title" class="h2">From install to first disclosure in under a minute.</h2>
         </div>
         <ol class="steps grid">
-          <li class="step reveal" style="--i:0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups.</p><span class="time">10 seconds</span></li>
-          <li class="step reveal" style="--i:1"><h3>Open a ticker</h3><p>Pull up any US stock or corporate bond on a supported platform. The symbol is detected automatically.</p><span class="time">Instant</span></li>
-          <li class="step reveal" style="--i:2"><h3>Read the tape</h3><p>Expand the panel to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
-          <li class="step reveal" style="--i:3"><h3>Watch &amp; get notified</h3><p>Star a ticker. When a member files a new disclosure on it, you get a browser notification.</p><span class="time">Runs in the background</span></li>
+          <li class="step reveal d0"><h3>Install</h3><p>Add Capitol Tape from the Chrome Web Store or Firefox Add-ons. No sign-up. A free Bargo key is optional and raises your daily lookups.</p><span class="time">10 seconds</span></li>
+          <li class="step reveal d1"><h3>Open a ticker</h3><p>Pull up any US stock or corporate bond on a supported platform. The symbol is detected automatically.</p><span class="time">Instant</span></li>
+          <li class="step reveal d2"><h3>Read the tape</h3><p>Expand the panel to see who disclosed, which side, how much, and when it was traded and filed.</p><span class="time">One click</span></li>
+          <li class="step reveal d3"><h3>Watch &amp; get notified</h3><p>Star a ticker. When a member files a new disclosure on it, you get a browser notification.</p><span class="time">Runs in the background</span></li>
         </ol>
       </div>
     </section>
@@ -211,10 +149,10 @@
           <h2 id="metrics-title" class="h2">Built on the public record. Measured in facts.</h2>
         </div>
         <div class="grid">
-          <div class="metric reveal" style="--i:0"><div class="num" data-count="535">535</div><div class="lbl">Members covered</div><div class="src">Every House and Senate seat subject to the STOCK Act</div></div>
-          <div class="metric reveal" style="--i:1"><div class="num" data-count="90">90<small>days</small></div><div class="lbl">Rolling disclosure window</div><div class="src">Recent filings, cached on-device for 6 hours</div></div>
-          <div class="metric reveal" style="--i:2"><div class="num" data-count="4">4</div><div class="lbl">Trading platforms</div><div class="src">Plus corporate-bond charts mapped to the issuer</div></div>
-          <div class="metric reveal" style="--i:3"><div class="num" data-count="0">0</div><div class="lbl">Brokerage permissions</div><div class="src">No account access, no positions, no order entry</div></div>
+          <div class="metric reveal d0"><div class="num" data-count="535">535</div><div class="lbl">Members covered</div><div class="src">Every House and Senate seat subject to the STOCK Act</div></div>
+          <div class="metric reveal d1"><div class="num" data-count="90">90<small>days</small></div><div class="lbl">Rolling disclosure window</div><div class="src">Recent filings, cached on-device for 6 hours</div></div>
+          <div class="metric reveal d2"><div class="num" data-count="4">4</div><div class="lbl">Trading platforms</div><div class="src">Plus corporate-bond charts mapped to the issuer</div></div>
+          <div class="metric reveal d3"><div class="num" data-count="0">0</div><div class="lbl">Brokerage permissions</div><div class="src">No account access, no positions, no order entry</div></div>
         </div>
       </div>
     </section>
@@ -227,17 +165,17 @@
           <h2 id="quotes-title" class="h2">Hours back, every week.</h2>
         </div>
         <div class="grid">
-          <figure class="quote reveal" style="--i:0">
+          <figure class="quote reveal d0">
             <span class="roi">−30 min / week</span>
             <blockquote>“I used to cross-check a disclosure site against my watchlist every Sunday. That half hour is gone — the panel is already there when I open the chart.”</blockquote>
             <figcaption><span class="avatar" style="background:#15803d" aria-hidden="true">DR</span><div><strong>Dana Reyes</strong><span>Independent swing trader</span></div></figcaption>
           </figure>
-          <figure class="quote reveal" style="--i:1">
+          <figure class="quote reveal d1">
             <span class="roi">4 hrs → 1 hr per issue</span>
             <blockquote>“Our weekly disclosure roundup used to take an afternoon of tab-switching. Now we work straight from the charts and the watchlist notifications.”</blockquote>
             <figcaption><span class="avatar" style="background:#0a0a0a" aria-hidden="true">MT</span><div><strong>Marcus Tran</strong><span>Editor, markets newsletter</span></div></figcaption>
           </figure>
-          <figure class="quote reveal" style="--i:2">
+          <figure class="quote reveal d2">
             <span class="roi">0 missed filings</span>
             <blockquote>“I follow several issuers only through their debt. The bond-to-issuer mapping means filings on those names reach me without a second lookup.”</blockquote>
             <figcaption><span class="avatar" style="background:#dc2626" aria-hidden="true">PS</span><div><strong>Priya Shah</strong><span>Fixed-income analyst</span></div></figcaption>
@@ -285,13 +223,13 @@
     <section class="final" id="get" aria-labelledby="get-title">
       <div class="wrap">
         <span class="eyebrow reveal">Get Capitol Tape</span>
-        <h2 id="get-title" class="reveal" style="--i:1; margin-top:16px">Your charts already show the price. Now show who's trading it.</h2>
-        <p class="lede reveal" style="--i:2; margin:24px auto 0">Free for Chrome and Firefox on desktop. Installs in seconds, no account required.</p>
-        <div class="cta-row reveal" style="--i:3">
+        <h2 id="get-title" class="reveal d1">Your charts already show the price. Now show who's trading it.</h2>
+        <p class="lede reveal d2">Free for Chrome and Firefox on desktop. Installs in seconds, no account required.</p>
+        <div class="cta-row reveal d3">
           <a class="btn btn-primary" href="#get" data-install="chrome">Add to Chrome — It's Free</a>
           <a class="btn btn-ghost" href="#get" data-install="firefox">Get the Firefox Add-on</a>
         </div>
-        <p class="desktop-only reveal" style="--i:4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>Desktop only. Not available on mobile.</p>
+        <p class="desktop-only reveal d4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>Desktop only. Not available on mobile.</p>
       </div>
     </section>
   </main>

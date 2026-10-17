@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="Data &amp; Disclaimers — Capitol Tape" description="Where Capitol Tape's congressional trade data comes from, how late it can be, what it can get wrong, and why it is not advice." canonical="data.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <div class="prose">
+      <h1>Data &amp; Disclaimers</h1>
+      <p>Last updated: October 17, 2026</p>
+      <p class="callout"><strong>Short version:</strong> public filings, shown as they were filed, up to 45 days late, sometimes wrong. Information only, never advice.</p>
+
+      <h2>Where the data comes from</h2>
+      <ul>
+        <li><strong>Trades:</strong> the <a href="https://www.bargo.ai/" target="_blank" rel="noopener noreferrer">Bargo Congress Trades API<span class="sr-only"> (opens in a new tab)</span></a>. Bargo collects the periodic transaction reports that members of the House and Senate must file under the STOCK Act. Coverage is about the last 90 days.</li>
+        <li><strong>Party, chamber and seat:</strong> the public-domain <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener noreferrer">congress-legislators dataset<span class="sr-only"> (opens in a new tab)</span></a>, matched by name. Bargo has no party field, so a badge can be missing or, rarely, wrong after a name change.</li>
+        <li><strong>The official records</strong> are on the <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener noreferrer">House Clerk's disclosure site<span class="sr-only"> (opens in a new tab)</span></a> and the <a href="https://efdsearch.senate.gov/" target="_blank" rel="noopener noreferrer">Senate's eFD search<span class="sr-only"> (opens in a new tab)</span></a>. Each row in the panel links to the filing portal so you can check it.</li>
+      </ul>
+
+      <h2>How late it can be</h2>
+      <p>The STOCK Act gives members up to 45 days after a trade to file. Capitol Tape shows both the trade date and the filing date. On your device, results for a ticker are kept for up to 6 hours before they are fetched again. So what you see can be weeks behind the trade itself.</p>
+
+      <h2>What it can get wrong</h2>
+      <ul>
+        <li>Filings can be late, missing, amended later, or contain mistakes made by the filer.</li>
+        <li>Amounts are ranges set by law (for example $1,001–$15,000), never exact figures.</li>
+        <li>A trade can be by a spouse or dependent child, or held in a managed account the member does not direct.</li>
+        <li>The data provider can be slow, down, or change its format. Ticker matching can miss unusual symbols.</li>
+      </ul>
+      <p>We show the data as we receive it. We do not check, correct or guarantee it, and we are not responsible for errors, omissions, delays or outages in it. Always confirm with the official filing before relying on anything.</p>
+
+      <h2>What the signal box means</h2>
+      <p>Quiet, Watch and Hot add up a few simple facts about the filings on screen, such as several members trading the same stock within 30 days. They describe filing activity. They are not buy or sell signals and they do not predict prices. <a href="https://github.com/djbatalona06/congress-trades-overlay/blob/master/docs/signals-explained.md" target="_blank" rel="noopener noreferrer">How the score works<span class="sr-only"> (opens in a new tab)</span></a>.</p>
+
+      <h2>Not financial advice</h2>
+      <p>Capitol Tape is for information only. It is not financial, investment, tax, legal or trading advice, and nothing it shows is a recommendation to buy, sell or hold any security. A member's trade says nothing reliable about how a stock will perform.</p>
+
+      <h2>Limits on how disclosure data may be used</h2>
+      <p>Federal law (5 U.S.C. § 13107(c)) makes it unlawful to use these financial disclosure reports for any unlawful purpose, for any commercial purpose other than by news and communications media for dissemination to the general public, to determine anyone's credit rating, or to solicit money. Please use what you see for your own information only.</p>
+
+      <h2>Nonpartisan</h2>
+      <p>Capitol Tape shows every member's filings the same way. It does not rank, score or comment on any member or party.</p>
+
+      <h2>Not affiliated</h2>
+      <p>Capitol Tape is not affiliated with or endorsed by the U.S. Congress, any government agency, Bargo, or any of the websites it works on.</p>
+
+      <p>Questions or a data problem to report? <a href="mailto:{{contactEmail}}?subject=Capitol%20Tape%20data">{{contactEmail}}</a></p>
+    </div>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="config.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

@@ -234,7 +234,8 @@ describe('legal and trust pages', () => {
 
   it('the security page lists exactly the permissions the extension asks for', () => {
     const config = readFileSync('wxt.config.ts', 'utf8');
-    const permissions = JSON.parse(config.match(/permissions: (\[[^\]]*\])/)![1].replace(/'/g, '"')) as string[];
+    const permissions = JSON.parse((config.match(/permissions: (\[[^\]]*\])/)?.[1] ?? '[]').replace(/'/g, '"')) as string[];
+    expect(permissions.length).toBeGreaterThan(0);
     for (const permission of permissions) expect(page('security'), permission).toContain(`<code>${permission}</code>`);
   });
 

@@ -112,6 +112,24 @@ describe('Hud: what it shows', () => {
     expect(text()).toContain('Nothing unusual');
   });
 
+  it('pairs each level word with its own shape, so colour is never the only cue', async () => {
+    const icon = () => host.querySelector('.hud-level .hud-level-icon');
+    await render(response(HOT()));
+    expect(icon()?.getAttribute('data-level')).toBe('hot');
+    expect(icon()?.getAttribute('aria-hidden')).toBe('true');
+    expect(host.querySelector('.hud-level')?.textContent).toBe('Hot');
+    const hotShape = icon()?.innerHTML;
+
+    await render(response([trade({ filedDate: daysAgo(30) })]));
+    expect(icon()?.getAttribute('data-level')).toBe('quiet');
+    expect(host.querySelector('.hud-level')?.textContent).toBe('Quiet');
+    expect(icon()?.innerHTML).not.toBe(hotShape);
+
+    await render(response([trade({ party: 'D' }), trade({ party: 'R' })]));
+    expect(icon()?.getAttribute('data-level')).toBe('watch');
+    expect(host.querySelector('.hud-level')?.textContent).toBe('Watch');
+  });
+
   it('always carries the Bargo credit and the not-advice note', async () => {
     await render(response(HOT()));
     const credit = host.querySelector<HTMLAnchorElement>('a.hud-credit');

@@ -140,6 +140,9 @@
 }
 
 .hud-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   color: var(--hud-accent);
   font-size: 16px;
   font-weight: 800;
@@ -239,6 +242,10 @@
 
 .hud a:hover {
   text-decoration: underline;
+}
+
+.hud-level-icon {
+  flex: none;
 }
 
 .hud-title .hud-credit {

@@ -10,14 +10,14 @@ Three facts go with it everywhere: public disclosure data; read-only, no brokera
 
 ## Look
 
-- **Neutral first.** Navy (`#1e3a5f`) for buttons, links and focus. Slate for text and lines. White and `#f8fafc` for backgrounds.
+- **Neutral first.** The logo slate (`#172536`) for buttons, links and focus. Slate for text and lines. White and `#f8fafc` for backgrounds.
 - **Colour means a signal.** Only the signal levels get colour: Quiet (slate), Watch (amber), Hot (red). Each always has its own icon and its word, so colour is never the only cue.
 - **Buy and sell** may use green and red, but only inside trade data (the panel, the chart flags).
 - **No party colours.** Party is shown as a letter (D, R, I) on a neutral badge. No red-versus-blue branding.
 - **Logo:** the mark in `brand/` — a disclosure strip with a rising teal signal line, on a slate tile for small sizes — plus the "Capitol Tape" wordmark. Colours: slate `#172536`, off-white `#F7F8F6`, muted teal `#4D9A88`. No Capitol dome, no flag, no stars and stripes. Use the files in `brand/` as they are; don't redraw the mark.
 - **Type:** Inter for everything you read and click (16px minimum for body text). Source Serif 4 semibold for page and section headlines.
 - **Spacing:** an 8px grid (`--s1` = 8px … `--s10` = 80px).
-- **Buttons:** primary (navy) and secondary (white with a slate border). One primary per view.
+- **Buttons:** primary (slate) and secondary (white with a slate border). One primary per view.
 
 ## Voice
 

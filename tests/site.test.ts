@@ -55,7 +55,7 @@ describe('broker links on the site', () => {
   });
 
   it('lists the same links in the footer, IBKR marked as not supported', () => {
-    const footer = html.slice(html.indexOf('<h3>Platforms</h3>'), html.indexOf('<h3>Resources</h3>'));
+    const footer = html.slice(html.indexOf('<h2>Platforms</h2>'), html.indexOf('<h2>Resources</h2>'));
     for (const [, url] of BROKERS) expect(footer).toContain(`href="${url}"`);
     expect(footer).toContain('not supported yet');
   });
@@ -234,7 +234,8 @@ describe('legal and trust pages', () => {
 
   it('the security page lists exactly the permissions the extension asks for', () => {
     const config = readFileSync('wxt.config.ts', 'utf8');
-    const permissions = JSON.parse(config.match(/permissions: (\[[^\]]*\])/)![1].replace(/'/g, '"')) as string[];
+    const permissions = JSON.parse((config.match(/permissions: (\[[^\]]*\])/)?.[1] ?? '[]').replace(/'/g, '"')) as string[];
+    expect(permissions.length).toBeGreaterThan(0);
     for (const permission of permissions) expect(page('security'), permission).toContain(`<code>${permission}</code>`);
   });
 

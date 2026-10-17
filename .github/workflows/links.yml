@@ -1,0 +1,21 @@
+# Opens every external link on the website once a week (broker sites, Bargo, official filing portals).
+# Kept off pull requests because other people's websites can be slow or block robots.
+name: External links
+
+on:
+  schedule:
+    - cron: '17 9 * * 1' # Mondays, 09:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check:links

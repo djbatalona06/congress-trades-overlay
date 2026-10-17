@@ -305,7 +305,7 @@ section { padding: var(--section-y) 0; }
 .roi { align-self: flex-start; font-size: 13px; font-weight: 700; color: var(--navy); background: var(--navy-tint); padding: 4px 10px; border-radius: 6px; }
 .quote blockquote { margin: 20px 0 0; flex: 1; font-size: 17px; color: var(--ink-2); }
 .quote figcaption { display: flex; align-items: center; gap: 12px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 15px; }
-.avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: #fff; flex: none; }
+.avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: #fff; background: var(--navy); flex: none; }
 .quote figcaption span { display: block; color: var(--muted); font-size: 14px; }
 .illustrative { margin-top: 32px; text-align: center; font-size: 13px; color: var(--muted); }
 @media (max-width: 1000px) { .quote { grid-column: span 12; } }
@@ -314,7 +314,7 @@ section { padding: var(--section-y) 0; }
 .tier { grid-column: span 4; position: relative; display: flex; flex-direction: column; padding: var(--s5) var(--s4); background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
 .tier.rec { border: 2px solid var(--navy); box-shadow: var(--shadow-lg); }
 .tag { position: absolute; top: -13px; left: 32px; padding: 4px 12px; border-radius: 999px; background: var(--navy); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; }
-.tier h3 { font-size: 20px; letter-spacing: -0.02em; }
+.tier h2 { font-family: var(--font-ui); font-size: 20px; letter-spacing: -0.02em; }
 .tier .for { margin-top: 6px; color: var(--muted); font-size: 15px; }
 .price { margin-top: 24px; display: flex; align-items: baseline; gap: 6px; }
 .price b { font-size: 48px; font-weight: 600; letter-spacing: -0.04em; }
@@ -352,7 +352,7 @@ footer.site { padding: 80px 0 48px; border-top: 1px solid var(--line); backgroun
 .socials a:hover { color: var(--navy); border-color: var(--navy); }
 .socials svg { width: 18px; height: 18px; }
 .foot-col { grid-column: span 2; }
-.foot-col h3 { font-size: 14px; letter-spacing: 0; color: var(--ink); }
+.foot-col h2 { font-family: var(--font-ui); font-size: 14px; letter-spacing: 0; color: var(--ink); }
 .foot-col ul { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; }
 .foot-col a { color: var(--muted); text-decoration: none; }
 .foot-col a:hover { color: var(--ink); }

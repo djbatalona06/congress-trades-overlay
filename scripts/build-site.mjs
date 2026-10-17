@@ -4,7 +4,8 @@
 //   site/src/legal/   privacy, terms and other legal pages (written to the top level)
 //   site/src/components/   shared pieces, pulled in with <!-- @include Name key="value" -->
 //   site/src/js, site/src/styles   copied to the top level, so URLs stay /site.js, /styles.css
-//   site/public/      copied as-is (logos, icon, _headers)
+//   site/src/_headers response headers for Cloudflare Pages (CSP and friends), filled in like a page
+//   site/public/      copied as-is (logos, icon)
 //
 // A block include wraps content, which the component places with {{children}}:
 //   <!-- @include PricingCard name="Pro" -->…list items…<!-- @end PricingCard -->
@@ -89,6 +90,13 @@ export function buildSite({ root = 'site', out = join(root, 'dist'), env = proce
       writeFileSync(join(out, path), html);
       pages.push(path);
     }
+  }
+
+  // The Worker's origin is the only other place the site's scripts may connect to.
+  const authOrigin = values.authBase ? ` ${new URL(values.authBase).origin}` : '';
+  const headers = join(src, '_headers');
+  if (existsSync(headers)) {
+    writeFileSync(join(out, '_headers'), render(readFileSync(headers, 'utf8'), { ...values, authOrigin }, components, '_headers'));
   }
 
   writeFileSync(

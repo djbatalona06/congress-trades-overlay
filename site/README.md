@@ -40,6 +40,24 @@ Use single quotes around an argument whose value holds HTML: `tag='<span class="
 
 The build swaps each marker for the file in `src/components/`. Inside a component, `{{title}}` is replaced by the matching argument. `{{base}}` is `""` for top-level pages and `"../"` for pages in a sub-folder, so links work from anywhere. A missing component or an unknown `{{value}}` stops the build.
 
+## Checks
+
+| Command | What it checks | When it runs |
+|---|---|---|
+| `npm test` | Site structure, brand rules, legal pages, axe accessibility on every page, colour contrast of the tokens, security headers, internal links | Every pull request |
+| `npm run check:site` | Every page, file and `#anchor` the site links to exists; no `href="#"` placeholders | Every pull request |
+| Lighthouse (`lighthouserc.json`) | Accessibility must score 95+; performance, best practices and SEO warn below target | Every pull request (`lighthouse` job), reports saved as a build artifact |
+| `npm run check:links` | Opens every external link | Mondays (`.github/workflows/links.yml`), or by hand |
+
+## Security headers
+
+`src/_headers` becomes `dist/_headers`, which Cloudflare Pages sends with every response: HSTS, `nosniff`, no framing, a strict referrer policy, a locked-down Permissions-Policy and a Content-Security-Policy that allows only this site's own scripts and styles plus Google Fonts. Because of the CSP:
+
+- no `<script>` blocks, `onclick=` handlers or `style="…"` attributes in HTML (a test enforces this);
+- the only place scripts may `fetch` is this site and, when set, the `SITE_AUTH_BASE` Worker (the build adds it).
+
+Adding a new outside service (fonts, analytics, a form provider) means adding it to `src/_headers` too.
+
 ## Settings (env vars at build time)
 
 | Variable | What it sets |

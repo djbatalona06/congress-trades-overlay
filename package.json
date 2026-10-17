@@ -14,6 +14,7 @@
     "postinstall": "wxt prepare",
     "compile": "tsc --noEmit",
     "check:links": "node scripts/build-site.mjs && node scripts/check-links.mjs",
+    "check:site": "node scripts/build-site.mjs && node scripts/check-site.mjs",
     "compile:worker": "tsc --noEmit -p worker",
     "test": "vitest run",
     "party-map": "node scripts/build-party-map.mjs",

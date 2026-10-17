@@ -1,7 +1,7 @@
 # Builds site/ into site/dist and publishes it to Cloudflare Pages whenever it changes on master.
 # Needs two repository secrets: CLOUDFLARE_API_TOKEN (Pages: Edit) and CLOUDFLARE_ACCOUNT_ID.
 # Optional repository variables (public values, not secrets): SITE_CHROME_URL, SITE_FIREFOX_URL,
-# SITE_AUTH_BASE, SITE_CONTACT_EMAIL. See scripts/build-site.mjs.
+# SITE_AUTH_BASE, SITE_CONTACT_EMAIL, SITE_URL. See scripts/build-site.mjs.
 name: Deploy site
 
 on:
@@ -49,5 +49,6 @@ jobs:
           SITE_FIREFOX_URL: ${{ vars.SITE_FIREFOX_URL }}
           SITE_AUTH_BASE: ${{ vars.SITE_AUTH_BASE }}
           SITE_CONTACT_EMAIL: ${{ vars.SITE_CONTACT_EMAIL }}
+          SITE_URL: ${{ vars.SITE_URL }}
       - name: Deploy
         run: npx --yes wrangler@4 pages deploy site/dist --project-name="$PROJECT" --branch=master --commit-dirty=true

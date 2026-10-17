@@ -11,12 +11,12 @@ npx serve site/dist    # preview at http://localhost:3000
 
 | Folder | What is inside |
 |---|---|
-| `src/pages/` | One file per page: `index`, `pricing`, `faq`, `changelog`, `login`, `account` |
+| `src/pages/` | One file per page: `index`, `pricing`, `faq`, `changelog`, `login`, `account`, and `guides/` (SEO guides) |
 | `src/legal/` | Legal and trust pages: `privacy` (the store listing links to this one), `terms`, `data` (Data & Disclaimers), `security` (permissions and how to report a problem) |
-| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature`, `TrustStrip` |
-| `src/js/` | Scripts: `site.js` (shared), `demo.js`, `reveal.js`, `login.js`, `account.js` |
+| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature`, `TrustStrip`, `WaitlistForm`, `Testimonial` |
+| `src/js/` | Scripts: `site.js` (shared), `demo.js`, `reveal.js`, `waitlist.js`, `login.js`, `account.js` |
 | `src/styles/` | `styles.css`, all the styling for every page |
-| `public/` | Copied as-is: `icon.png` (the 128px extension icon) and `logos/` |
+| `public/` | Copied as-is: `og.png` (social share card, made from `scripts/og-card.html`), `icon.png` (the 128px extension icon) and `logos/` |
 | `../brand/` | The logo. The build copies `favicon.svg`, `favicon-16.png`, `favicon-32.png` and `apple-touch-icon.png` into `dist/`; the header logo is `favicon.svg`. Change the logo there, not here |
 | `dist/` | The built site. Made by the build, never edited, not committed |
 
@@ -64,8 +64,9 @@ Adding a new outside service (fonts, analytics, a form provider) means adding it
 | Variable | What it sets |
 |---|---|
 | `SITE_CHROME_URL`, `SITE_FIREFOX_URL` | Store links on every Add to Chrome / Firefox button. Empty: the buttons scroll to the bottom of the page |
-| `SITE_AUTH_BASE` | Address of the Worker that handles sign-in, no trailing slash. Empty: sign-in says it is not switched on yet |
+| `SITE_AUTH_BASE` | Address of the Worker that handles sign-in and the waitlist, no trailing slash. Empty: sign-in says it is not switched on yet, and the waitlist shows an email link instead |
 | `SITE_CONTACT_EMAIL` | Contact links. Empty: a placeholder |
+| `SITE_URL` | Public address for canonical links, `sitemap.xml` and `robots.txt`. Empty: `https://capitol-tape.pages.dev` |
 
 These are public values. **Never put a secret here**: everything in them ends up in `config.js`, which anyone can read. For the live site, set them as GitHub repository *variables* (Settings > Secrets and variables > Actions > Variables).
 
@@ -74,7 +75,7 @@ These are public values. **Never put a secret here**: everything in them ends up
 1. Set `SITE_CHROME_URL` and `SITE_FIREFOX_URL` once the listings are live.
 2. Set `SITE_CONTACT_EMAIL`. It fills every contact, support and security link. To show social links, add them to `src/components/FooterLegal.html` (they were removed while they pointed nowhere).
 3. Have a lawyer read `terms`, `privacy` and `data`. The Terms have no governing-law section yet on purpose.
-4. Replace the three testimonials with real reviews. They are made up and marked as illustrative on the page.
+4. Add real reviews with the `Testimonial` component (it needs a source link). The made-up ones are gone.
 5. To switch sign-in on, follow "Website sign-in" in `worker/README.md`, then set `SITE_AUTH_BASE`.
 
 ## Publish
@@ -102,5 +103,7 @@ From your own computer instead: `npx wrangler login`, then `npm run build:site &
 | `webull`, `schwab`, `interactivebrokers`, `sofi`, `fidelity`, `etrade`, `vanguard`, `public` (`.svg`) | **Placeholders we drew**: a grey tile with the company's initial. No open-licence logo exists for these. |
 
 To show a company's real logo, save its official SVG over the matching file in `public/logos/` (same file name). Use only the press or brand-kit file the company publishes, and check its brand rules first. The Google "G" on the sign-in button is Google's own four-colour mark, drawn inline in `src/pages/login.html`.
+
+`og.png` uses our own mark and text set in Inter and Source Serif 4 (both SIL Open Font License, from Google Fonts).
 
 All logos and names belong to their owners. The page says it is not affiliated with any of them.

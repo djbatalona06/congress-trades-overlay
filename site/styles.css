@@ -209,13 +209,20 @@ section { padding: var(--section-y) 0; }
 .t-buy { color: #22c55e; font-weight: 600; }
 .t-sell { color: #ef4444; font-weight: 600; }
 .panel-foot { padding: 8px 12px; color: #94a3b8; font-size: 11px; }
-@media (max-width: 900px) { .tv-tools { display: none; } .panel { right: 68px; width: 52%; } }
+/* Tablets and phones: stack the two displays. The chart keeps its own box on top and the panel
+   sits underneath at full width, so nothing covers the candles and every trade stays readable. */
+@media (max-width: 900px) {
+  .tv-tools, .tv-rail { display: none; }
+  .stage { display: flex; flex-direction: column; aspect-ratio: auto; }
+  .tv-top { flex: none; height: 44px; }
+  .tv-plot { flex: none; aspect-ratio: 16 / 9; }
+  .panel { position: static; width: auto; border-width: 1px 0 0; border-radius: 0; box-shadow: none; }
+}
 @media (max-width: 640px) {
-  .stage { grid-template-columns: minmax(0, 1fr); aspect-ratio: 4 / 5; }
-  .tv-rail, .tv-tf, .tv-signal { display: none; }
+  .tv-tf, .tv-signal { display: none; }
+  .tv-plot { aspect-ratio: 4 / 3; }
   .tv-canvas { right: 48px; } .tv-axis { width: 48px; }
-  .panel { right: 3%; left: 3%; bottom: 3%; width: auto; }
-  .panel .chips, .rows li:nth-child(3) { display: none; }
+  .rows li { gap: 8px; padding: 10px 12px; }
 }
 .mock-note { margin-top: 12px; text-align: center; font-size: 13px; color: var(--muted); }
 

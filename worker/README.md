@@ -42,6 +42,36 @@ npm run deploy
 
 Local try-out (no cloud account needed): `npm run migrate:local && npm run dev`, then `curl localhost:8787/v1/ticker/LMT`. Trigger a cron with `curl "localhost:8787/__scheduled?cron=7+*+*+*+*"`.
 
+## Website sign-in (Google and GitHub)
+
+The same Worker signs people in for the website's login and account pages. It is optional and separate from the extension.
+
+```
+GET  /auth/{google|github}/start      -> sends the browser to Google or GitHub
+GET  /auth/{google|github}/callback   -> they send it back; we make or find the account, then set a session cookie
+GET  /auth/me                         -> { "name", "email", "provider" }, or 401 when signed out
+POST /auth/logout                     -> ends the session (204)
+```
+
+How it keeps people safe: a random `state` and a PKCE check on every sign-in, accounts matched on the service's own user id (never the email), a verified email required, the session cookie is `HttpOnly; Secure`, only a hash of it is stored, and only `SITE_ORIGIN` may read `/auth/me` or call `/auth/logout`.
+
+### Turn sign-in on (about 10 minutes, all by hand)
+
+1. **Pick the addresses.** Deploy the Worker once (`npm run deploy`) and note its address, for example `https://congress-trades-api.<you>.workers.dev`. The website address is `https://capitol-tape.pages.dev`.
+2. **Google.** In the [Google Cloud console](https://console.cloud.google.com/apis/credentials): create an *OAuth client ID*, type *Web application*. Add this *Authorized redirect URI*: `<worker address>/auth/google/callback`. Copy the client ID and secret. (Google will ask you to set up the consent screen first: app name, your email, scopes `openid`, `email`, `profile`.)
+3. **GitHub.** In *GitHub → Settings → Developer settings → OAuth Apps → New OAuth App*: *Homepage URL* is the website address and *Authorization callback URL* is `<worker address>/auth/github/callback`. Copy the client ID and generate a client secret.
+4. **Put the ids in `wrangler.toml`** (`GOOGLE_CLIENT_ID`, `GITHUB_CLIENT_ID`) and the secrets in Cloudflare, never in a file:
+   ```bash
+   npx wrangler secret put GOOGLE_CLIENT_SECRET
+   npx wrangler secret put GITHUB_CLIENT_SECRET
+   ```
+5. **Create the tables and deploy:** `npm run migrate && npm run deploy`.
+6. **Tell the website where the Worker is:** set `AUTH_BASE` in `site/config.js` to the Worker address and merge. The sign-in buttons wake up on their own.
+
+Until step 6, the login page says sign-in "isn't switched on yet". With no ids set, `/auth/*` answers `503 auth_not_configured`.
+
+**Known limit.** The website (`pages.dev`) and this Worker (`workers.dev`) are different sites, so a browser that blocks cross-site cookies (Safari, or Chrome with that setting) can show the account page as signed out even after a good sign-in. The fix is to serve both from one custom domain. Do that before relying on the account page.
+
 ## Turn it on in the extension
 
 Build with the flag; the Worker address also becomes the only new host permission.
@@ -54,7 +84,7 @@ Without the flag, nothing changes: the extension talks to Bargo as before. With 
 
 ## Privacy
 
-The Worker never reads or stores the caller's address, sets no cookies, and keeps request logging off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
+The ticker route never reads or stores the caller's address, sets no cookies, and request logging is off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Only the optional `/auth/*` routes set cookies (a 10-minute sign-in cookie and the session cookie) and store a name, email and service id for people who choose to sign in. Say so in `site/privacy.html` (already done) and keep it true. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
 
 ## Before you switch it on for users
 

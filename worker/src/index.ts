@@ -1,4 +1,6 @@
 import { fetchTrades } from '../../lib/bargo';
+import { d1AccountStore } from './accounts-d1';
+import { handleAuth } from './auth';
 import type { Env } from './env';
 import { syncBills, syncLobbying, syncMemberLinks, syncOrders, syncOutsideMoney } from './ingest';
 import { handleRequest } from './routes';
@@ -16,6 +18,8 @@ const LOBBYING_CRON = '27 */6 * * *';
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    const auth = await handleAuth(request, { store: d1AccountStore(env.DB), now: Date.now(), fetch, env });
+    if (auth) return auth;
     return handleRequest(request, {
       store: d1Store(env.DB),
       now: Date.now(),

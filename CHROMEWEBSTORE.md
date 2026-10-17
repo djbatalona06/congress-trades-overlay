@@ -39,7 +39,7 @@ Remote code: none. All code is in the package.
 ## Data use disclosure
 
 - **Collected/transmitted:** the ticker symbol of the page being viewed and watchlist tickers, sent to Bargo to retrieve data (Chrome category: *Website content*; Firefox: `websiteContent`). Subscription status is checked with ExtensionPay.
-- **Not collected:** personal information, authentication data, financial account data, location, browsing history.
+- **Not collected by the extension:** personal information, authentication data, financial account data, location, browsing history. (The website's optional Google/GitHub sign-in is separate and the extension never uses it.)
 - Certify: not sold; not used for purposes unrelated to the single purpose; not used for creditworthiness or lending.
 - ExtensionPay uses `storage.sync`, which the browser may sync through the user's account.
 - **Privacy policy URL:** _publish `site/` and paste the URL of `privacy.html` here_

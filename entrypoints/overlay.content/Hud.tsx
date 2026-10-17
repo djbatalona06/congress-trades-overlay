@@ -11,11 +11,35 @@ import {
   setHudPosition,
   watchHudEnabled,
 } from '@/lib/settings';
-import { HOT_SCORE, LEVEL_LABEL, type SignalId, computeSignals } from '@/lib/signals';
+import { HOT_SCORE, LEVEL_LABEL, type SignalId, type SignalLevel, computeSignals } from '@/lib/signals';
 import type { TradesResponse } from '@/lib/types';
 
 const RING_RADIUS = 18;
 const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
+
+/**
+ * Each level has its own shape, so the level never depends on colour alone:
+ * Quiet is a dash in a circle, Watch is an eye, Hot is a flame. The word sits next to it.
+ */
+function LevelIcon({ level }: { level: SignalLevel }) {
+  return (
+    <svg className="hud-level-icon" data-level={level} viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+      {level === 'quiet' && (
+        <>
+          <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          <path d="M8 12h8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+        </>
+      )}
+      {level === 'watch' && (
+        <>
+          <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
+          <circle cx="12" cy="12" r="3" fill="currentColor" />
+        </>
+      )}
+      {level === 'hot' && <path d="M12 2c1 3.5 5 5.5 5 10.5a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-5.5 1-9Z" fill="currentColor" />}
+    </svg>
+  );
+}
 
 function viewport() {
   return { width: window.innerWidth, height: window.innerHeight };
@@ -158,7 +182,10 @@ export function Hud({ ticker, response, now }: { ticker: string; response: Trade
           </span>
         </button>
         <div className="hud-title">
-          <span className="hud-level">{LEVEL_LABEL[level]}</span>
+          <span className="hud-level">
+            <LevelIcon level={level} />
+            {LEVEL_LABEL[level]}
+          </span>
           {!collapsed && <span className="hud-ticker">{ticker}</span>}
           {collapsed && (
             <a className="hud-credit" href={BARGO_HOME} target="_blank" rel="noopener noreferrer">

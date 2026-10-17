@@ -1,0 +1,50 @@
+[
+  {
+    "url": "http://localhost:43747/index.html",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-index_html-2026_10_17_07_01_58.report.html",
+    "jsonPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-index_html-2026_10_17_07_01_58.report.json",
+    "summary": {
+      "performance": 0.98,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:43747/pricing.html",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-pricing_html-2026_10_17_07_02_12.report.html",
+    "jsonPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-pricing_html-2026_10_17_07_02_12.report.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:43747/faq.html",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-faq_html-2026_10_17_07_02_24.report.html",
+    "jsonPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-faq_html-2026_10_17_07_02_24.report.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:43747/data.html",
+    "isRepresentativeRun": true,
+    "htmlPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-data_html-2026_10_17_07_02_36.report.html",
+    "jsonPath": "/home/user/congress-trades-overlay/.lighthouseci/localhost-data_html-2026_10_17_07_02_36.report.json",
+    "summary": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    }
+  }
+]

@@ -27,6 +27,7 @@ const INCLUDE = new RegExp(`<!-- @include ([A-Za-z]+)${ATTRS}-->`, 'g');
 // Arguments use double quotes, or single quotes when the value holds HTML with double quotes.
 const ARG = /([a-zA-Z]+)=(?:"([^"]*)"|'([^']*)')/g;
 const VAR = /\{\{([a-zA-Z]+)\}\}/g;
+const BRAND_FILES = ['favicon.svg', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png'];
 
 export function siteValues(env = process.env) {
   return {
@@ -71,6 +72,10 @@ export function buildSite({ root = 'site', out = join(root, 'dist'), env = proce
   mkdirSync(out, { recursive: true });
 
   if (existsSync(join(root, 'public'))) cpSync(join(root, 'public'), out, { recursive: true });
+  // The brand folder is the one source for the logo; the site never keeps its own copy.
+  for (const file of BRAND_FILES) {
+    if (existsSync(join(root, '..', 'brand', file))) cpSync(join(root, '..', 'brand', file), join(out, file));
+  }
   for (const folder of ['js', 'styles']) {
     for (const file of listFiles(join(src, folder))) cpSync(file, join(out, relative(join(src, folder), file)));
   }

@@ -7,7 +7,7 @@ name: Deploy site
 on:
   push:
     branches: [master]
-    paths: ['site/**', 'scripts/build-site.mjs', '.github/workflows/deploy-site.yml']
+    paths: ['site/**', 'brand/**', 'scripts/build-site.mjs', '.github/workflows/deploy-site.yml']
   workflow_dispatch:
 
 permissions:

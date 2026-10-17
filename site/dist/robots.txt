@@ -1,3 +1,0 @@
-User-agent: *
-Disallow: /account.html
-Sitemap: https://capitol-tape.pages.dev/sitemap.xml

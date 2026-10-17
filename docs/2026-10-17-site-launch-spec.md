@@ -147,7 +147,7 @@ No red or blue as brand colour. Party badges in the demo are neutral slate with 
 
 **Mobile.** The product is desktop-only, but the site must work at 320px wide: single column, no sideways scroll, 44px touch targets.
 
-**Logo.** "Capitol Tape" wordmark plus a simple mark: a navy rounded square with three slate "tape" bars, the middle one amber. No dome, no flag, no red-and-blue.
+**Logo.** The mark in `brand/` (from PR #16): a disclosure strip with a rising teal signal line, on a slate tile at small sizes, plus the "Capitol Tape" wordmark. Brand colours slate `#172536`, off-white `#F7F8F6`, muted teal `#4D9A88`. The site build copies the favicon files from `brand/`, so the logo lives in one place. No dome, no flag, no red-and-blue.
 
 ---
 

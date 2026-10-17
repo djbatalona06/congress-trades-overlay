@@ -66,7 +66,7 @@ How it keeps people safe: a random `state` and a PKCE check on every sign-in, ac
    npx wrangler secret put GITHUB_CLIENT_SECRET
    ```
 5. **Create the tables and deploy:** `npm run migrate && npm run deploy`.
-6. **Tell the website where the Worker is:** set `AUTH_BASE` in `site/config.js` to the Worker address and merge. The sign-in buttons wake up on their own.
+6. **Tell the website where the Worker is:** set the `SITE_AUTH_BASE` repository variable to the Worker address and re-run "Deploy site". The sign-in buttons wake up on their own.
 
 Until step 6, the login page says sign-in "isn't switched on yet". With no ids set, `/auth/*` answers `503 auth_not_configured`.
 
@@ -84,7 +84,7 @@ Without the flag, nothing changes: the extension talks to Bargo as before. With 
 
 ## Privacy
 
-The ticker route never reads or stores the caller's address, sets no cookies, and request logging is off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Only the optional `/auth/*` routes set cookies (a 10-minute sign-in cookie and the session cookie) and store a name, email and service id for people who choose to sign in. Say so in `site/privacy.html` (already done) and keep it true. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
+The ticker route never reads or stores the caller's address, sets no cookies, and request logging is off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Only the optional `/auth/*` routes set cookies (a 10-minute sign-in cookie and the session cookie) and store a name, email and service id for people who choose to sign in. Say so in `site/src/legal/privacy.html` (already done) and keep it true. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
 
 ## Before you switch it on for users
 

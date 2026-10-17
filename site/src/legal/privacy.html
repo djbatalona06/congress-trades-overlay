@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="Privacy Policy — Capitol Tape" description="What Capitol Tape sends, stores and never collects." canonical="privacy.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <div class="prose">
+      <h1>Privacy Policy — Capitol Tape</h1>
+      <p>Last updated: October 17, 2026</p>
+
+      <h2>What the extension sends, and to whom</h2>
+      <ul>
+        <li>
+          <strong>Ticker symbols, to Bargo.</strong> When you view a supported stock page, the extension reads the ticker
+          symbol from the page address or title and sends that symbol to the Bargo Congress Trades API
+          (www.bargo.ai) to retrieve public STOCK Act disclosures. Tickers on your watchlist are sent the same way
+          when the extension checks for new disclosures. Bargo receives the request from your IP address, as any
+          website you visit does. If you enter your own Bargo API key, it is sent with these requests.
+        </li>
+        <li>
+          <strong>Payment status, to ExtensionPay.</strong> The extension asks ExtensionPay (extensionpay.com) whether
+          this installation has a paid subscription. If you upgrade, payment is handled by ExtensionPay and Stripe on
+          their pages; the extension never sees your card details.
+        </li>
+      </ul>
+      <p>Nothing else leaves your browser. The extension has no server of its own and no analytics. It does not need an account.</p>
+
+      <h2>What stays on your device</h2>
+      <ul>
+        <li>Your watchlist, recent lookup results, the daily lookup count, your panel preferences and, if you add one, your Bargo API key are stored in the browser's extension storage.</li>
+        <li>ExtensionPay stores an anonymous installation key, which your browser may sync across your signed-in devices.</li>
+      </ul>
+
+      <h2>If you create an account on this website</h2>
+      <p>
+        An account is optional. You only need one if you want to sign in on this website; the extension works
+        without it. When you choose Continue with Google or Continue with GitHub, that service tells us three
+        things: your name, your email address, and a private ID it gives you. We never see your Google or GitHub
+        password.
+      </p>
+      <ul>
+        <li>We store that name, email address, ID, and which service you used, so we can recognise you next time.</li>
+        <li>We set one cookie to keep you signed in for up to 30 days. It is used for nothing else. Signing out removes it.</li>
+        <li>We do not sell this information, show ads with it, or share it with data brokers.</li>
+        <li>To have your account and its data deleted, write to the contact address below.</li>
+      </ul>
+
+      <h2>What the extension does not do</h2>
+      <p>
+        It does not read account balances, positions, orders or any other brokerage data, does not place trades, and
+        does not sell or share data with advertisers or data brokers.
+      </p>
+
+      <h2>Not financial advice</h2>
+      <p>
+        The extension displays publicly available STOCK Act data for information only. It is not financial, investment
+        or trading advice. Data may be delayed or incomplete; verify with official sources.
+      </p>
+
+      <h2>Contact</h2>
+      <p>[publisher contact email]</p>
+
+      <p>
+        This extension is not affiliated with TradingView, Robinhood, Webull, Schwab, Bargo, Google, GitHub, the U.S. Congress or any
+        government entity.
+      </p>
+    </div>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="config.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

@@ -5,7 +5,7 @@ import { FREE_WATCHLIST_LIMIT, PRO_PRICE_MONTHLY } from '@/lib/watchlist';
 
 // Store listing and site copy are written by hand. These tests fail, naming the
 // file, when that copy drifts from the constants the code uses.
-const FILES = ['CHROMEWEBSTORE.md', 'README.md', 'site/index.html', 'site/pricing.html'] as const;
+const FILES = ['CHROMEWEBSTORE.md', 'README.md', 'site/dist/index.html', 'site/dist/pricing.html'] as const;
 
 function readText(path: string): string {
   const raw = readFileSync(path, 'utf8');
@@ -31,16 +31,16 @@ describe('Bargo key copy', () => {
     expect(BARGO_KEY_URL).toBe('https://www.bargo.ai/connect');
   });
 
-  for (const file of ['README.md', 'site/index.html'] as const) {
+  for (const file of ['README.md', 'site/dist/index.html'] as const) {
     it(`${file} links to bargo.ai/connect`, () => {
       expect(readFileSync(file, 'utf8'), file).toContain('bargo.ai/connect');
     });
   }
 
   it('the site does not say no key is needed, and says the key is optional', () => {
-    const raw = readFileSync('site/index.html', 'utf8');
+    const raw = readFileSync('site/dist/index.html', 'utf8');
     expect(raw).not.toMatch(/no api key/i);
-    expect(readText('site/index.html')).toContain('A free Bargo key is optional');
+    expect(readText('site/dist/index.html')).toContain('A free Bargo key is optional');
   });
 
   it('the popup Lookups tab links to bargo.ai/connect', () => {

@@ -56,7 +56,7 @@ Remote code: none. All code is in the package.
 
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
 - [ ] ExtensionPay extension registered as `congress-trades-overlay` with the $8/month plan; test-mode payment passes
-- [ ] Contact email filled into `site/privacy.html`; `site/` published (landing page + privacy)
+- [ ] `SITE_CONTACT_EMAIL` repository variable set; `site/` published (landing page + privacy)
 - [ ] Reply from Bargo on commercial use; legal advice on 5 U.S.C. 13107(c)(1)
 - [ ] `npm test`, `npm run zip`, `npm run zip:firefox`
 - [ ] Load unpacked and click through all four sites; run once in Firefox

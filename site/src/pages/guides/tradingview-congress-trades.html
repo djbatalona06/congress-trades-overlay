@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="How to see congressional trades on TradingView — Capitol Tape" description="Two ways to see which members of Congress disclosed trading a stock while you look at its TradingView chart: the free Capitol Tape extension, or the official House and Senate search pages." canonical="guides/tradingview-congress-trades.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <article class="prose">
+      <p class="crumbs"><a href="index.html">Guides</a></p>
+      <h1>How to see congressional trades on TradingView</h1>
+      <p class="lede-prose">Members of Congress must publicly report most stock trades under the STOCK Act. Here are two ways to see those reports for the stock on your TradingView chart: one automatic, one by hand.</p>
+
+      <h2>Option 1: show them on the chart with Capitol Tape (free)</h2>
+      <ol class="howto">
+        <li><strong>Install Capitol Tape</strong> from the <a href="../index.html#get">Chrome Web Store or Firefox Add-ons</a>. It works in desktop Chrome and Firefox. No account is needed.</li>
+        <li><strong>Open a chart</strong> on TradingView, for example <code>tradingview.com/chart/?symbol=NASDAQ:NVDA</code>, or any stock's symbol page.</li>
+        <li><strong>Look at the right edge of the chart.</strong> A small tab shows the ticker and how many recent disclosures there are. Click it to open the panel; press Esc to close it.</li>
+        <li><strong>Read each row:</strong> the member, party letter, chamber, state or district, buy or sell, the amount range, the trade date and the filing date, with a link to the official filing portal.</li>
+        <li><strong>Change symbols</strong> as usual. The panel follows the chart without reloading.</li>
+      </ol>
+      <p>Capitol Tape also shows a small floating box that says <strong>Quiet</strong>, <strong>Watch</strong> or <strong>Hot</strong>, depending on how many filings there are and how close together. It describes filing activity only; it is not a buy or sell signal.</p>
+      <p>On a TradingView corporate-bond chart, Capitol Tape looks up the issuing company and shows that company's stock disclosures.</p>
+
+      <h2>Option 2: look them up by hand</h2>
+      <ol class="howto">
+        <li>Open the <a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener noreferrer">House Clerk's financial disclosure search<span class="sr-only"> (opens in a new tab)</span></a> and the <a href="https://efdsearch.senate.gov/" target="_blank" rel="noopener noreferrer">Senate's eFD search<span class="sr-only"> (opens in a new tab)</span></a>.</li>
+        <li>Search for periodic transaction reports (PTRs) by member name and date. The official sites search by member, not by ticker.</li>
+        <li>Open each report and look for the ticker you care about.</li>
+      </ol>
+      <p>This is slower, but it is the official record. It is also the right place to double-check anything you see in any tool, including ours.</p>
+
+      <h2>Things to know before you read the data</h2>
+      <ul>
+        <li><strong>It is delayed.</strong> Members can file up to 45 days after a trade.</li>
+        <li><strong>Amounts are ranges</strong>, like $1,001–$15,000, not exact figures.</li>
+        <li><strong>A trade may not be the member's own choice.</strong> Reports include spouses, dependent children and some managed accounts.</li>
+        <li><strong>It is not advice.</strong> A disclosed trade says nothing reliable about where a price will go.</li>
+      </ul>
+      <p>More detail: <a href="stock-act-disclosures-explained.html">STOCK Act disclosures explained</a> and <a href="../data.html">Data &amp; Disclaimers</a>.</p>
+
+      <p class="guide-cta"><a class="btn btn-primary" href="../index.html#get" data-install="chrome">Add to Chrome</a></p>
+    </article>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="../config.js"></script>
+  <script src="../site.js"></script>
+</body>
+</html>

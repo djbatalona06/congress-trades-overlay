@@ -71,6 +71,12 @@
     why.textContent = 'Capitol Tape is a browser extension for Chrome and Firefox on a computer. Phone and tablet browsers can’t install it, so it doesn’t work on mobile.';
     const what = document.createElement('p');
     what.textContent = 'Open this page on your Windows, Mac or Linux computer to add it.';
+    const later = document.createElement('p');
+    const join = document.createElement('a');
+    join.href = '/index.html?list=mobile#waitlist';
+    join.textContent = 'Join the mobile waitlist';
+    join.addEventListener('click', () => dialog.close());
+    later.append('Want it on your phone one day? ', join, '.');
 
     const actions = document.createElement('div');
     actions.className = 'note-actions';
@@ -93,7 +99,7 @@
     close.addEventListener('click', () => dialog.close());
 
     actions.append(copy, close);
-    dialog.append(title, why, what, actions);
+    dialog.append(title, why, what, later, actions);
     // A click on the dark backdrop lands on the dialog itself.
     dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
     document.body.append(dialog);

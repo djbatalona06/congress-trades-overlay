@@ -13,11 +13,13 @@
     "zip:firefox": "wxt zip -b firefox",
     "postinstall": "wxt prepare",
     "compile": "tsc --noEmit",
-    "check:links": "node scripts/check-links.mjs",
+    "check:links": "node scripts/build-site.mjs && node scripts/check-links.mjs",
+    "check:site": "node scripts/build-site.mjs && node scripts/check-site.mjs",
     "compile:worker": "tsc --noEmit -p worker",
     "test": "vitest run",
     "party-map": "node scripts/build-party-map.mjs",
-    "verify:influence": "vitest run --config vitest.live.config.ts"
+    "verify:influence": "vitest run --config vitest.live.config.ts",
+    "build:site": "node scripts/build-site.mjs"
   },
   "dependencies": {
     "extpay": "^3.1.2",

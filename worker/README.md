@@ -66,7 +66,7 @@ How it keeps people safe: a random `state` and a PKCE check on every sign-in, ac
    npx wrangler secret put GITHUB_CLIENT_SECRET
    ```
 5. **Create the tables and deploy:** `npm run migrate && npm run deploy`.
-6. **Tell the website where the Worker is:** set `AUTH_BASE` in `site/config.js` to the Worker address and merge. The sign-in buttons wake up on their own.
+6. **Tell the website where the Worker is:** set the `SITE_AUTH_BASE` repository variable to the Worker address and re-run "Deploy site". The sign-in buttons wake up on their own.
 
 Until step 6, the login page says sign-in "isn't switched on yet". With no ids set, `/auth/*` answers `503 auth_not_configured`.
 
@@ -84,7 +84,7 @@ Without the flag, nothing changes: the extension talks to Bargo as before. With 
 
 ## Privacy
 
-The ticker route never reads or stores the caller's address, sets no cookies, and request logging is off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Only the optional `/auth/*` routes set cookies (a 10-minute sign-in cookie and the session cookie) and store a name, email and service id for people who choose to sign in. Say so in `site/privacy.html` (already done) and keep it true. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
+The ticker route never reads or stores the caller's address, sets no cookies, and request logging is off (`[observability]` in `wrangler.toml`). The extension sends only the ticker. Only the optional `/auth/*` routes set cookies (a 10-minute sign-in cookie and the session cookie) and store a name, email and service id for people who choose to sign in. Say so in `site/src/legal/privacy.html` (already done) and keep it true. Cloudflare itself still sees connecting addresses at its edge, as with any hosted site.
 
 ## Before you switch it on for users
 
@@ -96,3 +96,14 @@ The ticker route never reads or stores the caller's address, sets no cookies, an
 ## Checking the ids and codes
 
 `FEC_API_KEY=... npm run verify:influence` (from the repo root, with internet access) asks the FEC and Senate sites whether each member id, committee id and issue code is real and named as expected, and writes `docs/influence-verification-<date>.md`. It only reads. Run it before relying on the Influence data.
+
+## Waitlist
+
+`POST /waitlist` takes `{ email, list, ref? }` from the website, where `list` is `mobile`, `desk` or `beta`. It stores the email, gives the person an 8-character share code, and records which share code (if any) brought them. Joining twice returns the same code. Only the website's origin (`SITE_ORIGIN`) can call it; a hidden form field catches simple bots.
+
+1. Apply the table: `npx wrangler d1 migrations apply congress-trades --remote` (adds `0005_waitlist.sql`).
+2. Make sure `SITE_ORIGIN` is set (the same setting sign-in uses).
+3. Set the website's `SITE_AUTH_BASE` repository variable to the Worker address. The form on the home page wakes up on its own.
+4. Optional: add a Cloudflare rate-limiting rule for `/waitlist` (for example 10 requests a minute per IP) in the dashboard under Security > WAF.
+
+Read the list: `npx wrangler d1 execute congress-trades --remote --command "SELECT list, email, ref_code, referred_by, created_at FROM waitlist ORDER BY created_at"`.

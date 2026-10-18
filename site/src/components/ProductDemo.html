@@ -1,0 +1,43 @@
+<!-- ProductDemo: the chart and panel picture under the hero. Fictional members and made-up prices; demo.js draws the candles. -->
+        <figure class="frame reveal d4" aria-label="Capitol Tape panel shown on a stock chart">
+          <div class="frame-bar" aria-hidden="true">
+            <div class="dots"><i></i><i></i><i></i></div>
+            <div class="url">tradingview.com/chart/?symbol=NASDAQ:NVDA</div>
+          </div>
+          <div class="stage" role="img" aria-label="Example: a stock chart for NVDA with three numbered flags marking congressional trades, and the Capitol Tape panel listing the same three disclosures: a Senate buy, a House sell and a House buy.">
+            <div class="tv-top" aria-hidden="true">
+              <span class="tv-sym">NVDA<small>NASDAQ · 1D</small></span>
+              <span class="tv-tf"><span>1H</span><span class="on">1D</span><span>1W</span></span>
+              <span class="tv-tools"><span>Indicators</span><span>Alerts</span><span>Replay</span></span>
+            </div>
+            <div class="tv-rail" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 20 4" /><circle cx="4" cy="20" r="1.5" /><circle cx="20" cy="4" r="1.5" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-6 4 3 8-9" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2" /></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></svg>
+            </div>
+            <div class="tv-plot" aria-hidden="true">
+              <div class="tv-canvas" id="demo-canvas">
+                <svg id="demo-chart" viewBox="0 0 1000 500" preserveAspectRatio="none"></svg>
+                <div class="tv-readout">NVDA · 1D<span>▲ 2.41%</span></div>
+                <div class="tv-signal"><!-- @include SignalBox level="watch" label="Watch" reason="2 members bought in 30 days" --></div>
+              </div>
+              <div class="tv-axis" id="demo-axis"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-bar">
+                <strong>▾ Congress Trades: NVDA</strong><span class="count">(3 recent)</span>
+                <div class="chips"><span class="chip on">All</span><span class="chip">Buys</span><span class="chip">Sells</span></div>
+                <small>Data via Bargo</small>
+              </div>
+              <ul class="rows">
+                <li><span class="n buy">1</span><span class="who"><b>Sen. Jordan Hale</b><span class="badge" title="Democrat">D</span><small>Senate · OR · Traded Sep 02 · Filed Sep 24</small></span><span class="what"><b class="t-buy">Buy</b><small>$15K–$50K</small></span></li>
+                <li><span class="n sell">2</span><span class="who"><b>Rep. Avery Brooks</b><span class="badge" title="Republican">R</span><small>House · TX-31 · Traded Aug 28 · Filed Sep 19</small></span><span class="what"><b class="t-sell">Sell</b><small>$1K–$15K</small></span></li>
+                <li><span class="n buy">3</span><span class="who"><b>Rep. Casey Lin</b><span class="badge" title="Democrat">D</span><small>House · CA-12 · Traded Aug 15 · Filed Sep 11</small></span><span class="what"><b class="t-buy">Buy</b><small>$50K–$100K</small></span></li>
+              </ul>
+              <div class="panel-foot">Not financial advice. Public STOCK Act data. Delayed.</div>
+            </div>
+          </div>
+        </figure>
+        <p class="mock-note">Illustrative example with fictional members and made-up prices.</p>
+

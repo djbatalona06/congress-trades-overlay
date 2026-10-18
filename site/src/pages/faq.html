@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="FAQ — Capitol Tape" description="Answers about Capitol Tape: where the data comes from, how late it is, the daily lookup limit and the free Bargo key, privacy, Pro and mobile." canonical="faq.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <section class="page-head" aria-labelledby="faq-title">
+      <div class="wrap">
+        <span class="eyebrow">FAQ</span>
+        <h1 id="faq-title">Questions, answered.</h1>
+        <p class="lede">Can't find yours? Email <a href="mailto:{{contactEmail}}?subject=Capitol%20Tape%20question">{{contactEmail}}</a>.</p>
+      </div>
+    </section>
+
+    <section class="faq-page" aria-label="Questions">
+      <div class="wrap">
+        <h2 class="faq-group">The basics</h2>
+        <div class="faq">
+          <details><summary>What does Capitol Tape do?</summary><p class="a">When you open a stock chart on TradingView, Robinhood, Webull or Schwab, a small tab on the edge of the chart shows which members of Congress disclosed trading that stock, when, which side (buy or sell) and the amount range. It uses public STOCK Act filings.</p></details>
+          <details><summary>Is this financial advice?</summary><p class="a">No. Capitol Tape displays public STOCK Act disclosures for information only. It does not recommend buying or selling anything, and a member's trade says nothing reliable about how a stock will perform. Read <a href="data.html">Data &amp; Disclaimers</a>.</p></details>
+          <details><summary>Is it nonpartisan?</summary><p class="a">Yes. Every member's filings are shown the same way. Party appears as a plain letter (D, R or I). Capitol Tape does not rank or comment on any member or party.</p></details>
+          <details><summary>Which sites and browsers does it work on?</summary><p class="a">Stock pages on TradingView, Robinhood, Webull and Schwab, in desktop Chrome and Firefox. On a TradingView corporate-bond chart, it shows disclosures for the issuing company's stock.</p></details>
+          <details><summary>Does it work on my phone or tablet?</summary><p class="a">Not yet. Phone and tablet browsers can't install extensions, so Capitol Tape works only on a computer. A mobile version is on the wish list, not on a schedule.</p></details>
+        </div>
+
+        <h2 class="faq-group">The data</h2>
+        <div class="faq">
+          <details><summary>Where does the data come from?</summary><p class="a">From the Bargo Congress Trades API, which collects the periodic transaction reports that members of the House and Senate must file under the STOCK Act. Coverage is the most recent ~90 days. Each row links to the official filing portal.</p></details>
+          <details><summary>How current are the disclosures?</summary><p class="a">Members have up to 45 days after a trade to file, so every disclosure is delayed by law. Capitol Tape shows both the trade date and the filing date, and refreshes each ticker at most every 6 hours.</p></details>
+          <details><summary>Why is the amount a range?</summary><p class="a">The law asks members to report a range (for example $1,001–$15,000), not the exact amount. Capitol Tape shows the range as filed.</p></details>
+          <details><summary>What do Quiet, Watch and Hot mean?</summary><p class="a">They add up a few simple facts about the filings on screen, such as several members trading the same stock within 30 days. 0 or 1 points is Quiet, 2 to 4 is Watch, 5 or more is Hot. They describe filing activity only; they are not buy or sell signals.</p></details>
+          <details><summary>I found a mistake in a filing.</summary><p class="a">Capitol Tape shows filings as received, so check the official record first. If our copy is different from the official filing, email <a href="mailto:{{contactEmail}}?subject=Capitol%20Tape%20data">{{contactEmail}}</a> with the ticker and member.</p></details>
+        </div>
+
+        <h2 class="faq-group">Lookups and the free Bargo key</h2>
+        <div class="faq">
+          <details><summary>Why is there a daily lookup limit?</summary><p class="a">The free data service allows a set number of requests per day per network. Capitol Tape saves results for 6 hours and keeps half the daily budget for charts, so most people never hit it. If you see "daily limit reached", the free lookups are used up for today.</p></details>
+          <details id="bargo-key"><summary>How do I add a free Bargo key?</summary>
+            <div class="a">
+              <p>A key is optional. It raises your daily lookups. It takes about two minutes:</p>
+              <ol class="howto">
+                <li>Open <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">bargo.ai/connect<span class="sr-only"> (opens in a new tab)</span></a> and create a free account.</li>
+                <li>Copy the API key Bargo shows you.</li>
+                <li>Click the Capitol Tape icon in your browser's toolbar to open the popup.</li>
+                <li>Choose the <strong>Lookups</strong> tab, paste the key, and press <strong>Save</strong>.</li>
+                <li>Reload your chart. The limit message goes away.</li>
+              </ol>
+              <p>The key stays on your device and is sent only to Bargo.</p>
+            </div>
+          </details>
+        </div>
+
+        <h2 class="faq-group">Privacy and safety</h2>
+        <div class="faq">
+          <details><summary>Can it see my brokerage account?</summary><p class="a">No. It reads only the ticker symbol from the page address or title. It cannot read balances, positions or orders, and it cannot place trades. See every permission on the <a href="security.html">Security</a> page.</p></details>
+          <details><summary>Do I need an account?</summary><p class="a">No. The extension works without one. An account on this website is optional and separate.</p></details>
+          <details><summary>What do you collect?</summary><p class="a">The extension sends the ticker you are viewing to the data provider and checks your Pro status. No analytics, no ads, no tracking. Details are in the <a href="privacy.html">Privacy Policy</a>.</p></details>
+        </div>
+
+        <h2 class="faq-group">Plans and billing</h2>
+        <div class="faq">
+          <details><summary>What is free, and what is Pro?</summary><p class="a">Free gives you the panel and the signal box on all four sites and a watchlist of 3 tickers. Pro is $8/month for an unlimited watchlist and a notification when a watched ticker gets a new filing or turns Hot. See <a href="pricing.html">Pricing</a>.</p></details>
+          <details><summary>How do I upgrade or cancel Pro?</summary><p class="a">Open the extension popup and choose Upgrade to Pro. Payment runs through ExtensionPay and Stripe; the extension never sees your card. Cancel any time under Manage subscription in the same popup. Pro stays on until the end of the month you paid for.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="config.js"></script>
+  <script src="site.js"></script>
+</body>
+</html>

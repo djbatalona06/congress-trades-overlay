@@ -5,6 +5,8 @@ import type { Env } from './env';
 import { syncBills, syncLobbying, syncMemberLinks, syncOrders, syncOutsideMoney } from './ingest';
 import { handleRequest } from './routes';
 import { d1Store } from './store';
+import { handleWaitlist } from './waitlist';
+import { d1WaitlistStore } from './waitlist-d1';
 
 /** Rows per ticker. Matches the extension, so the panel still says "5 recent". */
 const ROWS_PER_TICKER = 5;
@@ -20,6 +22,8 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const auth = await handleAuth(request, { store: d1AccountStore(env.DB), now: Date.now(), fetch, env });
     if (auth) return auth;
+    const waitlist = await handleWaitlist(request, { store: d1WaitlistStore(env.DB), now: Date.now(), env });
+    if (waitlist) return waitlist;
     return handleRequest(request, {
       store: d1Store(env.DB),
       now: Date.now(),

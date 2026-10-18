@@ -82,7 +82,7 @@ Capitol Tape is **not** advice about money. It only shows forms that anyone can 
 |---|---|
 | `entrypoints/` | The parts you see: the pop-up box and the menu |
 | `lib/` | The brain: finds the stock name and gets the forms |
-| `site/` | The website: home, pricing, sign-in and account pages |
+| `site/` | The website. Pages are in `site/src`, pictures in `site/public`; `npm run build:site` puts them together in `site/dist` |
 | `tests/` | Checks that make sure everything still works |
 | `worker/` | An extra helper on the internet (turned off for now) |
 | `docs/` | The plan for the whole project |

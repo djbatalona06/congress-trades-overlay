@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.{ts,tsx}'],
     setupFiles: ['tests/setup.ts'],
+    globalSetup: ['tests/site-build.setup.ts'],
     restoreMocks: true,
     unstubGlobals: true,
   },

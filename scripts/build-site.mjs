@@ -16,6 +16,7 @@
 //   SITE_CHROME_URL, SITE_FIREFOX_URL   store listing links
 //   SITE_AUTH_BASE                      Worker address for sign-in, no trailing slash
 //   SITE_CONTACT_EMAIL                  contact address on every page
+//   SITE_URL                            public address, for canonical links, sitemap.xml and robots.txt
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,6 +35,7 @@ export function siteValues(env = process.env) {
     firefoxUrl: env.SITE_FIREFOX_URL ?? '',
     authBase: (env.SITE_AUTH_BASE ?? '').replace(/\/+$/, ''),
     contactEmail: env.SITE_CONTACT_EMAIL || 'hello@example.com',
+    siteUrl: (env.SITE_URL || 'https://capitol-tape.pages.dev').replace(/\/+$/, ''),
   };
 }
 
@@ -96,6 +98,17 @@ export function buildSite({ root = 'site', out = join(root, 'dist'), env = proce
       pages.push(path);
     }
   }
+
+  // Search engines get every public page; sign-in and account pages are for people, not results.
+  const listed = pages.filter((path) => !['login.html', 'account.html'].includes(path)).sort();
+  const pageUrl = (path) => `${values.siteUrl}/${path.replace(/(^|\/)index\.html$/, '$1')}`;
+  writeFileSync(
+    join(out, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      listed.map((path) => `  <url><loc>${pageUrl(path)}</loc></url>\n`).join('') +
+      `</urlset>\n`,
+  );
+  writeFileSync(join(out, 'robots.txt'), `User-agent: *\nDisallow: /account.html\nSitemap: ${values.siteUrl}/sitemap.xml\n`);
 
   // The Worker's origin is the only other place the site's scripts may connect to.
   const authOrigin = values.authBase ? ` ${new URL(values.authBase).origin}` : '';

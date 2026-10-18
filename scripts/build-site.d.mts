@@ -4,6 +4,7 @@ export function siteValues(env?: Record<string, string | undefined>): {
   firefoxUrl: string;
   authBase: string;
   contactEmail: string;
+  siteUrl: string;
 };
 export function buildSite(options?: {
   root?: string;

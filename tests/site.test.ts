@@ -161,3 +161,54 @@ describe('site build', () => {
     expect(readFileSync('site/dist/config.js', 'utf8')).toContain('"chrome": ""');
   });
 });
+
+describe('brand and visual system', () => {
+  const hero = (source: string) => source.slice(source.indexOf('<section class="hero"'), source.indexOf('</section>', source.indexOf('<section class="hero"')));
+
+  it('the hero has one headline, one subhead and one primary button', () => {
+    const block = hero(page('index'));
+    expect(block.match(/<h1[\s>]/g)).toHaveLength(1);
+    expect(block.match(/class="sub /g)).toHaveLength(1);
+    expect(block.match(/class="btn btn-primary"/g)).toHaveLength(1);
+    expect(block).toContain('Nonpartisan congressional trade data, right on your chart.');
+  });
+
+  it('every signal box pairs an icon with the level word', () => {
+    const boxes = [...page('index').matchAll(/<p class="signal signal-(quiet|watch|hot)">([\s\S]*?)<\/p>/g)];
+    expect(new Set(boxes.map((m) => m[1]))).toEqual(new Set(['quiet', 'watch', 'hot']));
+    for (const [, level, inner] of boxes) {
+      expect(inner, level).toContain(`<use href="#sig-${level}"`);
+      expect(inner, level).toMatch(new RegExp(`<b>${level}</b>`, 'i'));
+    }
+    for (const level of ['quiet', 'watch', 'hot']) expect(page('index')).toContain(`<symbol id="sig-${level}"`);
+  });
+
+  it('does not colour party badges by party', () => {
+    expect(page('index')).not.toMatch(/class="badge b-[dri]"/);
+    expect(css).not.toMatch(/\.b-[dr]\s*\{/);
+  });
+
+  it('uses the logo slate, not green or red, for buttons, links and focus', () => {
+    const rule = (selector: string) => css.match(new RegExp(`${selector.replace(/[.:-]/g, '\\$&')} \\{([^}]*)\\}`))?.[1] ?? '';
+    expect(rule('.btn-primary')).toContain('var(--brand)');
+    expect(rule(':focus-visible')).toContain('var(--brand)');
+    expect(css).not.toMatch(/--green|--red/);
+  });
+
+  it('uses the brand folder\'s mark for the favicon, touch icon and header logo', () => {
+    for (const file of ['favicon.svg', 'favicon-16.png', 'favicon-32.png', 'apple-touch-icon.png']) {
+      expect(readFileSync(`site/dist/${file}`), file).toEqual(readFileSync(`brand/${file}`));
+    }
+    for (const name of PAGES) {
+      const source = page(name);
+      expect(source, name).toContain('<link rel="icon" type="image/svg+xml" href="favicon.svg" />');
+      expect(source, name).toContain('<link rel="apple-touch-icon" href="apple-touch-icon.png" />');
+      expect(header(source), name).toContain('<img class="logo-mark" src="favicon.svg"');
+    }
+  });
+
+  it('keeps pages free of inline style attributes', () => {
+    for (const name of ['pricing', 'login', 'account', 'privacy'] as const) expect(page(name), name).not.toMatch(/\sstyle="/);
+    expect(page('index').replace(/<figure class="quote[\s\S]*?<\/figure>/g, '')).not.toMatch(/\sstyle="/);
+  });
+});

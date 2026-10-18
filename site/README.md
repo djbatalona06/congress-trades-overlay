@@ -13,13 +13,14 @@ npx serve site/dist    # preview at http://localhost:3000
 |---|---|
 | `src/pages/` | One file per page: `index`, `pricing`, `login`, `account` |
 | `src/legal/` | Legal pages: `privacy` (the store listing links to this one) |
-| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal` |
+| `src/components/` | Shared pieces: `Head`, `Header`, `FooterLegal`, `LogoMark`, `Hero`, `ProductDemo`, `PlatformBadges`, `SignalIcons`, `SignalBox`, `PricingCard`, `Feature` |
 | `src/js/` | Scripts: `site.js` (shared), `demo.js`, `reveal.js`, `login.js`, `account.js` |
 | `src/styles/` | `styles.css`, all the styling for every page |
-| `public/` | Copied as-is: `icon.png` (from `public/icon/128.png` at the repo root) and `logos/` |
+| `public/` | Copied as-is: `icon.png` (the 128px extension icon) and `logos/` |
+| `../brand/` | The logo. The build copies `favicon.svg`, `favicon-16.png`, `favicon-32.png` and `apple-touch-icon.png` into `dist/`; the header logo is `favicon.svg`. Change the logo there, not here |
 | `dist/` | The built site. Made by the build, never edited, not committed |
 
-HTML files hold only HTML. CSS and JavaScript live in their own files.
+HTML files hold only HTML. CSS and JavaScript live in their own files. Colours, type and spacing follow `docs/brand-voice.md`.
 
 ## How a page uses a component
 
@@ -27,6 +28,16 @@ HTML files hold only HTML. CSS and JavaScript live in their own files.
 <!-- @include Head title="Pricing — Capitol Tape" description="…" canonical="pricing.html" -->
 <!-- @include Header -->
 ```
+
+A block include wraps content, and the component places it where it says `{{children}}`:
+
+```html
+<!-- @include PricingCard name="Pro" price="$8" … -->
+  <!-- @include Feature -->Unlimited watchlist<!-- @end Feature -->
+<!-- @end PricingCard -->
+```
+
+Use single quotes around an argument whose value holds HTML: `tag='<span class="tag">Recommended</span>'`.
 
 The build swaps each marker for the file in `src/components/`. Inside a component, `{{title}}` is replaced by the matching argument. `{{base}}` is `""` for top-level pages and `"../"` for pages in a sub-folder, so links work from anywhere. A missing component or an unknown `{{value}}` stops the build.
 

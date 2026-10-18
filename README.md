@@ -19,7 +19,7 @@ Capitol Tape finds those forms for you. When you look at a stock's chart on a we
 
 ## The signal box
 
-When you open a stock, a small floating box shows up in the bottom-left corner. It says how busy Congress has been in that stock: **Quiet**, **Watch** or **Hot**. A ring around a number fills up as the stock gets busier.
+When you open a stock, a small floating box shows up in the bottom-left corner. It says how busy Congress has been in that stock: **Quiet**, **Watch** or **Hot**. Each word has its own little picture (a dash in a circle, an eye, a flame), so you can tell them apart even without colours. A ring around a number fills up as the stock gets busier.
 
 Under the ring are little tags. Tap one to read, in plain words, why it is lit.
 

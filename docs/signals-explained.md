@@ -6,6 +6,8 @@ Written in plain words. The code is in `lib/signals.ts`, and `tests/signals.test
 
 Capitol Tape already knows the forms Congress members filed for a stock. The signal box looks at those forms and asks a few simple questions. Each "yes" lights a tag and adds points. The points add up to **Quiet**, **Watch** or **Hot**.
 
+The box always shows the level as a word plus a shape: a dash in a circle for Quiet, an eye for Watch, a flame for Hot. Colour is the third clue, never the only one.
+
 Nothing here uses the internet. It is only counting and comparing dates on your own computer.
 
 ## Which forms count

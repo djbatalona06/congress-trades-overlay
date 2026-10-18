@@ -18,7 +18,11 @@
     show('Sign-in isn’t switched on yet. Please check back soon.');
     return;
   }
-  for (const button of buttons) button.href = base + '/auth/' + button.dataset.provider + '/start';
+  // The buttons start disabled in the HTML, so they do nothing until the Worker address is known.
+  for (const button of buttons) {
+    button.href = base + '/auth/' + button.dataset.provider + '/start';
+    button.removeAttribute('aria-disabled');
+  }
 
   // The Worker sends people back here with ?error=... when a sign-in does not finish.
   const errors = {

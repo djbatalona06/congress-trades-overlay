@@ -9,3 +9,4 @@ stats.html
 !.env.example
 site/dist/
 site/dist-env-test/
+.lighthouseci/

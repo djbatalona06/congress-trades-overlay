@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { alertText, findNewTrades, pollAlerts } from '@/lib/alerts';
-import { writeProStatus } from '@/lib/pro';
 import { getTrades } from '@/lib/service';
 import type { CongressTrade, TradesResponse } from '@/lib/types';
 import { addToWatchlist } from '@/lib/watchlist';
@@ -38,7 +37,6 @@ beforeEach(async () => {
   getTradesMock.mockReset();
   vi.spyOn(fakeBrowser.runtime, 'getURL').mockImplementation((path) => `chrome-extension://id${path}`);
   createNotification = vi.spyOn(fakeBrowser.notifications, 'create');
-  await writeProStatus(true);
 });
 
 describe('findNewTrades', () => {
@@ -66,11 +64,18 @@ describe('alertText', () => {
 });
 
 describe('pollAlerts', () => {
-  it('does nothing on the free plan', async () => {
-    await writeProStatus(false);
+  it('works with no plan status ever written', async () => {
     await addToWatchlist('NVDA', null);
+    getTradesMock.mockResolvedValue(fromNetwork('NVDA', [OLD]));
     await pollAlerts();
-    expect(getTradesMock).not.toHaveBeenCalled();
+    getTradesMock.mockResolvedValue(fromNetwork('NVDA', [NEW, OLD]));
+    await pollAlerts();
+    expect(notifications()).toHaveLength(1);
+  });
+
+  it('puts no money ask in a notification', () => {
+    const { title, message } = alertText('NVDA', NEW, 3);
+    expect(`${title} ${message}`).not.toMatch(/upgrade|pro|donat|subscribe|pricing|waitlist|newsletter/i);
   });
 
   it('does nothing with an empty watchlist', async () => {

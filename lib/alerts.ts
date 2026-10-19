@@ -1,6 +1,5 @@
 import { browser } from 'wxt/browser';
 import { storage } from 'wxt/utils/storage';
-import { isPro } from './pro';
 import { getTrades } from './service';
 import { TYPE_LABEL } from './trades';
 import type { CongressTrade } from './types';
@@ -36,7 +35,6 @@ export function alertText(
 
 /** Checks one watchlist ticker per call, in rotation, and notifies on new disclosures. */
 export async function pollAlerts(): Promise<void> {
-  if (!(await isPro())) return;
   const watchlist = await getWatchlist();
   if (watchlist.length === 0) return;
 

@@ -42,10 +42,10 @@ describe('refreshPro', () => {
     expect(await refreshPro(NOON)).toEqual({ ok: false, cachedPaid: false, checkedAt: null });
   });
 
-  it('drops cachedPaid once the 72h grace has passed', async () => {
+  it('keeps cachedPaid past the 72h grace so a past payer is never stranded offline', async () => {
     await writeProStatus(true, NOON);
     getUser.mockRejectedValue(new Error('offline'));
-    const result = await refreshPro(NOON + 73 * 3_600_000);
-    expect(result).toMatchObject({ ok: false, cachedPaid: false, checkedAt: NOON });
+    const result = await refreshPro(NOON + 30 * 24 * 3_600_000);
+    expect(result).toMatchObject({ ok: false, cachedPaid: true, checkedAt: NOON });
   });
 });

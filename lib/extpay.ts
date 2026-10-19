@@ -1,5 +1,5 @@
 import ExtPay from 'extpay';
-import { isPro, readProStatus, writeProStatus } from './pro';
+import { readProStatus, writeProStatus } from './pro';
 
 // The extension id registered at extensionpay.com.
 export const EXTPAY_ID = 'congress-trades-overlay';
@@ -12,7 +12,8 @@ export function createExtPay() {
 
 export type RefreshResult =
   | { ok: true; paid: boolean; checkedAt: number }
-  // The check failed; cachedPaid / checkedAt describe what is on this device.
+  // The check failed; cachedPaid / checkedAt describe what is on this device. cachedPaid
+  // ignores the grace window: nothing is gated on it, and a past payer must keep their way back.
   | { ok: false; cachedPaid: boolean; checkedAt: number | null };
 
 /**
@@ -27,6 +28,6 @@ export async function refreshPro(now = Date.now()): Promise<RefreshResult> {
   } catch (error) {
     console.warn('[congress-trades] could not refresh Pro status', error);
     const cached = await readProStatus();
-    return { ok: false, cachedPaid: await isPro(now), checkedAt: cached?.checkedAt ?? null };
+    return { ok: false, cachedPaid: cached?.paid === true, checkedAt: cached?.checkedAt ?? null };
   }
 }

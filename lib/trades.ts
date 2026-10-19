@@ -12,21 +12,36 @@ export interface RecordLink {
   label: string;
 }
 
+const OFFICIAL_HOSTS: Record<string, Chamber> = {
+  'disclosures-clerk.house.gov': 'house',
+  'efdsearch.senate.gov': 'senate',
+};
+
+// Bargo is a third-party feed, so only these two hosts count as official.
+function officialUrl(raw: string | null): URL | null {
+  if (!raw) return null;
+  try {
+    const url = new URL(raw);
+    return url.protocol === 'https:' && Object.hasOwn(OFFICIAL_HOSTS, url.hostname) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
 // Bargo's filing_portal is the portal home today; a single filing is a PDF or an eFD view page.
-const isSpecificFiling = (url: string) =>
-  /\.pdf$/i.test(url) || /efdsearch\.senate\.gov\/search\/view\//.test(url);
+const isSpecificFiling = (url: URL) =>
+  /\.pdf$/i.test(url.pathname) || url.pathname.startsWith('/search/view/');
 
 function chamberOf(trade: Pick<CongressTrade, 'chamber' | 'sourceUrl'>): Chamber | null {
   if (trade.chamber) return trade.chamber;
-  if (trade.sourceUrl?.includes('senate.gov')) return 'senate';
-  if (trade.sourceUrl?.includes('house.gov')) return 'house';
-  return null;
+  const url = officialUrl(trade.sourceUrl);
+  return url ? (OFFICIAL_HOSTS[url.hostname] ?? null) : null;
 }
 
 /** Where to read the official record of a trade. Never empty. */
 export function officialRecordLinks(trade: Pick<CongressTrade, 'chamber' | 'sourceUrl'>): RecordLink[] {
-  const url = trade.sourceUrl;
-  if (url?.startsWith('https://') && isSpecificFiling(url)) return [{ url, label: 'Official record' }];
+  const url = officialUrl(trade.sourceUrl);
+  if (url && isSpecificFiling(url)) return [{ url: url.href, label: 'Official record' }];
   const chamber = chamberOf(trade);
   if (chamber === 'house') return [{ url: HOUSE_SEARCH_URL, label: 'Search official records' }];
   if (chamber === 'senate') return [{ url: SENATE_SEARCH_URL, label: 'Search official records' }];

@@ -161,6 +161,22 @@ describe('officialRecordLinks', () => {
     ]);
   });
 
+  it('only calls a link an official record when it is on a House or Senate host', () => {
+    for (const sourceUrl of [
+      'https://evil.example/x.pdf',
+      'https://evil.example/?efdsearch.senate.gov/search/view/',
+      'https://disclosures-clerk.house.gov.evil.example/x.pdf',
+      'https://constructor/x.pdf',
+    ]) {
+      const links = officialRecordLinks({ chamber: 'house', sourceUrl });
+      expect(links).toEqual([{ url: HOUSE_SEARCH_URL, label: 'Search official records' }]);
+    }
+  });
+
+  it('does not guess the chamber from a look-alike host', () => {
+    expect(officialRecordLinks({ chamber: null, sourceUrl: 'https://senate.gov.evil.example/' })).toHaveLength(2);
+  });
+
   it('never returns a non-https URL', () => {
     for (const link of officialRecordLinks({ chamber: 'house', sourceUrl: 'http://example.com/x.pdf' })) {
       expect(link.url.startsWith('https://')).toBe(true);

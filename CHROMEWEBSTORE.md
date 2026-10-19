@@ -54,6 +54,7 @@ Remote code: none. All code is in the package.
 
 ## Before submitting
 
+- [ ] The site's `/extension/#waitlist` page is live (the popup's "Join the waitlist" link opens it); submit 1.2.0 only after it deploys
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
 - [ ] ExtensionPay stays registered as `congress-trades-overlay` (no plan is sold in 1.2.0; Manage subscription must still open for past payers)
 - [ ] Contact email filled into `site/privacy.html`; `site/` published (landing page + privacy)

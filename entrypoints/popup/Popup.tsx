@@ -1,10 +1,10 @@
-import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { BARGO_HOME, BARGO_KEY_URL } from '@/lib/bargo';
 import { readBudget } from '@/lib/budget';
 import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
-import { isPro } from '@/lib/pro';
 import { getApiKey, setApiKey } from '@/lib/settings';
+import { WAITLIST_URL } from '@/lib/site';
 import type { BudgetState, WatchlistItem } from '@/lib/types';
 import { type AddResult, addToWatchlist, getWatchlist, removeFromWatchlist } from '@/lib/watchlist';
 import { PANEL_ID, type TabDef, Tabs, tabId } from './Tabs';
@@ -104,42 +104,37 @@ const formatChecked = (at: number) =>
 
 function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) {
   const extpay = createExtPay();
-  const retry = (
-    <button type="button" onClick={onRetry}>
-      Try again
-    </button>
-  );
   return (
     <section>
       <h2>Plan</h2>
+      <p>Everything in Capitol Tape is free: the panel, an unlimited watchlist and new-filing alerts.</p>
+      <p>
+        Policy Pro is coming: alerts on bills and executive orders for your sectors.{' '}
+        <a href={WAITLIST_URL} target="_blank" rel="noopener noreferrer">
+          Join the waitlist
+        </a>
+      </p>
       <div role="status">
-        {status.kind === 'checking' && <p className="muted">Checking your plan…</p>}
         {status.kind === 'pro' && (
-          <p>Pro is active. Last checked {formatChecked(status.checkedAt)}.</p>
-        )}
-        {status.kind === 'free' && (
-          <p className="muted">Free plan. Last checked {formatChecked(status.checkedAt)}.</p>
+          <p>You have an active subscription. Last checked {formatChecked(status.checkedAt)}.</p>
         )}
         {status.kind === 'offline-pro' && (
           <p className="error">
-            Couldn&apos;t reach the payment server. Showing Pro from {formatChecked(status.checkedAt)}.
-          </p>
-        )}
-        {status.kind === 'offline' && (
-          <p className="error">
-            Couldn&apos;t check your plan. Check your connection and try again.
+            Couldn&apos;t reach the payment server. Showing your subscription from{' '}
+            {formatChecked(status.checkedAt)}.
           </p>
         )}
       </div>
       {status.kind === 'pro' && (
-        <>
-          <p>Unlimited watchlist and new-disclosure alerts.</p>
-          <button type="button" onClick={() => void extpay.openPaymentPage()}>
-            Manage subscription
-          </button>
-        </>
+        <button type="button" onClick={() => void extpay.openPaymentPage()}>
+          Manage subscription
+        </button>
       )}
-      {(status.kind === 'offline-pro' || status.kind === 'offline') && retry}
+      {status.kind === 'offline-pro' && (
+        <button type="button" onClick={onRetry}>
+          Try again
+        </button>
+      )}
     </section>
   );
 }
@@ -215,26 +210,17 @@ function Lookups() {
 }
 
 export function Popup() {
-  const [pro, setPro] = useState(false);
   const [plan, setPlan] = useState<PlanStatus>({ kind: 'checking' });
   // Not saved between opens: a remembered tab is a convenience, not a need.
   const [tab, setTab] = useState<TabKey>('watchlist');
 
-  const confirmed = useRef(false);
-
   const check = useCallback(async () => {
     setPlan({ kind: 'checking' });
     const result = await refreshPro();
-    confirmed.current = true;
-    setPro(result.ok ? result.paid : result.cachedPaid);
     setPlan(planStatus(result));
   }, []);
 
   useEffect(() => {
-    // Show the cached badge immediately, unless the server has already answered.
-    isPro().then((cached) => {
-      if (!confirmed.current) setPro(cached);
-    });
     void check();
   }, [check]);
 
@@ -243,7 +229,6 @@ export function Popup() {
       <header>
         <img src="/icon/32.png" width="24" height="24" alt="" />
         <h1>Capitol Tape</h1>
-        <span className={pro ? 'badge pro' : 'badge'}>{pro ? 'Pro' : 'Free'}</span>
         <Tabs tabs={TABS} selected={tab} onSelect={setTab} />
       </header>
       <UpdateGate />

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
 import { Popup } from '@/entrypoints/popup/Popup';
 import type { RefreshResult } from '@/lib/extpay';
+import { WAITLIST_URL } from '@/lib/site';
 
 const refreshPro = vi.fn<() => Promise<RefreshResult>>();
 vi.mock('@/lib/extpay', () => ({
@@ -43,41 +44,49 @@ afterEach(async () => {
   host.remove();
 });
 
-describe('Plan tab states', () => {
-  it('Pro, confirmed: says so with the time and offers Manage subscription', async () => {
-    await openPlan({ ok: true, paid: true, checkedAt: AT });
-    expect(status()).toContain('Pro is active. Last checked');
-    expect(buttons()).toContain('Manage subscription');
-    expect(buttons()).not.toContain('Upgrade to Pro');
-    expect(host.querySelector('header .badge')?.textContent).toBe('Pro');
-  });
+const waitlist = () => host.querySelector<HTMLAnchorElement>(`a[href="${WAITLIST_URL}"]`);
 
-  it('Free, confirmed: offers Upgrade and Log in', async () => {
+describe('Plan tab while Pro is paused', () => {
+  it('free user: waitlist link, no Upgrade, no Log in, no price', async () => {
     await openPlan({ ok: true, paid: false, checkedAt: AT });
-    expect(status()).toContain('Free plan. Last checked');
-    expect(buttons()).toEqual(expect.arrayContaining(['Upgrade to Pro', 'Already paid? Log in']));
-    expect(host.textContent).toContain('Pro, $8/month');
+    expect(host.textContent).toContain('Policy Pro is coming');
+    expect(waitlist()).toMatchObject({ target: '_blank', rel: 'noopener noreferrer' });
+    expect(buttons()).not.toContain('Upgrade to Pro');
+    expect(buttons()).not.toContain('Already paid? Log in');
+    expect(host.textContent).not.toMatch(/\$\d+\/month/);
   });
 
-  it('check failed with a cached Pro: says so and offers Try again', async () => {
+  it('paid user: active subscription with Manage subscription, plus the waitlist', async () => {
+    await openPlan({ ok: true, paid: true, checkedAt: AT });
+    expect(status()).toContain('You have an active subscription. Last checked');
+    expect(buttons()).toContain('Manage subscription');
+    expect(waitlist()).toBeTruthy();
+  });
+
+  it('paid user offline: says so and offers Try again', async () => {
     await openPlan({ ok: false, cachedPaid: true, checkedAt: AT });
-    expect(status()).toContain("Couldn't reach the payment server. Showing Pro from");
+    expect(status()).toContain("Couldn't reach the payment server. Showing your subscription from");
     expect(buttons()).toContain('Try again');
-    expect(host.querySelector('header .badge')?.textContent).toBe('Pro');
   });
 
-  it('check failed with no cache: says so and offers Try again', async () => {
+  it('free user offline: no error, just the waitlist', async () => {
     await openPlan({ ok: false, cachedPaid: false, checkedAt: null });
-    expect(status()).toContain("Couldn't check your plan. Check your connection and try again.");
-    expect(buttons()).toContain('Try again');
+    expect(status()).toBe('');
+    expect(buttons()).not.toContain('Try again');
+    expect(waitlist()).toBeTruthy();
   });
 
   it('Try again re-checks in place and redraws', async () => {
-    await openPlan({ ok: false, cachedPaid: false, checkedAt: null });
+    await openPlan({ ok: false, cachedPaid: true, checkedAt: AT });
     refreshPro.mockResolvedValue({ ok: true, paid: true, checkedAt: AT });
     const retry = [...host.querySelectorAll('button')].find((b) => b.textContent === 'Try again');
     await act(async () => retry?.click());
     expect(refreshPro).toHaveBeenCalledTimes(2);
-    expect(status()).toContain('Pro is active');
+    expect(status()).toContain('You have an active subscription');
+  });
+
+  it('has no Free/Pro badge in the header', async () => {
+    await openPlan({ ok: true, paid: true, checkedAt: AT });
+    expect(host.querySelector('header .badge')).toBeNull();
   });
 });

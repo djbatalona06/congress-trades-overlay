@@ -6,14 +6,7 @@ import { lookupsLeft, lookupsPerDay } from '@/lib/format';
 import { isPro } from '@/lib/pro';
 import { getApiKey, setApiKey } from '@/lib/settings';
 import type { BudgetState, WatchlistItem } from '@/lib/types';
-import {
-  type AddResult,
-  FREE_WATCHLIST_LIMIT,
-  PRO_PRICE_MONTHLY,
-  addToWatchlist,
-  getWatchlist,
-  removeFromWatchlist,
-} from '@/lib/watchlist';
+import { type AddResult, addToWatchlist, getWatchlist, removeFromWatchlist } from '@/lib/watchlist';
 import { PANEL_ID, type TabDef, Tabs, tabId } from './Tabs';
 import { UpdateGate } from './UpdateGate';
 
@@ -27,10 +20,9 @@ type TabKey = (typeof TABS)[number]['id'];
 const ADD_ERRORS: Record<Extract<AddResult, { ok: false }>['reason'], string> = {
   invalid: 'Enter a US stock ticker, like NVDA.',
   duplicate: 'That ticker is already on your watchlist.',
-  limit: `The free plan watches ${FREE_WATCHLIST_LIMIT} tickers. Upgrade to Pro for more.`,
 };
 
-function Watchlist({ pro }: { pro: boolean }) {
+function Watchlist() {
   const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +44,7 @@ function Watchlist({ pro }: { pro: boolean }) {
       <h2>
         Watchlist
         <span className="muted">
-          {pro ? `${watchlist.length} tickers` : `${watchlist.length} of ${FREE_WATCHLIST_LIMIT}`}
+          {watchlist.length} {watchlist.length === 1 ? 'ticker' : 'tickers'}
         </span>
       </h2>
       <form className="row" onSubmit={add}>
@@ -145,22 +137,6 @@ function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) 
           <button type="button" onClick={() => void extpay.openPaymentPage()}>
             Manage subscription
           </button>
-        </>
-      )}
-      {status.kind === 'free' && (
-        <>
-          <p>
-            Pro, ${PRO_PRICE_MONTHLY}/month: unlimited watchlist and alerts when a watched ticker gets
-            a new disclosure.
-          </p>
-          <div className="row">
-            <button type="button" className="primary" onClick={() => void extpay.openPaymentPage()}>
-              Upgrade to Pro
-            </button>
-            <button type="button" className="ghost" onClick={() => void extpay.openLoginPage()}>
-              Already paid? Log in
-            </button>
-          </div>
         </>
       )}
       {(status.kind === 'offline-pro' || status.kind === 'offline') && retry}
@@ -272,7 +248,7 @@ export function Popup() {
       </header>
       <UpdateGate />
       <div role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(tab)} tabIndex={0}>
-        {tab === 'watchlist' && <Watchlist pro={pro} />}
+        {tab === 'watchlist' && <Watchlist />}
         {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}
         {tab === 'lookups' && <Lookups />}
       </div>

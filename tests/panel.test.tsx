@@ -11,7 +11,6 @@ import { budget, congressTrade } from './helpers';
 const requestTrades = vi.fn<(ticker: string) => Promise<TradesResponse>>();
 vi.mock('@/lib/messaging', () => ({
   requestTrades: (ticker: string) => requestTrades(ticker),
-  requestPaymentPage: vi.fn(),
 }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;

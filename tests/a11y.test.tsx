@@ -23,7 +23,6 @@ const TRADES: TradesResponse = {
 };
 vi.mock('@/lib/messaging', () => ({
   requestTrades: async () => TRADES,
-  requestPaymentPage: vi.fn(),
   requestPopOut: vi.fn(),
 }));
 

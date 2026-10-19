@@ -39,7 +39,7 @@ Remote code: none. All code is in the package.
 ## Data use disclosure
 
 - **Collected/transmitted:** the ticker symbol of the page being viewed and watchlist tickers, sent to Bargo to retrieve data (Chrome category: *Website content*; Firefox: `websiteContent`). Subscription status is checked with ExtensionPay.
-- **Not collected:** personal information, authentication data, financial account data, location, browsing history.
+- **Not collected by the extension:** personal information, authentication data, financial account data, location, browsing history. (The website's optional Google/GitHub sign-in is separate and the extension never uses it.)
 - Certify: not sold; not used for purposes unrelated to the single purpose; not used for creditworthiness or lending.
 - ExtensionPay uses `storage.sync`, which the browser may sync through the user's account.
 - **Privacy policy URL:** _publish `site/` and paste the URL of `privacy.html` here_
@@ -57,7 +57,7 @@ Remote code: none. All code is in the package.
 - [ ] The site's `/extension/#waitlist` page is live (the popup's "Join the waitlist" link opens it); submit 1.2.0 only after it deploys
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
 - [ ] ExtensionPay stays registered as `congress-trades-overlay` (no plan is sold in 1.2.0; Manage subscription must still open for past payers)
-- [ ] Contact email filled into `site/privacy.html`; `site/` published (landing page + privacy)
+- [ ] `SITE_CONTACT_EMAIL` repository variable set; `site/` published (landing page + privacy)
 - [ ] Reply from Bargo on commercial use; legal advice on 5 U.S.C. 13107(c)(1)
 - [ ] `npm test`, `npm run zip`, `npm run zip:firefox`
 - [ ] Load unpacked and click through all four sites; run once in Firefox

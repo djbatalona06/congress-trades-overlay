@@ -1,0 +1,39 @@
+<!-- Header: logo, page links, Sign in, Add to Chrome and the grid menu. Same on every page. -->
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="logo" href="{{base}}index.html" aria-label="Capitol Tape home">
+        <!-- @include LogoMark -->
+        Capitol Tape
+      </a>
+      <nav aria-label="Primary">
+        <ul class="nav-links">
+          <li><a href="{{base}}index.html#features">Features</a></li>
+          <li><a href="{{base}}index.html#how">How it works</a></li>
+          <li><a href="{{base}}pricing.html">Pricing</a></li>
+          <li><a href="{{base}}faq.html">FAQ</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a class="nav-login" href="{{base}}login.html">Sign in</a>
+        <a class="btn btn-primary btn-sm" href="{{base}}index.html#get" data-install="chrome">Add to Chrome</a>
+        <div class="menu">
+          <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu-panel" aria-label="Open site menu">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="5" r="2" /><circle cx="12" cy="5" r="2" /><circle cx="19" cy="5" r="2" /><circle cx="5" cy="12" r="2" /><circle cx="12" cy="12" r="2" /><circle cx="19" cy="12" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="12" cy="19" r="2" /><circle cx="19" cy="19" r="2" /></svg>
+          </button>
+          <div class="menu-panel" id="menu-panel" hidden>
+            <ul class="menu-grid">
+            <li><a href="{{base}}index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7" /><path d="M5 10v10h14V10" /></svg><span>Home</span></a></li>
+            <li><a href="{{base}}index.html#features"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg><span>Features</span></a></li>
+            <li><a href="{{base}}index.html#how"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="m10 8.5 5 3.5-5 3.5z" /></svg><span>How it works</span></a></li>
+            <li><a href="{{base}}pricing.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12 12 20 4 12V4h8z" /><circle cx="8.5" cy="8.5" r="1" /></svg><span>Pricing</span></a></li>
+            <li><a href="{{base}}faq.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5" /><path d="M12 17h.01" /></svg><span>FAQ</span></a></li>
+            <li><a href="{{base}}login.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" /><path d="m10 16-4-4 4-4" /><path d="M6 12h10" /></svg><span>Sign in</span></a></li>
+            <li><a href="{{base}}index.html#brokers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18" /><path d="M5 21V10M10 21V10M14 21V10M19 21V10" /><path d="m3 10 9-6 9 6z" /></svg><span>Brokers</span></a></li>
+            <li><a href="{{base}}privacy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z" /></svg><span>Privacy</span></a></li>
+            <li><a href="{{base}}account.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg><span>Account</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>

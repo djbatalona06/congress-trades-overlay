@@ -82,3 +82,61 @@ export async function setLastSeen(value: LastSeen): Promise<void> {
 export function watchLastSeen(callback: (value: LastSeen | null) => void): () => void {
   return storage.watch<LastSeen>(LAST_SEEN, (value) => callback(value ?? null));
 }
+
+// The floating signal HUD (see entrypoints/overlay.content/Hud.tsx).
+const HUD_ENABLED = 'local:hudEnabled';
+const HUD_COLLAPSED = 'local:hudCollapsed';
+const HUD_POSITION = 'local:hudPosition';
+
+/** Where the HUD sits, in px from the left and bottom edges of the window. */
+export interface HudPosition {
+  left: number;
+  bottom: number;
+}
+
+/** On unless the user switched it off. */
+export async function getHudEnabled(): Promise<boolean> {
+  return (await storage.getItem<boolean>(HUD_ENABLED)) ?? true;
+}
+
+export async function setHudEnabled(enabled: boolean): Promise<void> {
+  await storage.setItem(HUD_ENABLED, enabled);
+}
+
+export function watchHudEnabled(callback: (enabled: boolean) => void): () => void {
+  return storage.watch<boolean>(HUD_ENABLED, (value) => callback(value ?? true));
+}
+
+export async function getHudCollapsed(): Promise<boolean> {
+  return (await storage.getItem<boolean>(HUD_COLLAPSED)) ?? false;
+}
+
+export async function setHudCollapsed(collapsed: boolean): Promise<void> {
+  await storage.setItem(HUD_COLLAPSED, collapsed);
+}
+
+/** The saved spot, or null when none was saved or the saved value is not two real numbers. */
+export async function getHudPosition(): Promise<HudPosition | null> {
+  const value = await storage.getItem<Partial<HudPosition>>(HUD_POSITION);
+  return typeof value?.left === 'number' &&
+    typeof value.bottom === 'number' &&
+    Number.isFinite(value.left) &&
+    Number.isFinite(value.bottom)
+    ? { left: value.left, bottom: value.bottom }
+    : null;
+}
+
+export async function setHudPosition(position: HudPosition): Promise<void> {
+  await storage.setItem(HUD_POSITION, position);
+}
+
+// The Influence layer (tax-break and outside-money chips plus the Influence tab). Off until the user opts in.
+const INFLUENCE_ENABLED = 'local:influenceEnabled';
+
+export async function getInfluenceEnabled(): Promise<boolean> {
+  return (await storage.getItem<boolean>(INFLUENCE_ENABLED)) ?? false;
+}
+
+export async function setInfluenceEnabled(enabled: boolean): Promise<void> {
+  await storage.setItem(INFLUENCE_ENABLED, enabled);
+}

@@ -1,9 +1,9 @@
 import { BargoError, fetchTrades } from './bargo';
 import { ROWS_PER_LOOKUP, allowRequest, readBudget, recordExhausted, recordResponse } from './budget';
 import { readCache, writeCache } from './cache';
-import { getApiKey } from './settings';
+import { getApiKey, getInfluenceEnabled } from './settings';
 import { toCongressTrades } from './trades';
-import type { RequestPurpose, TradesResponse } from './types';
+import type { RequestPurpose, TickerContext, TradesResponse } from './types';
 import { fetchTickerPayload, workerEnabled } from './worker';
 
 // Only collapses simultaneous requests for one ticker (several tabs on the same
@@ -25,7 +25,15 @@ export function getTrades(ticker: string, purpose: RequestPurpose): Promise<Trad
   return request;
 }
 
+/** The Influence data rides along in the saved answer; the flag decides whether anyone sees it. */
 async function load(ticker: string, purpose: RequestPurpose): Promise<TradesResponse> {
+  const response = await loadTrades(ticker, purpose);
+  if (!response.context || (await getInfluenceEnabled())) return response;
+  const { ie_spend: _ie, tax_flags: _tax, lobbying: _lobby, ...context } = response.context;
+  return { ...response, context };
+}
+
+async function loadTrades(ticker: string, purpose: RequestPurpose): Promise<TradesResponse> {
   const apiKey = await getApiKey();
   const [cached, budget] = await Promise.all([readCache(ticker), readBudget(apiKey !== null)]);
 
@@ -48,7 +56,13 @@ async function load(ticker: string, purpose: RequestPurpose): Promise<TradesResp
     try {
       const payload = await fetchTickerPayload(ticker);
       const trades = toCongressTrades(payload.trades, ticker);
-      const context = { related_bills: payload.related_bills, exec_orders: payload.exec_orders };
+      const context: TickerContext = {
+        related_bills: payload.related_bills,
+        exec_orders: payload.exec_orders,
+        ...(payload.ie_spend && { ie_spend: payload.ie_spend }),
+        ...(payload.tax_flags && { tax_flags: payload.tax_flags }),
+        ...(payload.lobbying && { lobbying: payload.lobbying }),
+      };
       const fetchedAt = Date.now();
       await writeCache(ticker, trades, fetchedAt, context);
       return { status: 'ok', ticker, trades, fetchedAt, stale: false, fromNetwork: true, budget, context };

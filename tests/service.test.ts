@@ -4,7 +4,7 @@ import { BargoError, type BargoResult, fetchTrades } from '@/lib/bargo';
 import { readBudget } from '@/lib/budget';
 import { CACHE_TTL_MS, writeCache } from '@/lib/cache';
 import { getTrades } from '@/lib/service';
-import { setApiKey } from '@/lib/settings';
+import { setApiKey, setInfluenceEnabled } from '@/lib/settings';
 import { WorkerError, fetchTickerPayload } from '@/lib/worker';
 import { bargoTrade, congressTrade } from './helpers';
 
@@ -171,6 +171,32 @@ describe('getTrades with the Worker feature flag', () => {
     expect(response.trades[0]).toMatchObject({ member: 'Nancy Pelosi', type: 'purchase' });
     expect(fetchMock).not.toHaveBeenCalled();
     expect((await readBudget(false)).requestsRemaining).toBe(30);
+  });
+
+  it('hides Influence data until the user turns it on, without refetching', async () => {
+    flagOn();
+    const influence = {
+      ie_spend: [
+        {
+          committee_id: 'C001',
+          committee_name: 'Some Committee',
+          member_slug: 'nancy-pelosi',
+          candidate_name: 'Nancy Pelosi',
+          support_or_oppose: 'support' as const,
+          amount: 5000,
+          date: '2026-09-01',
+          url: 'https://docs.fec.gov/x',
+        },
+      ],
+      tax_flags: [],
+    };
+    workerMock.mockResolvedValue({ trades: [bargoTrade()], ...context, ...influence });
+    const off = await getTrades('NVDA', 'chart');
+    expect(off.context).toEqual(context);
+    await setInfluenceEnabled(true);
+    const on = await getTrades('NVDA', 'chart');
+    expect(on.context).toEqual({ ...context, ...influence });
+    expect(workerMock).toHaveBeenCalledTimes(1);
   });
 
   it('saves the Worker answer, so a second chart lookup is served from cache with the same legislation', async () => {

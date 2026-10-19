@@ -48,10 +48,53 @@ export interface ExecOrder {
   url: string;
 }
 
-/** The legislation half of a Worker answer. */
+/**
+ * Outside money reported to the FEC for or against a member's race. Every
+ * group is stored with the same fields, so no group is shown differently.
+ */
+export interface IeSpend {
+  committee_id: string;
+  committee_name: string;
+  member_slug: string;
+  candidate_name: string;
+  support_or_oppose: 'support' | 'oppose';
+  amount: number;
+  /** Day (YYYY-MM-DD) the spending was reported. */
+  date: string;
+  /** The FEC filing itself. */
+  url: string;
+}
+
+/** A tax provision in a related bill that a person has reviewed. Unreviewed flags are never sent. */
+export interface TaxFlag {
+  bill_id: string;
+  section_cite: string;
+  url: string;
+}
+
+/** A lobbying disclosure on issues tied to a sector. It says who hired whom, not what happened. */
+export interface LobbyFiling {
+  registrant: string;
+  client: string;
+  /** Senate issue codes the filing lists, e.g. "DEF". */
+  issue_codes: string[];
+  /** Dollars reported, or null when the filing gives none. */
+  amount: number | null;
+  /** "2026 Q3" style label from the filing. */
+  period: string;
+  /** Day (YYYY-MM-DD) the filing was posted. */
+  date: string;
+  url: string;
+}
+
+/** The legislation half of a Worker answer, plus the optional Influence layer. */
 export interface TickerContext {
   related_bills: RelatedBill[];
   exec_orders: ExecOrder[];
+  /** Only present when the Worker has them and the Influence flag is on. */
+  ie_spend?: IeSpend[];
+  tax_flags?: TaxFlag[];
+  lobbying?: LobbyFiling[];
 }
 
 /** What `GET /v1/ticker/{T}` returns. Trades keep Bargo's row shape. */

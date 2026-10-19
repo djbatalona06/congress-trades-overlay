@@ -3,7 +3,14 @@ import { BARGO_HOME, BARGO_KEY_URL } from '@/lib/bargo';
 import { readBudget } from '@/lib/budget';
 import { type RefreshResult, createExtPay, refreshPro } from '@/lib/extpay';
 import { lookupsLeft, lookupsPerDay } from '@/lib/format';
-import { getApiKey, setApiKey } from '@/lib/settings';
+import {
+  getApiKey,
+  getHudEnabled,
+  getInfluenceEnabled,
+  setApiKey,
+  setHudEnabled,
+  setInfluenceEnabled,
+} from '@/lib/settings';
 import { WAITLIST_URL } from '@/lib/site';
 import type { BudgetState, WatchlistItem } from '@/lib/types';
 import { type AddResult, addToWatchlist, getWatchlist, removeFromWatchlist } from '@/lib/watchlist';
@@ -83,6 +90,67 @@ function Watchlist() {
   );
 }
 
+function HudToggle() {
+  // undefined until the saved choice is read, so the box never flickers.
+  const [on, setOn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    getHudEnabled().then(setOn);
+  }, []);
+
+  return (
+    <section>
+      <h2>Floating signal box</h2>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={on ?? true}
+          disabled={on === undefined}
+          onChange={(event) => {
+            setOn(event.target.checked);
+            void setHudEnabled(event.target.checked);
+          }}
+        />
+        Show it on charts
+      </label>
+      <p className="muted">
+        A small box that says how busy Congress has been in a stock: Quiet, Watch or Hot. You can drag it
+        anywhere.
+      </p>
+    </section>
+  );
+}
+
+function InfluenceToggle() {
+  const [on, setOn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    getInfluenceEnabled().then(setOn);
+  }, []);
+
+  return (
+    <section>
+      <h2>Influence (early)</h2>
+      <label className="check">
+        <input
+          type="checkbox"
+          checked={on ?? false}
+          disabled={on === undefined}
+          onChange={(event) => {
+            setOn(event.target.checked);
+            void setInfluenceEnabled(event.target.checked);
+          }}
+        />
+        Show tax breaks and outside money
+      </label>
+      <p className="muted">
+        Adds an Influence list to the panel when the extra data service is on. It only reports what was
+        filed. It never says why, and it never changes Quiet, Watch or Hot.
+      </p>
+    </section>
+  );
+}
+
 export type PlanStatus =
   | { kind: 'checking' }
   | { kind: 'pro'; checkedAt: number }
@@ -107,7 +175,10 @@ function Plan({ status, onRetry }: { status: PlanStatus; onRetry: () => void }) 
   return (
     <section>
       <h2>Plan</h2>
-      <p>Everything in Capitol Tape is free: the panel, an unlimited watchlist and new-filing alerts.</p>
+      <p>
+        Everything in Capitol Tape is free: the panel, the signal box, an unlimited watchlist and alerts
+        when a watched stock gets a new filing or turns Hot.
+      </p>
       <p>
         Policy Pro is coming: alerts on bills and executive orders for your sectors.{' '}
         <a href={WAITLIST_URL} target="_blank" rel="noopener noreferrer">
@@ -233,7 +304,13 @@ export function Popup() {
       </header>
       <UpdateGate />
       <div role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(tab)} tabIndex={0}>
-        {tab === 'watchlist' && <Watchlist />}
+        {tab === 'watchlist' && (
+          <>
+            <Watchlist />
+            <HudToggle />
+            <InfluenceToggle />
+          </>
+        )}
         {tab === 'plan' && <Plan status={plan} onRetry={() => void check()} />}
         {tab === 'lookups' && <Lookups />}
       </div>

@@ -23,9 +23,30 @@ Capitol Tape finds those forms for you. When you look at a stock's chart on a we
 - **Green** means *buy*. Green is also the color of a price going up.
 - **Red** means *sell*. Red is also the color of a price going down.
 
+## The signal box
+
+When you open a stock, a small floating box shows up in the bottom-left corner. It says how busy Congress has been in that stock: **Quiet**, **Watch** or **Hot**. Each word has its own little picture (a dash in a circle, an eye, a flame), so you can tell them apart even without colours. A ring around a number fills up as the stock gets busier.
+
+Under the ring are little tags. Tap one to read, in plain words, why it is lit.
+
+| Tag | What it means |
+|---|---|
+| Cluster buy / Cluster sell | 3 different members bought (or sold) the same stock within 30 days of each other |
+| Both parties buying | A Democrat and a Republican both bought within 30 days |
+| Big trade | A form says the trade went above $250,000. Forms only give ranges, not exact amounts |
+| Fresh filing | A form was made public in the last 7 days |
+| Filed late | A form came in more than 45 days after the trade. That is past the legal deadline. It adds no points |
+| Policy nearby | A related bill or order from the President moved within 30 days of a trade (only shows when that extra data is on) |
+
+The box is **free**. It uses the same forms the panel already has, so it never uses up more of your daily look-ups. You can drag it anywhere (or click the dots and use the arrow keys). Turn it off in the Capitol Tape popup under **Floating signal box**.
+
+You can also get a message when a stock you watch turns **Hot**. That is free too.
+
+The box only reports what the forms say. It is **not** advice. Read [docs/signals-explained.md](docs/signals-explained.md) for exactly how the score is worked out.
+
 ## Where it works
 
-It works on these four stock websites:
+It only works on a computer (desktop Chrome or Firefox), not on phones or tablets. It works on these four stock websites:
 
 1. TradingView
 2. Robinhood
@@ -51,9 +72,9 @@ Yes. Capitol Tape only reads the stock's name from the web page. It cannot see y
 
 No. Everything is free:
 
-- the box on all four websites
+- the trade box and the signal box on all four websites
 - a watchlist with no limit
-- a message when a stock you watch gets a new form
+- a message when a stock you watch gets a new form or turns **Hot**
 - a link to the real form for every trade
 
 ## Why is it free?
@@ -83,7 +104,7 @@ Capitol Tape is **not** advice about money. It only shows forms that anyone can 
 |---|---|
 | `entrypoints/` | The parts you see: the pop-up box and the menu |
 | `lib/` | The brain: finds the stock name and gets the forms |
-| `site/` | The website |
+| `site/` | The website. Pages are in `site/src`, pictures in `site/public`; `npm run build:site` puts them together in `site/dist` |
 | `tests/` | Checks that make sure everything still works |
 | `worker/` | An extra helper on the internet (turned off for now) |
 | `docs/` | The plan for the whole project. The newest plan is in `docs/superpowers/` |

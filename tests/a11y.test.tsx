@@ -5,6 +5,7 @@ import { act } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fakeBrowser } from 'wxt/testing/fake-browser';
+import { Hud } from '@/entrypoints/overlay.content/Hud';
 import { Overlay } from '@/entrypoints/overlay.content/Overlay';
 import { Panel } from '@/entrypoints/panel/Panel';
 import { Popup } from '@/entrypoints/popup/Popup';
@@ -39,6 +40,7 @@ const POPUP_CSS = readFileSync('entrypoints/popup/style.css', 'utf8');
 const PANEL_CSS = readFileSync('entrypoints/overlay.content/style.css', 'utf8');
 const POPOUT_CSS = readFileSync('entrypoints/panel/style.css', 'utf8');
 const TRADES_CSS = readFileSync('components/trades.css', 'utf8');
+const HUD_CSS = readFileSync('entrypoints/overlay.content/hud.css', 'utf8');
 
 function token(css: string, name: string): string {
   const match = css.match(new RegExp(`${name}:\\s*(#[0-9a-fA-F]{6})`));
@@ -100,9 +102,39 @@ describe('other coloured text', () => {
   });
 });
 
+describe('signal HUD colour contrast', () => {
+  const hudBackgrounds = [token(HUD_CSS, '--hud-bg'), token(HUD_CSS, '--hud-raised')];
+
+  for (const name of ['--hud-text', '--hud-muted', '--hud-link', '--hud-quiet', '--hud-watch', '--hud-hot']) {
+    it(`${name} is at least ${AAA_TEXT}:1 on both HUD backgrounds`, () => {
+      for (const bg of hudBackgrounds) {
+        expect(contrast(token(HUD_CSS, name), bg), `${name} on ${bg}`).toBeGreaterThanOrEqual(AAA_TEXT);
+      }
+    });
+  }
+
+  it('the dark text on a pressed chip is at least 7:1 on every level colour', () => {
+    for (const name of ['--hud-quiet', '--hud-watch', '--hud-hot']) {
+      expect(contrast(token(HUD_CSS, '--hud-bg'), token(HUD_CSS, name)), name).toBeGreaterThanOrEqual(AAA_TEXT);
+    }
+  });
+
+  it('control edges (--hud-control) are at least 3:1 on both HUD backgrounds', () => {
+    for (const bg of hudBackgrounds) {
+      expect(contrast(token(HUD_CSS, '--hud-control'), bg), bg).toBeGreaterThanOrEqual(NON_TEXT);
+    }
+  });
+
+  it('every control is at least 44x44 CSS px', () => {
+    expect(HUD_CSS).toMatch(/\.hud-grip \{[^}]*width: 44px;[^}]*height: 44px/s);
+    expect(HUD_CSS).toMatch(/\.hud-ring \{[^}]*width: 44px;[^}]*height: 44px/s);
+    expect(HUD_CSS).toMatch(/\.chip \{[^}]*min-height: 44px/s);
+  });
+});
+
 describe('stylesheets', () => {
   it('both turn motion off for prefers-reduced-motion', () => {
-    for (const css of [POPUP_CSS, PANEL_CSS, POPOUT_CSS]) {
+    for (const css of [POPUP_CSS, PANEL_CSS, POPOUT_CSS, HUD_CSS]) {
       expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)/);
       expect(css).toMatch(/transition: none !important/);
     }
@@ -176,6 +208,41 @@ describe('axe on the page panel and the pop-out window', () => {
     expect(await violations()).toEqual([]);
   });
 
+  it('the opened Influence section has no violations and names its sources', async () => {
+    const withInfluence: TradesResponse = {
+      ...TRADES,
+      context: {
+        related_bills: [],
+        exec_orders: [],
+        lobbying: [{ registrant: 'Big Firm LLP', client: 'Acme', issue_codes: ['DEF'], amount: 120000, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' }],
+        tax_flags: [{ bill_id: '119-hr-1', section_cite: '26 U.S.C. 45X', url: 'https://www.congress.gov/bill/119th-congress/house-bill/1' }],
+        ie_spend: [
+          {
+            committee_id: 'C001',
+            committee_name: 'Some Committee',
+            member_slug: 'nancy-pelosi',
+            candidate_name: 'Nancy Pelosi',
+            support_or_oppose: 'support',
+            amount: 5000,
+            date: '2026-09-01',
+            url: 'https://docs.fec.gov/x',
+          },
+        ],
+      },
+    };
+    await act(async () =>
+      root.render(<Overlay detection={{ platform: 'tradingview', ticker: 'NVDA', bond: null }} response={withInfluence} />),
+    );
+    await act(async () => host.querySelector<HTMLElement>('.edge-tab')?.click());
+    const details = host.querySelector<HTMLDetailsElement>('details.influence');
+    expect(details?.querySelector('summary')?.textContent).toBe('Influence (3)');
+    details?.setAttribute('open', '');
+    expect(details?.textContent).toContain('Some Committee reported $5,000 to support Nancy Pelosi');
+    expect(details?.querySelectorAll('a[href^="https://"]')).toHaveLength(3);
+    expect(details?.textContent).toContain('Big Firm LLP for Acme, 2026 Q3, $120,000 (DEF)');
+    expect(await violations()).toEqual([]);
+  });
+
   it('the pop-out window has no violations, empty and with trades', async () => {
     await act(async () => root.render(<Panel />));
     expect(await violations()).toEqual([]);
@@ -183,6 +250,31 @@ describe('axe on the page panel and the pop-out window', () => {
       await setCurrentTicker({ ticker: 'NVDA', bond: null, platform: 'tradingview', at: Date.now() });
     });
     expect(host.textContent).toContain('Nancy Pelosi');
+    expect(await violations()).toEqual([]);
+  });
+});
+
+describe('axe on the signal HUD', () => {
+  const hotTrade = (n: number) =>
+    congressTrade({ id: `h${n}`, memberSlug: `m${n}`, member: `Member ${n}`, party: n === 2 ? 'R' : 'D' });
+  const response: TradesResponse = {
+    ...TRADES,
+    trades: [hotTrade(1), hotTrade(2), hotTrade(3)],
+  };
+
+  it('has no violations expanded, with a signal picked, and collapsed', async () => {
+    // Fixed clock so the fixture trades (Aug-Sep 2026) count as recent.
+    const now = Date.parse('2026-09-12T12:00:00Z');
+    await act(async () => root.render(<Hud ticker="NVDA" response={response} now={now} />));
+    expect(host.querySelector('.hud')).toBeTruthy();
+    expect(await violations()).toEqual([]);
+
+    await act(async () => host.querySelector<HTMLElement>('.chip')?.click());
+    expect(host.querySelector('.chip[aria-pressed="true"]')).toBeTruthy();
+    expect(await violations()).toEqual([]);
+
+    await act(async () => host.querySelector<HTMLElement>('.hud-ring')?.click());
+    expect(host.querySelector('.chips')).toBeNull();
     expect(await violations()).toEqual([]);
   });
 });

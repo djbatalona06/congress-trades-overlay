@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="Congress trade data API: where to get STOCK Act data — Capitol Tape" description="Where developers can get congressional stock trade data: the free Bargo Congress Trades API, the official House and Senate sources, their limits, and the legal rules on use." canonical="guides/congress-trade-data-api.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <article class="prose">
+      <p class="crumbs"><a href="index.html">Guides</a></p>
+      <h1>Congress trade data API</h1>
+      <p class="lede-prose">If you want STOCK Act trade data in your own code, here is where it comes from, what each source gives you, and the rules that come with it.</p>
+      <p class="callout"><strong>Capitol Tape does not sell an API.</strong> The extension uses the free Bargo API below. If you need a hosted data service for a team, join the <a href="../index.html?list=desk#waitlist">Desk waitlist</a>.</p>
+
+      <h2>1. Bargo Congress Trades API (free)</h2>
+      <p>The source Capitol Tape uses. One request returns recent disclosures for one ticker.</p>
+      <pre><code>curl "https://www.bargo.ai/free-apis/congress/v1/trades/NVDA?limit=5"</code></pre>
+      <ul>
+        <li><strong>Coverage:</strong> about the last 3 months.</li>
+        <li><strong>Limits:</strong> without a key, about 30 requests a day per network. A <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free key<span class="sr-only"> (opens in a new tab)</span></a> raises it.</li>
+        <li><strong>Fields:</strong> member, ticker, buy or sell, amount range, trade and filing dates. No party field and no filing id.</li>
+        <li><strong>Terms:</strong> read Bargo's terms before using it in anything you charge for.</li>
+      </ul>
+
+      <h2>2. The official sources</h2>
+      <ul>
+        <li><a href="https://disclosures-clerk.house.gov/FinancialDisclosure" target="_blank" rel="noopener noreferrer">House Clerk<span class="sr-only"> (opens in a new tab)</span></a>: a search page, plus yearly downloads with an index of filings. Many reports are PDFs, some scanned.</li>
+        <li><a href="https://efdsearch.senate.gov/" target="_blank" rel="noopener noreferrer">Senate eFD<span class="sr-only"> (opens in a new tab)</span></a>: a search page with an agreement you must accept. There is no official API.</li>
+      </ul>
+      <p>Building on the official sources means parsing PDFs and handling scanned forms, which is why most people start with a compiled API.</p>
+
+      <h2>3. Party and seat data</h2>
+      <p>Trade feeds often lack party, chamber and district. The public-domain <a href="https://github.com/unitedstates/congress-legislators" target="_blank" rel="noopener noreferrer">congress-legislators dataset<span class="sr-only"> (opens in a new tab)</span></a> fills that gap; match on name and check by hand after elections.</p>
+
+      <h2>The legal rules come with the data</h2>
+      <p>Federal law (5 U.S.C. § 13107(c)) makes it unlawful to use these financial disclosure reports for any unlawful purpose, for any commercial purpose other than by news and communications media for dissemination to the general public, to determine anyone's credit rating, or to solicit money. If you are building a product, talk to a lawyer before you charge for anything built on this data.</p>
+
+      <h2>Things every app should show</h2>
+      <ul>
+        <li>The trade date and the filing date (filings can be 45 days late).</li>
+        <li>Amounts as ranges, not single numbers.</li>
+        <li>A link to the official filing.</li>
+        <li>"Not financial advice."</li>
+      </ul>
+    </article>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="../config.js"></script>
+  <script src="../site.js"></script>
+</body>
+</html>

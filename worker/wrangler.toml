@@ -10,12 +10,16 @@ database_id = "REPLACE_WITH_D1_DATABASE_ID"
 migrations_dir = "migrations"
 
 [triggers]
-# Keep in step with BILLS_CRON and ORDERS_CRON in src/index.ts.
-crons = ["7 * * * *", "17 */6 * * *"]
+# Keep in step with the *_CRON constants in src/index.ts.
+crons = ["7 * * * *", "17 */6 * * *", "47 4 * * *", "37 * * * *", "27 */6 * * *"]
 
 [vars]
 # "bargo" or "none". See README before charging for the data.
 TRADE_SOURCE = "bargo"
+# The website that signs people in (no trailing slash). Leave it out to keep sign-in switched off.
+SITE_ORIGIN = "https://capitol-tape.pages.dev"
+GOOGLE_CLIENT_ID = ""
+GITHUB_CLIENT_ID = ""
 
 # Request logs can carry client details; this Worker needs none of them.
 [observability]
@@ -23,4 +27,8 @@ enabled = false
 
 # Secrets (never in this file):
 #   npx wrangler secret put CONGRESS_API_KEY
+#   npx wrangler secret put FEC_API_KEY        (free key from api.data.gov; outside money)
+#   npx wrangler secret put LDA_API_TOKEN      (optional)
 #   npx wrangler secret put BARGO_API_KEY      (optional)
+#   npx wrangler secret put GOOGLE_CLIENT_SECRET   (sign-in; see README)
+#   npx wrangler secret put GITHUB_CLIENT_SECRET   (sign-in; see README)

@@ -1,0 +1,261 @@
+/* The floating signal HUD. Frosted glass and a ring gauge, so it reads as a
+   different thing from the solid slate trades panel. Sizes are in px: rem inside
+   a shadow root still follows the host page's root font size.
+   Every colour token is a plain #hex so tests/a11y.test.tsx can measure it. */
+.hud {
+  --hud-bg: #0b1020;
+  --hud-raised: #1a2340;
+  /* --hud-line is decoration only. Control edges use --hud-control (3:1, WCAG 1.4.11). */
+  --hud-line: #3b4a73;
+  --hud-control: #6f83ad;
+  --hud-text: #f1f5f9;
+  --hud-muted: #c0cadb;
+  --hud-link: #93c5fd;
+  --hud-quiet: #a5b4cc;
+  --hud-watch: #fbbf24;
+  --hud-hot: #ff8fa3;
+  --hud-accent: var(--hud-quiet);
+
+  position: fixed;
+  z-index: 2147483647;
+  width: 236px;
+  max-width: calc(100vw - 16px);
+  box-sizing: border-box;
+  padding: 6px 10px 10px 4px;
+  border: 1px solid var(--hud-line);
+  border-radius: 22px;
+  background: rgb(11 16 32 / 88%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  box-shadow:
+    0 10px 30px rgb(0 0 0 / 40%),
+    inset 0 0 0 1px rgb(255 255 255 / 5%);
+  color: var(--hud-text);
+  font: 12px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  text-align: left;
+}
+
+.hud-quiet {
+  --hud-accent: var(--hud-quiet);
+}
+
+.hud-watch {
+  --hud-accent: var(--hud-watch);
+}
+
+.hud-hot {
+  --hud-accent: var(--hud-hot);
+  border-color: var(--hud-hot);
+}
+
+.hud *,
+.hud *::before,
+.hud *::after {
+  box-sizing: border-box;
+}
+
+.hud-collapsed {
+  width: auto;
+  padding-right: 14px;
+}
+
+.hud-head {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.hud button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.hud :focus-visible {
+  outline: 2px solid var(--hud-link);
+  outline-offset: 2px;
+}
+
+.hud-grip {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--hud-muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+.hud-grip:active {
+  cursor: grabbing;
+}
+
+.hud-ring {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+}
+
+.hud-ring svg {
+  display: block;
+}
+
+.hud-track,
+.hud-arc {
+  fill: none;
+  stroke-width: 4;
+}
+
+.hud-track {
+  stroke: var(--hud-line);
+}
+
+.hud-arc {
+  stroke: var(--hud-accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.4s ease;
+}
+
+.hud-score {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hud-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: 6px;
+}
+
+.hud-level {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--hud-accent);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hud-ticker {
+  color: var(--hud-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.hud-body {
+  padding: 4px 0 0 8px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.chip-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 3px 10px;
+  border: 1px solid var(--hud-accent);
+  border-radius: 999px;
+  background: var(--hud-raised);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Information only: it adds no points, so it is drawn quieter. */
+.chip-info .chip-face {
+  border-style: dashed;
+  border-color: var(--hud-control);
+  font-weight: 500;
+}
+
+.chip[aria-pressed='true'] .chip-face {
+  background: var(--hud-accent);
+  border-style: solid;
+  color: var(--hud-bg);
+}
+
+.chip-count {
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 14%);
+  font-size: 11px;
+  text-align: center;
+}
+
+.chip[aria-pressed='true'] .chip-count {
+  background: rgb(11 16 32 / 20%);
+}
+
+.hud-calm,
+.hud-detail,
+.hud-foot {
+  margin: 8px 0 0;
+}
+
+.hud-calm,
+.hud-detail {
+  color: var(--hud-text);
+}
+
+.hud-detail:empty {
+  display: none;
+}
+
+.hud-foot {
+  color: var(--hud-muted);
+  font-size: 11px;
+}
+
+.hud a {
+  color: var(--hud-link);
+  text-decoration: none;
+}
+
+.hud a:hover {
+  text-decoration: underline;
+}
+
+.hud-level-icon {
+  flex: none;
+}
+
+.hud-title .hud-credit {
+  font-size: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud,
+  .hud * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

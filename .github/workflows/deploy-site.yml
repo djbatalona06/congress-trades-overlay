@@ -1,11 +1,13 @@
-# Publishes the site/ folder to Cloudflare Pages whenever it changes on master.
+# Builds site/ into site/dist and publishes it to Cloudflare Pages whenever it changes on master.
 # Needs two repository secrets: CLOUDFLARE_API_TOKEN (Pages: Edit) and CLOUDFLARE_ACCOUNT_ID.
+# Optional repository variables (public values, not secrets): SITE_CHROME_URL, SITE_FIREFOX_URL,
+# SITE_AUTH_BASE, SITE_CONTACT_EMAIL, SITE_URL. See scripts/build-site.mjs.
 name: Deploy site
 
 on:
   push:
     branches: [master]
-    paths: ['site/**', '.github/workflows/deploy-site.yml']
+    paths: ['site/**', 'brand/**', 'scripts/build-site.mjs', '.github/workflows/deploy-site.yml']
   workflow_dispatch:
 
 permissions:
@@ -40,5 +42,13 @@ jobs:
           if ! npx --yes wrangler@4 pages project list | grep -q "\b$PROJECT\b"; then
             npx --yes wrangler@4 pages project create "$PROJECT" --production-branch=master
           fi
+      - name: Build site
+        run: node scripts/build-site.mjs
+        env:
+          SITE_CHROME_URL: ${{ vars.SITE_CHROME_URL }}
+          SITE_FIREFOX_URL: ${{ vars.SITE_FIREFOX_URL }}
+          SITE_AUTH_BASE: ${{ vars.SITE_AUTH_BASE }}
+          SITE_CONTACT_EMAIL: ${{ vars.SITE_CONTACT_EMAIL }}
+          SITE_URL: ${{ vars.SITE_URL }}
       - name: Deploy
-        run: npx --yes wrangler@4 pages deploy site --project-name="$PROJECT" --branch=master --commit-dirty=true
+        run: npx --yes wrangler@4 pages deploy site/dist --project-name="$PROJECT" --branch=master --commit-dirty=true

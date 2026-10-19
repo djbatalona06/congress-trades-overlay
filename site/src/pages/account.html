@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="Your account — Capitol Tape" description="Your Capitol Tape account." canonical="account.html" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <section class="auth" aria-labelledby="account-title">
+      <div class="wrap">
+        <div class="auth-card">
+          <h1 id="account-title">Your account</h1>
+          <p class="auth-msg" id="auth-msg" role="status">Loading your account…</p>
+          <dl class="acct-list" id="acct-list" hidden>
+            <div><dt>Name</dt><dd id="acct-name"></dd></div>
+            <div><dt>Email</dt><dd id="acct-email"></dd></div>
+            <div><dt>Signed in with</dt><dd id="acct-provider"></dd></div>
+          </dl>
+          <div class="oauth-list">
+            <button class="btn btn-ghost" id="signout" type="button" hidden>Sign out</button>
+          </div>
+          <p class="auth-fine">Want your data removed? Email the contact address in the <a href="privacy.html">privacy policy</a> and we will delete your account.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="config.js"></script>
+  <script src="site.js"></script>
+  <script src="account.js"></script>
+</body>
+</html>

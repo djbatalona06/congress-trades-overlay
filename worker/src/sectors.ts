@@ -40,6 +40,28 @@ export const SECTOR_POLICY_AREAS: Record<Sector, readonly string[]> = {
   Utilities: ['Energy', 'Environmental Protection', 'Water Resources Development'],
 };
 
+/**
+ * Senate lobbying issue codes that plausibly touch each sector. These are PROPOSED: at run
+ * time `syncLobbying` keeps only codes the Senate's own list confirms, and
+ * `npm run verify:influence` reports any that it does not.
+ */
+export const SECTOR_ISSUE_CODES: Record<Sector, readonly string[]> = {
+  'Communication Services': ['COM', 'TEC', 'MIA'],
+  'Consumer Discretionary': ['AUT', 'APP', 'GAM', 'SPO', 'ART'],
+  'Consumer Staples': ['AGR', 'FOO', 'TOB', 'ALC'],
+  Energy: ['ENG', 'FUE', 'NAT'],
+  Financials: ['BAN', 'FIN', 'INS', 'BNK', 'CDT'],
+  'Health Care': ['HCR', 'MMM', 'PHA', 'MED'],
+  Industrials: ['DEF', 'AER', 'AVI', 'RRR', 'TRU', 'MAN', 'HOM'],
+  'Information Technology': ['CPI', 'SCI', 'TEC'],
+  Materials: ['CHM', 'NAT', 'MAN'],
+  'Real Estate': ['HOU', 'URB'],
+  Utilities: ['UTI', 'ENG', 'WAS', 'CAW'],
+};
+
+/** Every distinct proposed code, for checking against the official list. */
+export const ALL_ISSUE_CODES: readonly string[] = [...new Set(Object.values(SECTOR_ISSUE_CODES).flat())].sort();
+
 /** Words that tie an executive order's title or abstract to a sector. */
 const SECTOR_KEYWORDS: Record<Sector, readonly string[]> = {
   'Communication Services': ['telecommunications', 'broadband', 'spectrum', 'media', 'internet', 'social media'],

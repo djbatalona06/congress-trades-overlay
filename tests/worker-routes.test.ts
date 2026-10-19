@@ -29,7 +29,7 @@ describe('GET /v1/ticker/{T}', () => {
     expect(response.status).toBe(200);
     expect(response.headers.get('content-type')).toContain('application/json');
     const body = (await response.json()) as TickerPayload;
-    expect(Object.keys(body).sort()).toEqual(['exec_orders', 'related_bills', 'trades']);
+    expect(Object.keys(body).sort()).toEqual(['exec_orders', 'ie_spend', 'lobbying', 'related_bills', 'tax_flags', 'trades']);
     expect(body.trades).toHaveLength(1);
     expect(body.related_bills).toEqual([
       {
@@ -170,5 +170,49 @@ describe('trade cache', () => {
     const response = await get('/v1/ticker/NVDA');
     expect(response.status).toBe(502);
     expect(await response.json()).toEqual({ error: 'unavailable' });
+  });
+});
+
+describe('Influence data', () => {
+  const ie = {
+    committee_id: 'C001',
+    committee_name: 'Some Committee',
+    member_slug: 'nancy-pelosi',
+    candidate_name: 'Nancy Pelosi',
+    support_or_oppose: 'support' as const,
+    amount: 5000,
+    date: '2026-09-01',
+    url: 'https://docs.fec.gov/x',
+  };
+
+  it('sends outside spending for the members in the trades, and nobody else', async () => {
+    store.ieSpend = [ie, { ...ie, member_slug: 'someone-else' }, { ...ie, date: '2024-01-01' }];
+    const body = (await (await get('/v1/ticker/LMT')).json()) as TickerPayload;
+    expect(body.ie_spend).toEqual([ie]);
+  });
+
+  it('sends only tax flags a person has reviewed', async () => {
+    await store.upsertBills([billRow()]);
+    await store.setPolicyArea('119-hr-1', 'Armed Forces and National Security');
+    const base = { bill_id: '119-hr-1', url: 'https://www.congress.gov/bill/119th-congress/house-bill/1' };
+    store.taxFlags = [
+      { ...base, section_cite: '26 U.S.C. 45X', reviewed: true },
+      { ...base, section_cite: '26 U.S.C. 48', reviewed: false },
+    ];
+    const body = (await (await get('/v1/ticker/LMT')).json()) as TickerPayload;
+    expect(body.tax_flags).toEqual([{ ...base, section_cite: '26 U.S.C. 45X' }]);
+  });
+
+  it('sends lobbying filings for the ticker’s sector only', async () => {
+    const filing = { registrant: 'Firm', client: 'Acme', issue_codes: ['DEF'], amount: null, period: '2026 Q3', date: '2026-10-08', url: 'https://lda.senate.gov/x' };
+    store.lobbying = [filing];
+    expect(((await (await get('/v1/ticker/LMT')).json()) as TickerPayload).lobbying).toEqual([filing]);
+    // Unknown sector: nothing guessed.
+    expect(((await (await get('/v1/ticker/ZZZZ')).json()) as TickerPayload).lobbying).toEqual([]);
+  });
+
+  it('sends empty lists when there is nothing', async () => {
+    const body = (await (await get('/v1/ticker/LMT')).json()) as TickerPayload;
+    expect(body).toMatchObject({ ie_spend: [], tax_flags: [], lobbying: [] });
   });
 });

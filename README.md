@@ -12,6 +12,12 @@ There is a law called the STOCK Act. It says people in Congress must tell everyo
 
 Capitol Tape finds those forms for you. When you look at a stock's chart on a website, a small box pops up in the corner. The box shows who in Congress bought or sold that stock, and when.
 
+## What is new in version 1.2.0
+
+- **Everything is free now.** You can watch as many stocks as you want. You get a message when a stock you watch has a new form. You used to pay for these. Now you do not.
+- **Every trade has a link to the real form.** Click **Search official records** under a trade. It opens the House or Senate website, where the real forms are kept.
+- **No "pay us" buttons near the trades.** The box shows trades and nothing that asks for money.
+
 ## What the colors mean
 
 - **Green** means *buy*. Green is also the color of a price going up.
@@ -33,8 +39,9 @@ It works in the Chrome and Firefox web browsers.
 1. Add Capitol Tape to your browser.
 2. Open a stock on one of the four websites.
 3. Look at the right edge of the chart. A small tab shows the stock and how many trades there are. Click it to open it. Press Esc to close it.
-4. Click the star to watch a stock. You can get a message when someone in Congress trades it.
-5. Have two screens? Click **Pop out** (the little box with an arrow). The trades open in their own window. Drag it to your second screen and it follows the chart.
+4. Click **Watch** to watch a stock. You can watch as many stocks as you want. You get a message when someone in Congress trades one of them.
+5. Want to check a trade? Click **Search official records** under it. You will see the government's own website for that form.
+6. Have two screens? Click **Pop out** (the little box with an arrow). The trades open in their own window. Drag it to your second screen and it follows the chart.
 
 ## Is it safe?
 
@@ -42,9 +49,23 @@ Yes. Capitol Tape only reads the stock's name from the web page. It cannot see y
 
 ## Does it cost money?
 
-No. Everything is free: the box on all four websites, a watchlist with no limit, and a message when a stock you watch gets a new form. Each trade has a link to the official House or Senate records.
+No. Everything is free:
 
-A paid add-on about bills and laws ("Policy Pro") is planned. It will never charge for the trade forms themselves.
+- the box on all four websites
+- a watchlist with no limit
+- a message when a stock you watch gets a new form
+- a link to the real form for every trade
+
+## Why is it free?
+
+There is a law about these forms. It says you cannot use them to make money. (The law is called 5 U.S.C. 13107.) News reporters are allowed to share them with everyone. So we do not charge for the trade forms. We never will.
+
+If you paid for "Pro" before, you can still open **Plan** in the Capitol Tape popup and click **Manage subscription**.
+
+## What is coming next
+
+1. **A news website.** Every week we will write a short story about what Congress traded and what laws it passed. A person checks every story before it goes up. You can sign up to get it by email for free.
+2. **Policy Pro.** A paid add-on about bills, laws and the President's orders. It will tell you when a new law might touch the kinds of companies you watch. It will never charge for the trade forms. Click **Join the waitlist** in the **Plan** tab to hear when it is ready.
 
 ## Do I need a key?
 
@@ -65,7 +86,7 @@ Capitol Tape is **not** advice about money. It only shows forms that anyone can 
 | `site/` | The website |
 | `tests/` | Checks that make sure everything still works |
 | `worker/` | An extra helper on the internet (turned off for now) |
-| `docs/` | The plan for the whole project |
+| `docs/` | The plan for the whole project. The newest plan is in `docs/superpowers/` |
 
 ## For grown-up builders
 

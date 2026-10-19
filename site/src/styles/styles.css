@@ -140,6 +140,13 @@ section { padding: var(--section-y) 0; }
   background:
     radial-gradient(45% 55% at 50% 20%, rgba(23, 37, 54, 0.06), transparent 70%);
 }
+.hero-video {
+  position: absolute; inset: 0 0 auto; width: 100%; height: min(720px, 100%); object-fit: cover; pointer-events: none;
+  /* The clip is a dark chart. Flipping its tones turns the navy into white, so only the candles show, faintly, and the headline keeps its dark text on a light page. */
+  filter: invert(1) hue-rotate(180deg); opacity: 0.45;
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent 100%);
+}
 .hero .wrap { position: relative; text-align: center; }
 .pill {
   display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px;
@@ -369,6 +376,7 @@ footer.site { padding: 80px 0 48px; border-top: 1px solid var(--line); backgroun
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; transition-delay: 0ms !important; }
   .reveal { opacity: 1; transform: none; }
+  .hero-video { display: none; }
 }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 

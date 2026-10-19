@@ -1,5 +1,9 @@
-<!-- Hero: one headline, one subhead, one button, then the product picture. -->
+<!-- Hero: one headline, one subhead, one button, then the product picture. The video is a faint, silent 3-second loop of the chart; decoration only. -->
     <section class="hero" id="top" aria-labelledby="hero-title">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="{{base}}media/hero-chart-poster.jpg" aria-hidden="true" tabindex="-1">
+        <source src="{{base}}media/hero-chart-loop.webm" type="video/webm" />
+        <source src="{{base}}media/hero-chart-loop.mp4" type="video/mp4" />
+      </video>
       <div class="wrap">
         <h1 id="hero-title" class="reveal">{{title}}</h1>
         <p class="sub reveal d2">{{sub}}</p>

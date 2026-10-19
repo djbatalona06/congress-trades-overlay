@@ -42,8 +42,9 @@ Yes. Capitol Tape only reads the stock's name from the web page. It cannot see y
 
 ## Does it cost money?
 
-- **Free:** you get the box on all four websites. You can watch 3 tickers (a ticker is a stock's short name, like NVDA).
-- **Pro ($8/month):** you can watch as many stocks as you want. You also get a message when there is a new form.
+No. Everything is free: the box on all four websites, a watchlist with no limit, and a message when a stock you watch gets a new form. Each trade has a link to the official House or Senate records.
+
+A paid add-on about bills and laws ("Policy Pro") is planned. It will never charge for the trade forms themselves.
 
 ## Do I need a key?
 

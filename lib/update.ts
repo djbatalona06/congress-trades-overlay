@@ -11,6 +11,8 @@ export interface LastSeen {
 
 // Written by hand for each release. A missing entry falls back to the store page.
 export const RELEASE_NOTES: Record<string, string> = {
+  '1.2.0':
+    'Watchlist and new-filing alerts are now free for everyone. Each trade links to its official record.',
   '1.1.0':
     'A small tab on the edge of the chart replaces the box, and a Pop out button opens the trades in their own window for a second screen. The popup has three tabs, clearer plan messages and easier-to-read colours.',
 };

@@ -104,7 +104,8 @@ Capitol Tape is **not** advice about money. It only shows forms that anyone can 
 |---|---|
 | `entrypoints/` | The parts you see: the pop-up box and the menu |
 | `lib/` | The brain: finds the stock name and gets the forms |
-| `site/` | The website. Pages are in `site/src`, pictures in `site/public`; `npm run build:site` puts them together in `site/dist` |
+| `site/` | The website. Pages are in `site/src`, pictures and the little moving chart video in `site/public`; `npm run build:site` puts them together in `site/dist` |
+| `scripts/hero-video/` | The recipe that draws the moving chart video on the website's top banner. Run `scripts/hero-video/build.sh` to make it again |
 | `tests/` | Checks that make sure everything still works |
 | `worker/` | An extra helper on the internet (turned off for now) |
 | `docs/` | The plan for the whole project. The newest plan is in `docs/superpowers/` |

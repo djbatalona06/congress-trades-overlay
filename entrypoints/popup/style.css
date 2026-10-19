@@ -117,20 +117,6 @@ h2 .muted {
   color: var(--error);
 }
 
-.badge {
-  padding: 3px 10px;
-  border: 1px solid var(--control-border);
-  border-radius: 999px;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.badge.pro {
-  border-color: var(--accent);
-  color: var(--accent-text);
-}
-
 .check {
   display: flex;
   align-items: center;

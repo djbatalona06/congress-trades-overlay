@@ -1,16 +1,12 @@
 import { storage } from 'wxt/utils/storage';
-import { isPro } from './pro';
 import { resolveTicker } from './ticker';
 import type { Platform, WatchlistItem } from './types';
 
 const KEY = 'local:watchlist';
-// Plan facts live here and nowhere else in code; tests/parity.test.ts checks the written copy.
-export const FREE_WATCHLIST_LIMIT = 3;
-export const PRO_PRICE_MONTHLY = 8;
 
 export type AddResult =
   | { ok: true; watchlist: WatchlistItem[] }
-  | { ok: false; reason: 'invalid' | 'duplicate' | 'limit'; watchlist: WatchlistItem[] };
+  | { ok: false; reason: 'invalid' | 'duplicate'; watchlist: WatchlistItem[] };
 
 export async function getWatchlist(): Promise<WatchlistItem[]> {
   return (await storage.getItem<WatchlistItem[]>(KEY)) ?? [];
@@ -26,9 +22,6 @@ export async function addToWatchlist(
   if (!ticker) return { ok: false, reason: 'invalid', watchlist };
   if (watchlist.some((item) => item.ticker === ticker)) {
     return { ok: false, reason: 'duplicate', watchlist };
-  }
-  if (watchlist.length >= FREE_WATCHLIST_LIMIT && !(await isPro(now))) {
-    return { ok: false, reason: 'limit', watchlist };
   }
   const next = [...watchlist, { ticker, addedAt: now, platform }];
   await storage.setItem(KEY, next);

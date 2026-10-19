@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { formatDate, lookupsLeft, lookupsPerDay } from '@/lib/format';
 import { lookupParty } from '@/lib/party';
-import { toCongressTrades } from '@/lib/trades';
+import { HOUSE_SEARCH_URL, SENATE_SEARCH_URL, officialRecordLinks, toCongressTrades } from '@/lib/trades';
 import { bargoTrade, budget } from './helpers';
 
 vi.mock('@/assets/party-map.json', () => ({
@@ -125,5 +125,61 @@ describe('format', () => {
     expect(lookupsLeft(budget({ requestsRemaining: 3 }))).toBe(3);
     expect(lookupsLeft(budget({ rowsRemaining: 12 }))).toBe(2);
     expect(lookupsPerDay(budget({ requestsLimit: 100, rowsLimit: 1000 }))).toBe(100);
+  });
+});
+
+describe('officialRecordLinks', () => {
+  it('sends a House row with the portal home to the House search page', () => {
+    expect(
+      officialRecordLinks({ chamber: 'house', sourceUrl: 'https://disclosures-clerk.house.gov/FinancialDisclosure' }),
+    ).toEqual([{ url: HOUSE_SEARCH_URL, label: 'Search official records' }]);
+  });
+
+  it('sends a Senate row to eFD search', () => {
+    expect(officialRecordLinks({ chamber: 'senate', sourceUrl: 'https://efdsearch.senate.gov/search/' })).toEqual([
+      { url: SENATE_SEARCH_URL, label: 'Search official records' },
+    ]);
+  });
+
+  it('links a specific filing directly', () => {
+    const pdf = 'https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20031234.pdf';
+    const view = 'https://efdsearch.senate.gov/search/view/ptr/abc-123/';
+    expect(officialRecordLinks({ chamber: 'house', sourceUrl: pdf })).toEqual([{ url: pdf, label: 'Official record' }]);
+    expect(officialRecordLinks({ chamber: 'senate', sourceUrl: view })).toEqual([{ url: view, label: 'Official record' }]);
+  });
+
+  it('works out the chamber from the portal when the chamber is missing', () => {
+    expect(officialRecordLinks({ chamber: null, sourceUrl: 'https://efdsearch.senate.gov/search/' })[0]?.url).toBe(
+      SENATE_SEARCH_URL,
+    );
+  });
+
+  it('offers both chambers when nothing is known', () => {
+    expect(officialRecordLinks({ chamber: null, sourceUrl: null })).toEqual([
+      { url: HOUSE_SEARCH_URL, label: 'House records' },
+      { url: SENATE_SEARCH_URL, label: 'Senate records' },
+    ]);
+  });
+
+  it('only calls a link an official record when it is on a House or Senate host', () => {
+    for (const sourceUrl of [
+      'https://evil.example/x.pdf',
+      'https://evil.example/?efdsearch.senate.gov/search/view/',
+      'https://disclosures-clerk.house.gov.evil.example/x.pdf',
+      'https://constructor/x.pdf',
+    ]) {
+      const links = officialRecordLinks({ chamber: 'house', sourceUrl });
+      expect(links).toEqual([{ url: HOUSE_SEARCH_URL, label: 'Search official records' }]);
+    }
+  });
+
+  it('does not guess the chamber from a look-alike host', () => {
+    expect(officialRecordLinks({ chamber: null, sourceUrl: 'https://senate.gov.evil.example/' })).toHaveLength(2);
+  });
+
+  it('never returns a non-https URL', () => {
+    for (const link of officialRecordLinks({ chamber: 'house', sourceUrl: 'http://example.com/x.pdf' })) {
+      expect(link.url.startsWith('https://')).toBe(true);
+    }
   });
 });

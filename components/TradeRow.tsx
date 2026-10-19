@@ -1,5 +1,5 @@
 import { PARTY_NAME, formatDate } from '@/lib/format';
-import { TYPE_LABEL } from '@/lib/trades';
+import { TYPE_LABEL, officialRecordLinks } from '@/lib/trades';
 import type { CongressTrade } from '@/lib/types';
 
 export function TradeRow({ trade }: { trade: CongressTrade }) {
@@ -25,14 +25,14 @@ export function TradeRow({ trade }: { trade: CongressTrade }) {
       </div>
       <div className="when">
         Filed {formatDate(trade.filedDate)} · Traded {formatDate(trade.transactionDate)}
-        {trade.sourceUrl && (
-          <>
+        {officialRecordLinks(trade).map((link) => (
+          <span key={link.url}>
             {' · '}
-            <a href={trade.sourceUrl} target="_blank" rel="noopener noreferrer">
-              Filing portal
+            <a href={link.url} target="_blank" rel="noopener noreferrer">
+              {link.label}
             </a>
-          </>
-        )}
+          </span>
+        ))}
       </div>
     </li>
   );

@@ -94,6 +94,10 @@ describe('Overlay (saved choice: the bar users already know)', () => {
     expect(rows[0]?.textContent).toContain('$1,001 - $15,000');
     expect(rows[0]?.textContent).toContain('Filed Sep 10, 2026 · Traded Aug 18, 2026');
     expect(rows[0]?.querySelector('.when a')?.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(rows[0]?.querySelector('.when a')?.textContent).toBe('Search official records');
+    expect(rows[0]?.querySelector('.when a')?.getAttribute('href')).toBe(
+      'https://disclosures-clerk.house.gov/FinancialDisclosure/ViewSearch',
+    );
 
     expect(rows[1]?.querySelector('.party')).toBeNull();
     expect(rows[1]?.textContent).toContain('Senate · CA');
@@ -159,14 +163,14 @@ describe('Overlay (saved choice: the bar users already know)', () => {
     expect(await getWatchlist()).toEqual([]);
   });
 
-  it('offers Pro when the free watchlist is full', async () => {
+  it('watches a fourth ticker from the panel with no upsell', async () => {
     for (const ticker of ['AAPL', 'MSFT', 'TSLA']) await addToWatchlist(ticker, null);
     await render(NVDA, response());
     await click(toggle());
     await click(host.querySelector('.watch-button'));
-    expect(text()).toContain('The free plan watches 3 tickers.');
-    expect(host.querySelector('.watch .link')?.textContent).toBe('Upgrade to Pro');
-    expect(await getWatchlist()).toHaveLength(3);
+    expect(host.querySelector('.watch-button')?.textContent).toBe('Watching NVDA');
+    expect(text()).not.toMatch(/upgrade|free plan/i);
+    expect(await getWatchlist()).toHaveLength(4);
   });
 });
 

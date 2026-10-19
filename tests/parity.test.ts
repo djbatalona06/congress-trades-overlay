@@ -1,11 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { BARGO_KEY_URL } from '@/lib/bargo';
-import { FREE_WATCHLIST_LIMIT, PRO_PRICE_MONTHLY } from '@/lib/watchlist';
 
-// Store listing and site copy are written by hand. These tests fail, naming the
-// file, when that copy drifts from the constants the code uses.
-const FILES = ['CHROMEWEBSTORE.md', 'README.md', 'site/dist/index.html', 'site/dist/pricing.html'] as const;
+// Pro is paused (spec 2026-10-18). Store and README copy must not sell anything.
+const COPY_FILES = ['CHROMEWEBSTORE.md', 'README.md'] as const;
 
 function readText(path: string): string {
   const raw = readFileSync(path, 'utf8');
@@ -13,15 +11,13 @@ function readText(path: string): string {
   return raw.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ');
 }
 
-describe('plan facts match the constants', () => {
-  for (const file of FILES) {
-    it(`${file} states the price, and every price it states matches`, () => {
-      const prices = [...readText(file).matchAll(/\$(\d+)\/month/g)].map((m) => Number(m[1]));
-      expect(prices.length, `${file} states no $N/month price`).toBeGreaterThan(0);
-      expect(prices, `${file} price`).toEqual(prices.map(() => PRO_PRICE_MONTHLY));
-    });
-    it(`${file} states the free limit`, () => {
-      expect(readText(file), `${file} free limit`).toContain(`${FREE_WATCHLIST_LIMIT} tickers`);
+describe('copy sells nothing while Pro is paused', () => {
+  for (const file of COPY_FILES) {
+    it(`${file} states no price, no ticker limit and no upgrade`, () => {
+      const text = readText(file);
+      expect(text, `${file} price`).not.toMatch(/\$\d+\/month/);
+      expect(text, `${file} free limit`).not.toMatch(/3 tickers/);
+      expect(text, `${file} upgrade`).not.toMatch(/upgrade to pro/i);
     });
   }
 });

@@ -28,9 +28,6 @@ async function handle(message: AppMessage): Promise<unknown> {
       const ticker = resolveTicker(message.ticker)?.ticker;
       return ticker ? getTrades(ticker, 'chart') : null;
     }
-    case 'cto/open-payment':
-      await createExtPay().openPaymentPage();
-      return null;
     case 'cto/pop-out':
       await openPopout();
       return null;

@@ -40,16 +40,16 @@ describe('watchlist', () => {
     expect(await addToWatchlist('nvda', null, NOON)).toMatchObject({ ok: false, reason: 'duplicate' });
   });
 
-  it('stops the free plan at three tickers', async () => {
-    await addAll('NVDA', 'AAPL', 'MSFT');
-    const result = await addToWatchlist('TSLA', null, NOON);
-    expect(result).toMatchObject({ ok: false, reason: 'limit' });
-    expect(result.watchlist).toHaveLength(3);
+  it('has no limit and needs no Pro status', async () => {
+    await addAll('NVDA', 'AAPL', 'MSFT', 'TSLA', 'AMZN', 'META', 'GOOG', 'NFLX', 'AMD', 'INTC');
+    expect(await getWatchlist()).toHaveLength(10);
   });
 
-  it('lets Pro go past three', async () => {
+  it('keeps a long list saved under Pro and still adds after Pro lapses', async () => {
     await writeProStatus(true, NOON);
-    await addAll('NVDA', 'AAPL', 'MSFT', 'TSLA', 'AMZN');
+    await addAll('NVDA', 'AAPL', 'MSFT', 'TSLA');
+    await writeProStatus(false, NOON);
+    expect(await addToWatchlist('AMZN', null, NOON)).toMatchObject({ ok: true });
     expect(await getWatchlist()).toHaveLength(5);
   });
 

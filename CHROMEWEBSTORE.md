@@ -1,6 +1,6 @@
 # Chrome Web Store / Firefox Add-ons Listing — Capitol Tape
 
-Last updated: 2026-10-07 · Version 1.0.0 · Not yet submitted
+Last updated: 2026-10-07 · Version 1.2.0 · Not yet submitted
 
 ## Listing
 
@@ -16,8 +16,8 @@ Shows what members of Congress have disclosed trading in the stock you are looki
 - Works on stock pages at TradingView, Robinhood, Webull and Schwab
 - Shows each disclosure's member, party, chamber, buy or sell, amount range, trade date and filing date
 - On a corporate bond chart, shows disclosures for the issuing company's stock
-- Free: the panel plus a watchlist of 3 tickers
-- Pro ($8/month): unlimited watchlist and a notification when a watched ticker gets a new disclosure
+- Free: the panel, an unlimited watchlist and a notification when a watched ticker gets a new disclosure
+- Each disclosure links to the official House or Senate records
 
 What it does not do: place trades, access your brokerage account, read balances or positions, or give investment advice.
 
@@ -28,8 +28,8 @@ Data: Bargo Congress Trades API (bargo.ai), covering roughly the last 90 days. D
 | Permission | Justification |
 |---|---|
 | `storage` | Saves the watchlist, recent lookup results, the daily lookup count and panel preferences on the device. |
-| `alarms` | Runs an hourly check of watched tickers for new disclosures (Pro) and clears old saved results. |
-| `notifications` | Tells the user when a watched ticker has a new congressional disclosure (Pro). |
+| `alarms` | Runs an hourly check of watched tickers for new disclosures and clears old saved results. |
+| `notifications` | Tells the user when a watched ticker has a new congressional disclosure. |
 | Host `https://www.bargo.ai/*` | Fetches public disclosure data for the ticker on screen from the Bargo API. |
 | Content script on `tradingview.com`, `robinhood.com`, `www.webull.com`, `www.schwab.com` | Reads the ticker symbol from the page address or title and displays the panel on that page. No other page content is read. |
 | Firefox only: host `https://extensionpay.com/*` | Lets the payment library check subscription status. |
@@ -54,8 +54,9 @@ Remote code: none. All code is in the package.
 
 ## Before submitting
 
+- [ ] The site's `/extension/#waitlist` page is live (the popup's "Join the waitlist" link opens it); submit 1.2.0 only after it deploys
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
-- [ ] ExtensionPay extension registered as `congress-trades-overlay` with the $8/month plan; test-mode payment passes
+- [ ] ExtensionPay stays registered as `congress-trades-overlay` (no plan is sold in 1.2.0; Manage subscription must still open for past payers)
 - [ ] `SITE_CONTACT_EMAIL` repository variable set; `site/` published (landing page + privacy)
 - [ ] Reply from Bargo on commercial use; legal advice on 5 U.S.C. 13107(c)(1)
 - [ ] `npm test`, `npm run zip`, `npm run zip:firefox`
@@ -66,3 +67,4 @@ Remote code: none. All code is in the package.
 | Version | Date | Notes |
 |---|---|---|
 | 1.0.0 | — | First release |
+| 1.2.0 | — | Watchlist and new-filing alerts free for everyone; official record links; Pro paused |

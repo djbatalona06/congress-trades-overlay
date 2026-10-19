@@ -46,7 +46,7 @@ describe('popup header menu', () => {
   it('has three tabs and starts on Watchlist', () => {
     expect(tabs().map((tab) => tab.textContent)).toEqual(['Watchlist', 'Plan', 'Lookups']);
     expect(selected()?.textContent).toBe('Watchlist');
-    expect(host.querySelector('header .badge')).toBeTruthy();
+    expect(host.querySelector('header .badge')).toBeNull();
   });
 
   it('Right moves to Plan and the panel is labelled by the active tab', async () => {
@@ -54,7 +54,7 @@ describe('popup header menu', () => {
     expect(selected()?.textContent).toBe('Plan');
     expect(document.activeElement).toBe(selected());
     expect(panel()?.getAttribute('aria-labelledby')).toBe(selected()?.id);
-    expect(host.textContent).toContain('Upgrade to Pro');
+    expect(host.textContent).toContain('Policy Pro is coming');
   });
 
   it('End goes to Lookups, Home goes back, Left wraps around', async () => {

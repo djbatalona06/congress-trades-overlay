@@ -94,6 +94,10 @@ describe('Overlay (saved choice: the bar users already know)', () => {
     expect(rows[0]?.textContent).toContain('$1,001 - $15,000');
     expect(rows[0]?.textContent).toContain('Filed Sep 10, 2026 · Traded Aug 18, 2026');
     expect(rows[0]?.querySelector('.when a')?.getAttribute('rel')).toBe('noopener noreferrer');
+    expect(rows[0]?.querySelector('.when a')?.textContent).toBe('Search official records');
+    expect(rows[0]?.querySelector('.when a')?.getAttribute('href')).toBe(
+      'https://disclosures-clerk.house.gov/FinancialDisclosure/ViewSearch',
+    );
 
     expect(rows[1]?.querySelector('.party')).toBeNull();
     expect(rows[1]?.textContent).toContain('Senate · CA');

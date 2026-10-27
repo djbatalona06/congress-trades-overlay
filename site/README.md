@@ -97,7 +97,7 @@ From your own computer instead: `npx wrangler login`, then `npm run build:site &
 
 The hero (`src/components/Hero.html`) plays a silent 3-second loop of the demo chart behind the headline: `public/media/hero-chart-loop.mp4` (1280×720, H.264, about 260 KB, no audio) with `hero-chart-poster.jpg` shown until it loads.
 
-- It is decoration only: `aria-hidden`, no controls. The clip is a dark chart, so `.hero-video` in `styles.css` flips its tones (the navy becomes white) and shows it at 45% strength. That keeps the headline dark text on a light page. If you make it stronger, re-run `npm test` and Lighthouse: the contrast checks must still pass.
+- It is decoration only: `aria-hidden`, no controls. `src/js/hero-video.js` shows it only once it is playing, and removes it if the browser refuses autoplay. Some browsers (Safari on iPhone in Low Power Mode) would otherwise draw their own play button over it. The clip is a dark chart, so `.hero-video` in `styles.css` flips its tones (the navy becomes white) and shows it at 45% strength. That keeps the headline dark text on a light page. If you make it stronger, re-run `npm test` and Lighthouse: the contrast checks must still pass.
 - There are two copies: `hero-chart-loop.webm` (smaller, listed first) and `hero-chart-loop.mp4` (for browsers that cannot play WebM).
 - Visitors who ask their device for less motion (`prefers-reduced-motion`) do not see it.
 - The files are served from this site, so the Content-Security-Policy needs no change. Keep any video on the same address, or add `media-src` to `src/_headers`.

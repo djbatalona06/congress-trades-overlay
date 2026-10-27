@@ -184,6 +184,16 @@ describe('brand and visual system', () => {
     for (const level of ['quiet', 'watch', 'hot']) expect(page('index')).toContain(`<symbol id="sig-${level}"`);
   });
 
+  it('shows the hero video only once it plays, so no browser play button can show', () => {
+    expect(hero(page('index'))).not.toMatch(/\scontrols[\s>]/);
+    expect(page('index')).toContain('<script src="hero-video.js"></script>');
+    expect(css).toMatch(/\.hero-video \{[^}]*visibility: hidden;/);
+    expect(css).toMatch(/\.hero-video\.is-playing \{ visibility: visible; \}/);
+    const script = readFileSync('site/dist/hero-video.js', 'utf8');
+    expect(script).toContain("classList.add('is-playing')");
+    expect(script).toContain('started.catch(remove)');
+  });
+
   it('does not colour party badges by party', () => {
     expect(page('index')).not.toMatch(/class="badge b-[dri]"/);
     expect(css).not.toMatch(/\.b-[dr]\s*\{/);

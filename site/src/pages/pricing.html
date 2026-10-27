@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- @include Head title="Pricing — Capitol Tape" description="Capitol Tape is free forever with a watchlist of 3 tickers. Pro is $8/month for an unlimited watchlist and notifications." canonical="pricing.html" -->
+  <!-- @include Head title="Pricing — Capitol Tape" description="Capitol Tape is free: the panel, the signal box, an unlimited watchlist, new-filing notifications and official record links. Nothing to buy." canonical="pricing.html" -->
 </head>
 <body class="no-js">
   <a class="skip" href="#main">Skip to content</a>
@@ -9,43 +9,37 @@
   <!-- @include Header -->
 
   <main id="main">
-    <!-- 9. Pricing -->
+    <!-- Pricing. Everything is free while Pro is paused (spec 2026-10-18). Old links to this page keep working. -->
     <section class="pricing-page" id="pricing" aria-labelledby="pricing-title">
       <div class="wrap">
         <div class="head center reveal">
           <span class="eyebrow">Pricing</span>
-          <h1 id="pricing-title" class="h2">Start free. Upgrade when you watch more.</h1>
-          <p class="lede">The panel is free forever. Pro adds an unlimited watchlist and notifications. Cancel any time.</p>
+          <h1 id="pricing-title" class="h2">Capitol Tape is free.</h1>
+          <p class="lede">Everything in the extension is free for everyone. There is nothing to buy and no account to make.</p>
         </div>
         <div class="grid">
-          <!-- @include PricingCard extra="" delay="d0" tag="" name="Free" for="For checking the names you trade." price="$0" unit="forever" button="btn-ghost" href="index.html#get" install=' data-install="chrome"' cta="Add to Chrome" -->
+          <!-- @include PricingCard extra=" rec solo" delay="d0" tag="" name="Free" for="For everyone who wants to read the public record." price="$0" unit="" button="btn-primary" href="index.html#get" install=' data-install="chrome"' cta="Add to Chrome" -->
               <!-- @include Feature -->Panel on all four platforms<!-- @end Feature -->
               <!-- @include Feature -->Bond-to-issuer mapping<!-- @end Feature -->
-              <!-- @include Feature -->Watchlist of 3 tickers<!-- @end Feature -->
+              <!-- @include Feature -->A watchlist with no limit<!-- @end Feature -->
+              <!-- @include Feature -->A browser notification when a watched ticker gets a new filing or turns Hot<!-- @end Feature -->
+              <!-- @include Feature -->A link to the official House or Senate record for every trade<!-- @end Feature -->
               <!-- @include Feature -->Floating signal box: Quiet, Watch or Hot<!-- @end Feature -->
               <!-- @include Feature -->About 20 chart lookups a day, more with a <a href="https://www.bargo.ai/connect" target="_blank" rel="noopener noreferrer">free Bargo key<span class="sr-only"> (opens in a new tab)</span></a><!-- @end Feature -->
-          <!-- @end PricingCard -->
-          <!-- @include PricingCard extra=" rec" delay="d1" tag='<span class="tag">Recommended</span>' name="Pro" for="For active traders with a real watchlist." price="$8" unit="/month" button="btn-primary" href="index.html#get" install=' data-install="chrome"' cta="Start Free, Upgrade Later" -->
-              <!-- @include Feature -->Everything in Free<!-- @end Feature -->
-              <!-- @include Feature -->Unlimited watchlist<!-- @end Feature -->
-              <!-- @include Feature -->Browser notification when a watched ticker gets a new filing or turns Hot<!-- @end Feature -->
-              <!-- @include Feature -->Secure checkout via Stripe; cancel any time<!-- @end Feature -->
-          <!-- @end PricingCard -->
-          <!-- @include PricingCard extra="" delay="d2" tag="" name="Desk" for="For newsletters, research teams and desks." price="Custom" unit="" button="btn-ghost" href="index.html?list=desk#waitlist" install="" cta="Join the Desk Waitlist" -->
-              <!-- @include Feature -->Everything in Pro, per seat<!-- @end Feature -->
-              <!-- @include Feature -->Related bills and executive orders by sector (preview)<!-- @end Feature -->
-              <!-- @include Feature -->Hosted data service with higher lookup limits<!-- @end Feature -->
-              <!-- @include Feature -->Consolidated billing<!-- @end Feature -->
           <!-- @end PricingCard -->
         </div>
       </div>
     </section>
-    <section class="alt" aria-labelledby="pay-title">
+    <section class="alt" aria-labelledby="later-title">
       <div class="wrap">
         <div class="head center">
-          <h2 id="pay-title" class="h2">How paying works</h2>
-          <p class="lede">Pro is bought inside the extension popup, through ExtensionPay and Stripe. You do not need a Capitol Tape account to use the extension or to upgrade. The optional account on this site is separate.</p>
-          <div class="cta-row"><a class="btn btn-ghost" href="login.html">Sign in</a></div>
+          <h2 id="later-title" class="h2">Coming later</h2>
+          <p class="lede">Policy Pro is coming: alerts on bills and executive orders for your sectors. The trade data stays free.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="extension/#waitlist">Join the Policy Pro waitlist</a>
+            <a class="btn btn-ghost" href="index.html?list=desk#waitlist">Teams: join the Desk waitlist</a>
+          </div>
+          <p class="lede">Paid for Pro before? Everything you had is now free. To manage an old subscription, open the extension popup, go to the Plan tab and click Manage subscription.</p>
         </div>
       </div>
     </section>

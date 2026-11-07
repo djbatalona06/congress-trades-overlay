@@ -1,4 +1,4 @@
-// Waitlist form (home page): sends email + list to the Worker, then shows the person's share link.
+// Waitlist form (home page and extension page): sends email + list to the Worker, then shows the person's share link.
 // ?ref=CODE in the address is passed along so the person who shared gets counted.
 // ?list=desk (or mobile, beta) picks that option, so other pages can link straight to it.
 (function () {

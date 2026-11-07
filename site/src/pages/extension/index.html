@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- @include Head title="The Extension — Capitol Tape" description="The Capitol Tape browser extension is free: congressional trade disclosures on TradingView, Robinhood, Webull and Schwab, an unlimited watchlist and new-filing alerts. Read-only. Not financial advice." canonical="extension/" -->
+</head>
+<body class="no-js">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- @include Header -->
+
+  <main id="main">
+    <!-- 1. Intro. The extension's Plan tab links to #waitlist below, so keep that id. -->
+    <section class="pricing-page" aria-labelledby="ext-title">
+      <div class="wrap">
+        <div class="head center reveal">
+          <span class="eyebrow">The extension</span>
+          <h1 id="ext-title" class="h2">Capitol Tape is free.</h1>
+          <p class="lede">The panel, the signal box, a watchlist with no limit, a notification when a watched stock gets a new filing, and a link to the official House or Senate record for every trade. All free, with no account.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="{{base}}index.html#get" data-install="chrome">Add to Chrome</a>
+            <a class="btn btn-ghost" href="{{base}}index.html#get" data-install="firefox">Get the Firefox Add-on</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. The four supported sites -->
+    <!-- @include PlatformBadges -->
+
+    <!-- 3. How it works: the first three steps from README.md "How to use it" -->
+    <section class="alt" id="how" aria-labelledby="how-title">
+      <div class="wrap">
+        <div class="head reveal">
+          <span class="eyebrow">How it works</span>
+          <h2 id="how-title" class="h2">Three steps to your first disclosure.</h2>
+        </div>
+        <ol class="steps three grid">
+          <li class="step reveal d0"><h3>Add it</h3><p>Add Capitol Tape to desktop Chrome or Firefox. No sign-up.</p></li>
+          <li class="step reveal d1"><h3>Open a stock</h3><p>Open a stock on TradingView, Robinhood, Webull or Schwab. The symbol is read from the page.</p></li>
+          <li class="step reveal d2"><h3>Open the tab</h3><p>Click the small tab on the right edge of the chart to see who in Congress traded it, and when. Press Esc to close it.</p></li>
+        </ol>
+        <p class="faq-more"><a class="btn btn-ghost" href="{{base}}index.html#how">More on how it works</a></p>
+      </div>
+    </section>
+
+    <!-- 4. Coverage: the same numbers as the home page -->
+    <section aria-labelledby="metrics-title">
+      <div class="wrap">
+        <div class="head reveal">
+          <span class="eyebrow">Coverage</span>
+          <h2 id="metrics-title" class="h2">Built on the public record.</h2>
+        </div>
+        <div class="grid">
+          <div class="metric reveal d0"><div class="num">535</div><div class="lbl">Members covered</div><div class="src">Every House and Senate seat subject to the STOCK Act</div></div>
+          <div class="metric reveal d1"><div class="num">90<small>days</small></div><div class="lbl">Rolling disclosure window</div><div class="src">Recent filings, cached on-device for 6 hours</div></div>
+          <div class="metric reveal d2"><div class="num">4</div><div class="lbl">Trading platforms</div><div class="src">Plus corporate-bond charts mapped to the issuer</div></div>
+          <div class="metric reveal d3"><div class="num">0</div><div class="lbl">Brokerage permissions</div><div class="src">No account access, no positions, no order entry</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FAQ -->
+    <section class="alt" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="head center reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2 id="faq-title" class="h2">Questions about the extension.</h2>
+        </div>
+        <div class="faq reveal">
+          <details><summary>Is everything really free?</summary><p class="a">Yes. The panel, the signal box, the watchlist, new-filing notifications and the official record links are free for everyone. The trade data will stay free.</p></details>
+          <details><summary>Can it see my brokerage account?</summary><p class="a">No. It reads only the ticker symbol from the page address or title. It cannot read balances, positions or orders, and it cannot place trades. See every permission on the <a href="{{base}}security.html">Security</a> page.</p></details>
+          <details><summary>I paid for Pro before. What now?</summary><p class="a">Everything you had is now free. To manage an old subscription, open the extension popup, go to the Plan tab and click Manage subscription.</p></details>
+          <details><summary>Is this financial advice?</summary><p class="a">No. Capitol Tape displays public STOCK Act disclosures for information only. Filings can be up to 45 days late; check the official House and Senate records.</p></details>
+        </div>
+        <p class="faq-more"><a class="btn btn-ghost" href="{{base}}faq.html">See all questions</a></p>
+      </div>
+    </section>
+
+    <!-- 6. Waitlist. WAITLIST_URL in lib/site.ts points here. Same form and lists as the home page. -->
+    <section id="waitlist" aria-labelledby="waitlist-title">
+      <div class="wrap narrow">
+        <div class="head center reveal">
+          <span class="eyebrow">Coming later</span>
+          <h2 id="waitlist-title" class="h2">Policy Pro is coming</h2>
+          <p class="lede">Policy Pro is coming: alerts on bills and executive orders for your sectors.</p>
+        </div>
+        <div class="reveal d1">
+          <!-- @include WaitlistForm -->
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- @include FooterLegal -->
+
+  <script src="../config.js"></script>
+  <script src="../site.js"></script>
+  <script src="../reveal.js"></script>
+  <script src="../waitlist.js"></script>
+</body>
+</html>

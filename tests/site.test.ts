@@ -317,7 +317,7 @@ describe('marketing and growth', () => {
 
   it('lists every public page in the sitemap, but not sign-in or account', () => {
     const sitemap = readFileSync('site/dist/sitemap.xml', 'utf8');
-    for (const path of ['', 'pricing.html', 'faq.html', 'terms.html', 'data.html', 'guides/', 'guides/stock-act-disclosures-explained.html']) {
+    for (const path of ['', 'extension/', 'pricing.html', 'faq.html', 'terms.html', 'data.html', 'guides/', 'guides/stock-act-disclosures-explained.html']) {
       expect(sitemap, path).toContain(`<loc>https://capitol-tape.pages.dev/${path}</loc>`);
     }
     expect(sitemap).not.toContain('login.html');

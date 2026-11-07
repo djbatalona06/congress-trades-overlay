@@ -1,6 +1,6 @@
 # Chrome Web Store / Firefox Add-ons Listing — Capitol Tape
 
-Last updated: 2026-10-07 · Version 1.2.0 · Not yet submitted
+Last updated: 2026-10-27 · Version 1.2.0 · Not yet submitted
 
 ## Listing
 
@@ -54,17 +54,34 @@ Remote code: none. All code is in the package.
 
 ## Before submitting
 
-- [ ] The site's `/extension/#waitlist` page is live (the popup's "Join the waitlist" link opens it); submit 1.2.0 only after it deploys
+Ticked boxes were checked by running the commands on 2026-10-27. Unticked boxes need a person.
+
+Done in code (2026-10-27):
+
+- [x] The `/extension/` page is in the site build with the `#waitlist` section (`site/dist/extension/index.html`); `npm run check:site` finds no broken links
+- [x] No price, ticker limit or upgrade text in `README.md`, this file or any `site/src` page; `tests/parity.test.ts` now checks all of them
+- [x] `npm test` (549 tests in 36 files), `npm run compile`, `npx tsc --noEmit -p worker` (after `npm ci` in `worker/`)
+- [x] `npm run build`, `npm run build:firefox`, `npm run zip`, `npm run zip:firefox`; both manifests say version 1.2.0
+
+Needs a person:
+
+- [ ] Merge to `master` so the site deploys, then open `https://capitol-tape.pages.dev/extension/#waitlist` and check it loads; submit 1.2.0 only after it does
+- [ ] Load unpacked and click through all four sites; run once in Firefox (open NVDA on TradingView, click Search official records on one House row and one Senate row, open Plan and click Join the waitlist)
 - [ ] Developer account, $5 fee, 2-Step Verification, trader declaration
 - [ ] ExtensionPay stays registered as `congress-trades-overlay` (no plan is sold in 1.2.0; Manage subscription must still open for past payers)
-- [ ] `SITE_CONTACT_EMAIL` repository variable set; `site/` published (landing page + privacy)
+- [ ] Repository variables `SITE_CONTACT_EMAIL` and `SITE_AUTH_BASE` set; `site/` published (landing page + privacy); paste the privacy URL above
+- [ ] Apply migration `worker/migrations/0005_waitlist.sql` (`npm run migrate` in `worker/`) and deploy the Worker (`npm run deploy`)
 - [ ] Reply from Bargo on commercial use; legal advice on 5 U.S.C. 13107(c)(1)
-- [ ] `npm test`, `npm run zip`, `npm run zip:firefox`
-- [ ] Load unpacked and click through all four sites; run once in Firefox
+
+## Notes for reviewers
+
+Paste into the store's notes field if the Worker is not deployed yet:
+
+> The "Join the waitlist" link in the Plan tab opens a page on our website. Until our waitlist server is switched on, that page shows an email address to write to instead of a sign-up form. Nothing in the extension is sold, and the extension works the same either way.
 
 ## Version history
 
 | Version | Date | Notes |
 |---|---|---|
 | 1.0.0 | — | First release |
-| 1.2.0 | — | Watchlist and new-filing alerts free for everyone; official record links; Pro paused |
+| 1.2.0 | — (not yet submitted) | Watchlist and new-filing alerts free for everyone; official record links; Pro paused |
